@@ -442,7 +442,7 @@ function QualificationFlow({ iscrizioneId }) {
 
 // ─── Componente principale ───────────────────────────────────────────────────
 
-export default function FormIscrizione({ corsoPreselezionato = null }) {
+export default function FormIscrizione({ corsoPreselezionato = null, onSuccess = null }) {
   const [formData, setFormData] = useState(INITIAL_FORM);
   const [selectedCourses, setSelectedCourses] = useState(() => {
     if (!corsoPreselezionato) return [];
@@ -654,6 +654,7 @@ export default function FormIscrizione({ corsoPreselezionato = null }) {
       })();
 
       setSubmitResult(idoneo ? "success" : "non_idoneo");
+      if (idoneo && onSuccess) onSuccess(formData.email.trim().toLowerCase());
       topRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
     } catch (err) {
       console.error("Form submit error:", err);

@@ -1,11 +1,15 @@
-import { createClient } from "@supabase/supabase-js";
+import { createBrowserClient } from '@supabase/ssr'
 
-// Il client viene creato solo se le variabili d'ambiente sono presenti.
-// Durante la build statica senza .env.local il modulo non lancia eccezioni.
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+let client = null
 
-export const supabase =
-  supabaseUrl && supabaseAnonKey
-    ? createClient(supabaseUrl, supabaseAnonKey)
-    : null;
+export function createClient() {
+  if (!client) {
+    client = createBrowserClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+    )
+  }
+  return client
+}
+
+export const supabase = createClient()

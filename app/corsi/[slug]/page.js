@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { corsi, getCorsoBySlug } from "@/app/data/corsi";
-import FormIscrizione from "@/app/components/FormIscrizione";
+import FormIscrizioneConPrompt from "@/app/components/FormIscrizioneConPrompt";
 
 // ─── Componente: banner "fa parte di" ────────────────────────────────────────
 
@@ -301,7 +301,7 @@ export default async function CorsoPage({ params }) {
                   <strong className="text-gray-700">completamente gratuito</strong>.
                 </p>
               </div>
-              <FormIscrizione
+              <FormIscrizioneConPrompt
                 corsoPreselezionato={
                   corso.corsi_inclusi?.length > 0
                     ? corso.corsi_inclusi
