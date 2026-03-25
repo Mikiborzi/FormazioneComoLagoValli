@@ -1,6 +1,7 @@
 import Link from "next/link";
 import QuoteCarousel from "./components/QuoteCarousel";
 import MobileNav from "./components/MobileNav";
+import NavbarAuth from "./components/NavbarAuth";
 import { supabase } from "@/app/lib/supabase";
 
 // ─── Data ────────────────────────────────────────────────────────────────────
@@ -365,6 +366,8 @@ function Header() {
             ))}
           </nav>
 
+          {/* Auth buttons */}
+          <NavbarAuth />
           {/* Mobile nav */}
           <MobileNav />
         </div>
