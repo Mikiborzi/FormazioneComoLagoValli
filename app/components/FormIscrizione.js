@@ -45,8 +45,15 @@ const INITIAL_FORM = {
   codice_fiscale: "",
   data_nascita: "",
   comune_residenza: "",
+  cap_residenza: "",
+  provincia_residenza: "",
+  nazione_residenza: "Italia",
   indirizzo: "",
   comune_domicilio: "",
+  indirizzo_domicilio: "",
+  cap_domicilio: "",
+  provincia_domicilio: "",
+  nazione_domicilio: "",
   status: "",
   come_saputo: "",
   sedi_preferite: [],
@@ -609,8 +616,15 @@ export default function FormIscrizione({ corsoPreselezionato = null, onSuccess =
           codice_fiscale: formData.codice_fiscale,
           data_nascita: formData.data_nascita,
           comune_residenza: formData.comune_residenza.trim(),
+          cap_residenza: formData.cap_residenza.trim() || null,
+          provincia_residenza: formData.provincia_residenza.trim() || null,
+          nazione_residenza: formData.nazione_residenza.trim() || "Italia",
           indirizzo: formData.indirizzo.trim(),
           comune_domicilio: formData.comune_domicilio.trim() || null,
+          indirizzo_domicilio: formData.indirizzo_domicilio.trim() || null,
+          cap_domicilio: formData.cap_domicilio.trim() || null,
+          provincia_domicilio: formData.provincia_domicilio.trim() || null,
+          nazione_domicilio: formData.nazione_domicilio.trim() || null,
           status: formData.status,
           idoneo_gol: idoneo,
           corsi_interesse: selectedCourses,
@@ -809,24 +823,7 @@ export default function FormIscrizione({ corsoPreselezionato = null, onSuccess =
             />
           </FormField>
 
-          <FormField
-            label="Comune di residenza"
-            required
-            error={errors.comune_residenza}
-          >
-            <input
-              type="text"
-              name="comune_residenza"
-              value={formData.comune_residenza}
-              onChange={handleChange}
-              autoComplete="address-level2"
-              className={inputClass}
-              style={inputStyle(!!errors.comune_residenza)}
-              placeholder="Como"
-            />
-          </FormField>
-
-          <FormField label="Indirizzo" required error={errors.indirizzo}>
+          <FormField label="Indirizzo di residenza" required error={errors.indirizzo}>
             <input
               type="text"
               name="indirizzo"
@@ -839,6 +836,82 @@ export default function FormIscrizione({ corsoPreselezionato = null, onSuccess =
             />
           </FormField>
 
+          <FormField label="CAP residenza">
+            <input
+              type="text"
+              name="cap_residenza"
+              value={formData.cap_residenza}
+              onChange={handleChange}
+              className={inputClass}
+              style={inputStyle(false)}
+              placeholder="22100"
+              maxLength={5}
+            />
+          </FormField>
+
+          <FormField label="Comune di residenza" required error={errors.comune_residenza}>
+            <input
+              type="text"
+              name="comune_residenza"
+              value={formData.comune_residenza}
+              onChange={handleChange}
+              autoComplete="address-level2"
+              className={inputClass}
+              style={inputStyle(!!errors.comune_residenza)}
+              placeholder="Como"
+            />
+          </FormField>
+
+          <FormField label="Provincia residenza">
+            <input
+              type="text"
+              name="provincia_residenza"
+              value={formData.provincia_residenza}
+              onChange={handleChange}
+              className={inputClass}
+              style={inputStyle(false)}
+              placeholder="CO"
+              maxLength={2}
+            />
+          </FormField>
+
+          <FormField label="Nazione residenza">
+            <input
+              type="text"
+              name="nazione_residenza"
+              value={formData.nazione_residenza}
+              onChange={handleChange}
+              className={inputClass}
+              style={inputStyle(false)}
+              placeholder="Italia"
+            />
+          </FormField>
+
+          <FormField label="Indirizzo domicilio">
+            <input
+              type="text"
+              name="indirizzo_domicilio"
+              value={formData.indirizzo_domicilio || ""}
+              onChange={handleChange}
+              className={inputClass}
+              style={inputStyle(false)}
+              placeholder="Via Roma 1 (se diverso dalla residenza)"
+            />
+          </FormField>
+
+          <FormField label="CAP domicilio">
+            <input
+              type="text"
+              name="cap_domicilio"
+              value={formData.cap_domicilio}
+              onChange={handleChange}
+              className={inputClass}
+              style={inputStyle(false)}
+              placeholder="22100 (opzionale)"
+              maxLength={5}
+            />
+          </FormField>
+
           <FormField label="Comune di domicilio">
             <input
               type="text"
@@ -848,7 +921,32 @@ export default function FormIscrizione({ corsoPreselezionato = null, onSuccess =
               autoComplete="address-level2"
               className={inputClass}
               style={inputStyle(false)}
-              placeholder="Se diverso dalla residenza (opzionale)"
+              placeholder="Como (opzionale)"
+            />
+          </FormField>
+
+          <FormField label="Provincia domicilio">
+            <input
+              type="text"
+              name="provincia_domicilio"
+              value={formData.provincia_domicilio}
+              onChange={handleChange}
+              className={inputClass}
+              style={inputStyle(false)}
+              placeholder="CO"
+              maxLength={2}
+            />
+          </FormField>
+
+          <FormField label="Nazione domicilio">
+            <input
+              type="text"
+              name="nazione_domicilio"
+              value={formData.nazione_domicilio}
+              onChange={handleChange}
+              className={inputClass}
+              style={inputStyle(false)}
+              placeholder="Italia (opzionale)"
             />
           </FormField>
         </div>
