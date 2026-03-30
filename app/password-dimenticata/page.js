@@ -15,7 +15,7 @@ export default function PasswordDimenticata() {
     setErrore('')
     const supabase = createClient()
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: 'http://localhost:3002/reimposta-password',
+      redirectTo: 'https://formazionecomolago.it/reimposta-password',
     })
     if (error) {
       setErrore('Errore durante l\'invio. Riprova.')
