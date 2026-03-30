@@ -21,11 +21,25 @@ export default function NavbarAuth() {
     window.location.reload()
   }
 
+  const isAdmin = user && process.env.NEXT_PUBLIC_ADMIN_EMAIL
+    ?.split(',')
+    .map(e => e.trim())
+    .includes(user.email)
+
   if (loading) return null
 
   if (user) {
     return (
       <div className="hidden md:flex items-center gap-3">
+        {isAdmin && (
+          <Link
+            href="/admin"
+            className="font-sans text-xs font-medium px-3 py-1 rounded-lg"
+            style={{ backgroundColor: 'rgba(255,255,255,0.15)', color: 'white' }}
+          >
+            Dashboard
+          </Link>
+        )}
         <Link
           href="/area-personale"
           className="font-sans text-sm font-medium text-white/85 hover:text-white transition-colors"
