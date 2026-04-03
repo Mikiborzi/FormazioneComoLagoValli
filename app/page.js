@@ -1040,7 +1040,7 @@ function Footer() {
           </p>
           <div className="flex gap-5">
             <a
-              href="#"
+              href="/privacy-policy"
               className="font-sans text-white/40 hover:text-white/70 text-xs transition-colors"
             >
               Privacy Policy
@@ -1052,7 +1052,7 @@ function Footer() {
               Note Legali
             </a>
             <a
-              href="#"
+              href="/cookie-policy"
               className="font-sans text-white/40 hover:text-white/70 text-xs transition-colors"
             >
               Cookie Policy
