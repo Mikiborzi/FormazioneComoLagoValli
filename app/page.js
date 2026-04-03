@@ -1,7 +1,5 @@
 import Link from "next/link";
 import QuoteCarousel from "./components/QuoteCarousel";
-import MobileNav from "./components/MobileNav";
-import NavbarAuth from "./components/NavbarAuth";
 import { supabase } from "@/app/lib/supabase";
 
 // ─── Data ────────────────────────────────────────────────────────────────────
@@ -937,9 +935,7 @@ function Footer() {
               </div>
             </div>
             <p className="font-sans text-white/60 text-sm leading-relaxed">
-              Un progetto di Mestieri Lombardia – Starting Work, nell&apos;ambito
-              del Programma GOL finanziato da Regione Lombardia e
-              dall&apos;Unione Europea.
+              Portale realizzato da Mestieri Lombardia Como e Lago per promuovere l&apos;offerta formativa erogata sul territorio di Como, del Centro e Alto lago e delle Valli, tramite le proprie sedi di Como e Tremezzina.
             </p>
           </div>
 
@@ -996,35 +992,38 @@ function Footer() {
           className="mt-14 pt-10 border-t"
           style={{ borderColor: "rgba(255,255,255,0.1)" }}
         >
-          <p className="font-sans text-white/40 text-xs uppercase tracking-widest mb-6 text-center">
-            Con il sostegno di
-          </p>
-          <div className="flex flex-wrap justify-center gap-4">
-            {logos.map((logo) => (
-              <div
-                key={logo.abbr}
-                className="flex flex-col items-center justify-center rounded-xl p-3 text-center"
-                style={{
-                  backgroundColor: "rgba(255,255,255,0.07)",
-                  width: "6rem",
-                  minHeight: "5rem",
-                }}
-                title={logo.full.replace(/\n/g, " ")}
+          <div className="flex flex-col items-center gap-4">
+            <div
+              className="flex flex-col items-center justify-center rounded-xl p-4 text-center"
+              style={{
+                backgroundColor: "rgba(255,255,255,0.07)",
+                minWidth: "10rem",
+              }}
+            >
+              <span
+                className="font-display font-black text-base leading-none mb-2"
+                style={{ color: "#c8941a" }}
               >
-                <span
-                  className="font-display font-black text-sm leading-none mb-1"
-                  style={{ color: "#c8941a" }}
-                >
-                  {logo.abbr}
-                </span>
-                <span
-                  className="font-sans text-white/50 leading-tight whitespace-pre-line"
-                  style={{ fontSize: "0.625rem" }}
-                >
-                  {logo.full}
-                </span>
-              </div>
-            ))}
+                ML
+              </span>
+              <span className="font-sans text-white/70 text-sm font-medium">
+                Mestieri Lombardia
+              </span>
+              <span className="font-sans text-white/50 text-xs mt-0.5">
+                Starting Work
+              </span>
+            </div>
+            <div className="text-center" style={{ maxWidth: "700px" }}>
+              <p className="font-sans text-white/40 leading-relaxed whitespace-nowrap" style={{ fontSize: "0.7rem" }}>
+                Albo operatori accreditati per i Servizi al Lavoro di Regione Lombardia n. 305 del 30/01/2015
+              </p>
+              <p className="font-sans text-white/40 leading-relaxed whitespace-nowrap mt-1" style={{ fontSize: "0.7rem" }}>
+                Albo operatori accreditati per i Servizi formativi sez. B di Regione Lombardia n. 1363 del 20/07/2023
+              </p>
+              <p className="font-sans text-white/40 leading-relaxed whitespace-nowrap mt-1" style={{ fontSize: "0.7rem" }}>
+                Albo operatori autorizzati all&apos;attività di Intermediazione (Sez. I) di Regione Lombardia n. 86 del 16/02/2015
+              </p>
+            </div>
           </div>
         </div>
       </div>
@@ -1070,7 +1069,6 @@ function Footer() {
 export default function HomePage() {
   return (
     <>
-      <Header />
       <main>
         <HeroSection />
         <CoursesSection />
