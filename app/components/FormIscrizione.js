@@ -1235,7 +1235,7 @@ export default function FormIscrizione({ corsoPreselezionato = null, onSuccess =
             />
             <span className="font-sans text-sm text-gray-700 leading-relaxed">
               Desidero ricevere aggiornamenti sui nuovi corsi e le attività di
-              Mestieri Lombardia – Starting Work (opzionale, disiscrizione
+              Mestieri Lombardia Como (opzionale, disiscrizione
               sempre possibile).
             </span>
           </label>
