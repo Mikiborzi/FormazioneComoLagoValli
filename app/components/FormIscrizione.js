@@ -455,6 +455,12 @@ export default function FormIscrizione({ corsoPreselezionato = null, onSuccess =
     if (!corsoPreselezionato) return [];
     return Array.isArray(corsoPreselezionato) ? corsoPreselezionato : [corsoPreselezionato];
   });
+
+  useEffect(() => {
+    if (!corsoPreselezionato) return;
+    const initial = Array.isArray(corsoPreselezionato) ? corsoPreselezionato : [corsoPreselezionato];
+    setSelectedCourses(initial);
+  }, [corsoPreselezionato]);
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const [submitResult, setSubmitResult] = useState(null); // 'success' | 'non_idoneo' | 'error'
