@@ -53,7 +53,7 @@ export default function QuoteCarousel() {
         const next = (prev + 1) % quotes.length;
         return next;
       });
-    }, 4000);
+    }, 6000);
     return () => clearInterval(timer);
   }, [goTo]);
 

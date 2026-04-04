@@ -161,7 +161,7 @@ const reasons = [
       </svg>
     ),
     title: "È gratuito. Ma non è gratis.",
-    body: "Ogni corso è finanziato da Regione Lombardia e dall'Unione Europea attraverso il Programma GOL. Nessuna tassa d'iscrizione, nessun costo nascosto. È un investimento pubblico sulla tua crescita — e vale la pena non sprecarlo.",
+    body: "Finanziati da misure di Politiche Attive messe a disposizione da Unione Europea, Ministero del Lavoro e delle Politiche Sociali e Regione Lombardia. Nessuna tassa d'iscrizione, nessun costo nascosto. È un investimento pubblico sulla tua crescita — e vale la pena non sprecarlo.",
   },
   {
     icon: (
@@ -207,7 +207,7 @@ const reasons = [
       </svg>
     ),
     title: "Non sei solo: ti affianchiamo dall'inizio.",
-    body: "Mestieri Lombardia – Starting Work è con te prima, durante e dopo il corso: orientamento, supporto all'iscrizione, tutoraggio e accompagnamento al lavoro. Non ti lasciamo con un attestato in mano senza sapere cosa farne.",
+    body: "Mestieri Lombardia Como è con te prima, durante e dopo il corso: orientamento, supporto all'iscrizione, tutoraggio e accompagnamento al lavoro. Non ti lasciamo con un attestato in mano senza sapere cosa farne.",
   },
 ];
 
@@ -429,8 +429,8 @@ function HeroSection() {
             className="font-sans text-lg sm:text-xl leading-relaxed mb-8 max-w-2xl"
             style={{ color: "rgba(255,255,255,0.78)" }}
           >
-            Finanziati da Regione Lombardia e Unione Europea. Per chi non
-            lavora e vuole cambiare.
+            Percorsi di qualifica e riqualifica professionale,
+            finanziati da misure di Politiche Attive messe a disposizione da Unione Europea, Ministero del Lavoro e delle Politiche Sociali e Regione Lombardia.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4">
@@ -875,17 +875,7 @@ async function ProponCorsoSection() {
 function Footer() {
   const contacts = [
     {
-      label: "CPI Menaggio",
-      value: "+39 031 82 55 705",
-      href: "tel:+390318255705",
-    },
-    {
-      label: "CPI Como",
-      value: "+39 031 82 55 703",
-      href: "tel:+390318255703",
-    },
-    {
-      label: "Mestieri Lombardia",
+      label: "Mestieri Lombardia Como",
       value: "+39 031 81 23 796",
       href: "tel:+390318123796",
     },
@@ -893,6 +883,19 @@ function Footer() {
       label: "Email",
       value: "como@mestierilombardia.it",
       href: "mailto:como@mestierilombardia.it",
+    },
+  ];
+
+  const contactsUtili = [
+    {
+      label: "Centro Impiego Menaggio",
+      value: "+39 031 82 55 705",
+      href: "tel:+390318255705",
+    },
+    {
+      label: "Centro Impiego Como",
+      value: "+39 031 82 55 703",
+      href: "tel:+390318255703",
     },
   ];
 
@@ -935,7 +938,7 @@ function Footer() {
               </div>
             </div>
             <p className="font-sans text-white/60 text-sm leading-relaxed">
-              Portale realizzato da Mestieri Lombardia Como e Lago per promuovere l&apos;offerta formativa erogata sul territorio di Como, del Centro e Alto lago e delle Valli, tramite le proprie sedi di Como e Tremezzina.
+              Portale realizzato da Mestieri Lombardia Como e Lago per promuovere l&apos;offerta formativa erogata sul territorio di Como, del Centro Lago e delle Valli, tramite le proprie sedi di Como e Tremezzina.
             </p>
           </div>
 
@@ -949,6 +952,27 @@ function Footer() {
             </h3>
             <ul className="space-y-4">
               {contacts.map((c) => (
+                <li key={c.label}>
+                  <span className="font-sans text-white/50 text-xs uppercase tracking-wider block mb-0.5">
+                    {c.label}
+                  </span>
+                  <a
+                    href={c.href}
+                    className="font-sans text-white/85 hover:text-white text-sm transition-colors"
+                  >
+                    {c.value}
+                  </a>
+                </li>
+              ))}
+            </ul>
+            <h3
+              className="font-display font-bold text-lg mt-6 mb-4"
+              style={{ color: "#c8941a" }}
+            >
+              Contatti Utili
+            </h3>
+            <ul className="space-y-4">
+              {contactsUtili.map((c) => (
                 <li key={c.label}>
                   <span className="font-sans text-white/50 text-xs uppercase tracking-wider block mb-0.5">
                     {c.label}
@@ -1035,8 +1059,7 @@ function Footer() {
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 flex flex-col sm:flex-row items-center justify-between gap-3">
           <p className="font-sans text-white/40 text-xs">
-            &copy; {new Date().getFullYear()} Mestieri Lombardia – Starting
-            Work. Tutti i diritti riservati.
+            &copy; {new Date().getFullYear()} Mestieri Lombardia Como. Tutti i diritti riservati.
           </p>
           <div className="flex gap-5">
             <a
