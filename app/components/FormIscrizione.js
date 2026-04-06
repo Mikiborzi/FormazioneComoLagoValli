@@ -1210,7 +1210,8 @@ export default function FormIscrizione({ corsoPreselezionato = null, onSuccess =
               <span className="font-sans text-sm text-gray-700 leading-relaxed">
                 Ho letto l&apos;{" "}
                 <a
-                  href="#"
+                  href="/privacy-policy"
+                  target="_blank"
                   className="underline"
                   style={{ color: "#1a2e5a" }}
                 >
