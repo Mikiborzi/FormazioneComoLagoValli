@@ -16,7 +16,7 @@ export default function AccountPrompt({ email }) {
     }
     setStato('loading')
     const supabase = createClient()
-    const { error } = await supabase.auth.signUp({ email, password })
+    const { error } = await supabase.auth.signUp({ email, password, options: { emailRedirectTo: window.location.href } })
     if (error) {
       if (error.message.includes('already registered')) {
         setErrore('Hai già un profilo. Accedi da /accedi')
