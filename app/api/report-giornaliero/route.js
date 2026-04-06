@@ -4,7 +4,7 @@ import { Resend } from 'resend'
 const resend = new Resend(process.env.RESEND_API_KEY)
 
 const DESTINATARI = [
-  'michele.borzatta@startingwork.it'
+  'michele.borzatta@gmail.com'
 ]
 
 export async function GET(request) {
