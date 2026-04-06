@@ -612,7 +612,7 @@ export default function FormIscrizione({ corsoPreselezionato = null, onSuccess =
     try {
       const { idoneo } = checkIdoneitaGol(formData.status);
 
-      const { data: inserted, error: dbError } = await supabase
+      const { error: dbError } = await supabase
         .from("iscrizioni")
         .insert({
           nome: formData.nome.trim(),
@@ -640,12 +640,10 @@ export default function FormIscrizione({ corsoPreselezionato = null, onSuccess =
           sedi_preferite: formData.sedi_preferite,
           modalita_online: formData.sedi_preferite.includes("online"),
           stato: idoneo ? "nuovo" : "non_idoneo",
-        })
-        .select("id")
-        .single();
+        });
 
       if (dbError) throw dbError;
-      if (inserted?.id) setIscrizioneId(inserted.id);
+
 
       if (formData.newsletter) {
         await supabase.from("newsletter").upsert(
