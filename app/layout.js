@@ -17,6 +17,9 @@ const dmSans = DM_Sans({
 });
 
 export const metadata = {
+  verification: {
+    google: "GjLAX1NWAvDUR51ZzWsNQwJsZFAQBCoP0oNoz_TjxjY",
+  },
   title: "Formazione Como Lago e Valli – Corsi gratuiti GOL",
   description:
     "Corsi di formazione gratuiti finanziati da Regione Lombardia e Unione Europea tramite il Programma GOL. Per disoccupati, inoccupati, casalinghe e studenti nella provincia di Como.",
