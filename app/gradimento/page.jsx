@@ -176,13 +176,13 @@ export default function FormGradimento() {
         {/* Header */}
         <div className="mb-8">
           <p className="text-sm font-medium text-orange-600 uppercase tracking-wide mb-2">
-            Mestieri Lombardia · Starting Work
+            Mestieri Lombardia Como
           </p>
           <h1 className="text-2xl font-semibold text-gray-900 mb-3">
             Com'è andata? Raccontacelo.
           </h1>
           <p className="text-gray-600 leading-relaxed text-sm">
-            Hai partecipato a un percorso di orientamento o seguito un corso finanziato da{' '}
+            Hai usufruito dei nostri <strong>servizi di orientamento e accompagnamento al lavoro e/o percorsi di formazione professionale</strong> finanziati da{' '}
             <strong>Unione Europea, Ministero del Lavoro e Regione Lombardia</strong>. La tua opinione aiuta chi verrà dopo di te a fare la scelta giusta.
           </p>
           <p className="text-xs text-gray-400 mt-2">Meno di 3 minuti · 4 sezioni · mobile friendly</p>
@@ -434,8 +434,8 @@ export default function FormGradimento() {
                     Autorizzo la pubblicazione della mia recensione <span className="text-red-500">*</span>
                   </p>
                   <p className="text-xs text-gray-500 leading-relaxed">
-                    Autorizzo Mestieri Lombardia a pubblicare la mia recensione su{' '}
-                    <strong>formazionecomolago.it</strong> e sulle pagine social di Mestieri Lombardia
+                    Autorizzo Mestieri Lombardia Como a pubblicare la mia recensione su{' '}
+                    <strong>formazionecomolago.it</strong> e sulle pagine social di Mestieri Lombardia Como
                     (Facebook e Instagram). Il mio nome comparirà accanto alla recensione.
                     Posso chiedere la rimozione in qualsiasi momento scrivendo a{' '}
                     <a href="mailto:como@mestierilombardia.it" className="text-orange-600 underline">
@@ -463,7 +463,7 @@ export default function FormGradimento() {
                       Autorizzo la pubblicazione del mio video
                     </p>
                     <p className="text-xs text-blue-700 leading-relaxed">
-                      Autorizzo Mestieri Lombardia a pubblicare il video che invierò sui canali social
+                      Autorizzo Mestieri Lombardia Como a pubblicare il video che invierò sui canali social
                       e sul sito. Posso chiedere la rimozione in qualsiasi momento scrivendo a{' '}
                       <a href="mailto:como@mestierilombardia.it" className="underline">
                         como@mestierilombardia.it
@@ -520,7 +520,7 @@ export default function FormGradimento() {
             </div>
 
             <p className="text-xs text-gray-400 text-center mt-4 leading-relaxed">
-              I tuoi dati sono trattati da Mestieri Lombardia nel rispetto del GDPR.
+              I tuoi dati sono trattati da Mestieri Lombardia Como nel rispetto del GDPR.
               Puoi esercitare i tuoi diritti scrivendo a como@mestierilombardia.it
             </p>
           </div>
