@@ -665,8 +665,9 @@ export default function FormGradimento() {
             </div>
 
             <p style={{ fontSize: '0.72rem', color: '#9ca3af', textAlign: 'center', marginTop: '1rem', lineHeight: 1.6 }}>
-              I tuoi dati sono trattati da Mestieri Lombardia Como nel rispetto del GDPR.
-              Puoi esercitare i tuoi diritti scrivendo a como@mestierilombardia.it
+              I tuoi dati sono trattati nel rispetto della normativa vigente (GDPR e Codice della Privacy italiano)
+              secondo quanto indicato nella nostra{' '}
+              <a href="/privacy" style={{ color: '#9ca3af', textDecoration: 'underline' }}>Informativa sulla Privacy</a>.
             </p>
           </div>
         )}
