@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { supabase } from "@/app/lib/supabase";
-import FormRecensione from "@/app/components/FormRecensione";
+import FormGradimento from "@/app/components/FormGradimento";
 
 // Forza rendering dinamico ad ogni richiesta — necessario per leggere
 // recensioni fresche da Supabase senza caching statico.
@@ -43,7 +43,6 @@ async function getRecensioni() {
     console.error("getRecensioni errore Supabase:", JSON.stringify(error));
     return [];
   }
-  console.log(`getRecensioni: ${data?.length ?? 0} recensioni caricate`);
   return data ?? [];
 }
 
@@ -83,20 +82,10 @@ export default async function TestimonanzePage() {
         </div>
       </div>
 
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
-        {/* Griglia recensioni */}
-        {recensioni.length === 0 ? (
-          <div
-            className="text-center py-16 rounded-2xl mb-14"
-            style={{ backgroundColor: "#f8fafc", border: "1px solid #e2e8f0" }}
-          >
-            <p className="font-sans text-gray-400 text-base mb-1">Ancora nessuna recensione.</p>
-            <p className="font-sans text-gray-500 font-medium text-lg">
-              Sii il primo a lasciare una recensione!
-            </p>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
+      {/* Griglia recensioni — visibile solo se presenti */}
+      {recensioni.length > 0 && (
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {recensioni.map((r) => (
               <blockquote
                 key={r.id}
@@ -119,24 +108,11 @@ export default async function TestimonanzePage() {
               </blockquote>
             ))}
           </div>
-        )}
-
-        {/* Form recensione */}
-        <div
-          className="rounded-2xl p-6 sm:p-8"
-          style={{ border: "1px solid #e2e8f0" }}
-        >
-          <div className="mb-6">
-            <h2 className="font-display font-bold text-2xl mb-1" style={{ color: "#1a2e5a" }}>
-              Lascia la tua recensione
-            </h2>
-            <p className="font-sans text-sm text-gray-500">
-              Hai frequentato uno dei nostri corsi? Condividi la tua esperienza.
-            </p>
-          </div>
-          <FormRecensione />
         </div>
-      </div>
+      )}
+
+      {/* Form multi-step gradimento */}
+      <FormGradimento />
     </>
   );
 }

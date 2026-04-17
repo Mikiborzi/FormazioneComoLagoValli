@@ -138,7 +138,7 @@ export default function FormGradimento() {
 
   if (submitted) {
     return (
-      <div style={{ minHeight: '100vh', background: NAVY, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem' }}>
+      <div style={{ background: NAVY, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '3rem 1rem' }}>
         <div style={{ maxWidth: 480, width: '100%', background: '#fff', borderRadius: 16, border: `1px solid #e5e0d5`, padding: '2.5rem', textAlign: 'center' }}>
           <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>🙏</div>
           <h1 style={{ fontFamily: 'Georgia, serif', fontSize: '1.5rem', color: NAVY, marginBottom: '0.75rem' }}>Grazie davvero.</h1>
@@ -168,7 +168,7 @@ export default function FormGradimento() {
   }
 
   return (
-    <div style={{ minHeight: '100vh', background: NAVY, paddingTop: '2.5rem', paddingBottom: '2.5rem', paddingLeft: '1rem', paddingRight: '1rem' }}>
+    <div style={{ background: NAVY, paddingTop: '2.5rem', paddingBottom: '2.5rem', paddingLeft: '1rem', paddingRight: '1rem' }}>
       <div style={{ maxWidth: 560, margin: '0 auto' }}>
 
         {/* Header */}
@@ -176,9 +176,9 @@ export default function FormGradimento() {
           <p style={{ fontSize: '0.75rem', fontWeight: 600, color: GOLD, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.5rem' }}>
             Mestieri Lombardia Como
           </p>
-          <h1 style={{ fontFamily: 'Georgia, serif', fontSize: '1.75rem', color: '#fff', marginBottom: '0.75rem', lineHeight: 1.3 }}>
-            Com'è andata? Raccontacelo.
-          </h1>
+          <h2 style={{ fontFamily: 'Georgia, serif', fontSize: '1.75rem', color: '#fff', marginBottom: '0.75rem', lineHeight: 1.3 }}>
+            Com&apos;è andata? Raccontacelo.
+          </h2>
           <p style={{ color: '#c5cde0', lineHeight: 1.7, fontSize: '0.9rem' }}>
             Hai usufruito dei nostri <strong style={{ color: '#fff' }}>servizi di orientamento e accompagnamento al lavoro e/o percorsi di formazione professionale</strong> finanziati da{' '}
             <strong style={{ color: '#fff' }}>Unione Europea, Ministero del Lavoro e Regione Lombardia</strong>. La tua opinione aiuta chi verrà dopo di te a fare la scelta giusta.
@@ -353,7 +353,7 @@ export default function FormGradimento() {
             {/* Stelle */}
             <div style={{ marginBottom: '1.5rem' }}>
               <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: 500, color: '#374151', marginBottom: '0.75rem' }}>
-                Com'è andata, in sintesi? <span style={{ color: '#ef4444' }}>*</span>
+                Com&apos;è andata, in sintesi? <span style={{ color: '#ef4444' }}>*</span>
               </label>
               <div style={{ display: 'flex', gap: 8, marginBottom: 8 }}>
                 {[1, 2, 3, 4, 5].map(n => (
