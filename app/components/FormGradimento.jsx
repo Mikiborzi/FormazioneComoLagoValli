@@ -88,7 +88,7 @@ export default function FormGradimento() {
     if (!form.valutazione) return false
     return true
   }
-  const validaStep3 = () => form.testo_recensione.trim().length >= 30 && form.vuole_video
+  const validaStep3 = () => form.testo_recensione.trim().length >= 30
   const validaStep4 = () => form.consenso_recensione
 
   const handleSubmit = async () => {
