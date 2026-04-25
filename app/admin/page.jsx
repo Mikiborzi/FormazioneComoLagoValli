@@ -1,7 +1,6 @@
 'use client'
 
 import { useState, useEffect, useMemo } from 'react'
-import { supabase } from '../lib/supabase'
 
 const PASSWORD_ADMIN = 'formazione2026'
 const STATI = ['nuovo', 'contattato', 'iscritto', 'in_attesa', 'non_idoneo']
@@ -71,15 +70,19 @@ export default function AdminPage() {
 
   async function caricaIscrizioni() {
     setLoading(true)
-    const { data, error } = await supabase.from('iscrizioni').select('*').order('created_at', { ascending: false })
-    if (error) console.error('Errore:', error)
-    else setIscrizioni(data || [])
+    const res = await fetch('/api/admin/iscrizioni')
+    if (res.ok) setIscrizioni(await res.json())
+    else console.error('Errore caricamento iscrizioni')
     setLoading(false)
   }
 
   async function aggiornaStato(id, nuovoStato) {
-    const { error } = await supabase.from('iscrizioni').update({ stato: nuovoStato, updated_at: new Date().toISOString() }).eq('id', id)
-    if (!error) {
+    const res = await fetch('/api/admin/iscrizioni', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id, stato: nuovoStato, updated_at: new Date().toISOString() }),
+    })
+    if (res.ok) {
       setIscrizioni(prev => prev.map(i => i.id === id ? { ...i, stato: nuovoStato } : i))
       if (selezionato?.id === id) setSelezionato(prev => ({ ...prev, stato: nuovoStato }))
       setAggiornamento(id)
@@ -290,7 +293,7 @@ export default function AdminPage() {
               <div style={{ marginTop:'16px' }}>
                 <div style={{ fontSize:'11px', fontWeight:'700', color:'#94a3b8', textTransform:'uppercase', letterSpacing:'0.05em', marginBottom:'6px' }}>Note operatore</div>
                 <textarea defaultValue={selezionato.note_operatore||''} rows={3} placeholder="Aggiungi note interne..."
-                  onBlur={async e => { await supabase.from('iscrizioni').update({ note_operatore: e.target.value }).eq('id', selezionato.id) }}
+                  onBlur={async e => { await fetch('/api/admin/iscrizioni', { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id: selezionato.id, note_operatore: e.target.value }) }) }}
                   style={{ width:'100%', padding:'8px', border:'1px solid #e2e8f0', borderRadius:'6px', fontSize:'13px', resize:'vertical', outline:'none', boxSizing:'border-box', color:'#334155' }} />
               </div>
               <div style={{ marginTop:'12px' }}>
