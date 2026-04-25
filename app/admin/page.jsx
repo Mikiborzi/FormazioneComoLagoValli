@@ -1,9 +1,7 @@
 'use client'
 
 import { useState, useEffect, useMemo } from 'react'
-import { createClient } from '../lib/supabase'
-
-const supabase = createClient()
+import { supabase } from '../lib/supabase'
 
 const PASSWORD_ADMIN = 'formazione2026'
 const STATI = ['nuovo', 'contattato', 'iscritto', 'in_attesa', 'non_idoneo']
