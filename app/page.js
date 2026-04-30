@@ -1080,6 +1080,12 @@ function Footer() {
             >
               Cookie Policy
             </a>
+            <a
+              href="/admin"
+              className="font-sans text-white/20 hover:text-white/50 text-xs transition-colors"
+            >
+              Area riservata
+            </a>
           </div>
         </div>
       </div>
