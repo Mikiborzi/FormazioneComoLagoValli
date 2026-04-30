@@ -30,6 +30,7 @@ const CORSI_LABELS = {
 
 function LoginScreen({ onLogin }) {
   const [pwd, setPwd] = useState('')
+  const [mostra, setMostra] = useState(false)
   const [errore, setErrore] = useState(false)
   const [loading, setLoading] = useState(false)
 
@@ -65,10 +66,16 @@ function LoginScreen({ onLogin }) {
         <h1 style={{ fontSize:'22px', fontWeight:'700', color:'#0f172a', marginBottom:'8px' }}>Area Admin</h1>
         <p style={{ color:'#64748b', fontSize:'14px', marginBottom:'32px' }}>Formazione Como Lago e Valli</p>
         <form onSubmit={handleSubmit}>
-          <input type="password" placeholder="Password" value={pwd}
-            onChange={e => { setPwd(e.target.value); setErrore(false) }} autoFocus
-            style={{ width:'100%', padding:'12px 16px', border: errore ? '2px solid #ef4444' : '2px solid #e2e8f0', borderRadius:'8px', fontSize:'16px', outline:'none', marginBottom:'8px', boxSizing:'border-box' }} />
-          {errore && <p style={{ color:'#ef4444', fontSize:'13px', marginBottom:'16px', textAlign:'left' }}>Password non corretta</p>}
+          <div style={{ position:'relative', marginBottom:'8px' }}>
+            <input type={mostra ? 'text' : 'password'} placeholder="Password" value={pwd}
+              onChange={e => { setPwd(e.target.value); setErrore(false) }} autoFocus
+              style={{ width:'100%', padding:'12px 48px 12px 16px', border: errore ? '2px solid #ef4444' : '2px solid #e2e8f0', borderRadius:'8px', fontSize:'16px', outline:'none', boxSizing:'border-box' }} />
+            <button type="button" onClick={() => setMostra(v => !v)}
+              style={{ position:'absolute', right:'14px', top:'50%', transform:'translateY(-50%)', background:'none', border:'none', cursor:'pointer', color:'#94a3b8', fontSize:'18px', lineHeight:1, padding:0 }}>
+              {mostra ? '🙈' : '👁️'}
+            </button>
+          </div>
+          {errore && <p style={{ color:'#ef4444', fontSize:'13px', marginBottom:'8px', textAlign:'left' }}>Password non corretta</p>}
           <button type="submit" disabled={loading} style={{ width:'100%', padding:'12px', background:'#0f172a', color:'white', border:'none', borderRadius:'8px', fontSize:'15px', fontWeight:'600', cursor:'pointer', marginTop:'8px', opacity: loading ? 0.7 : 1 }}>
             {loading ? 'Verifica...' : 'Accedi'}
           </button>
