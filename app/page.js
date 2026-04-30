@@ -5,12 +5,13 @@ import { supabase } from "@/app/lib/supabase";
 // ─── Data ────────────────────────────────────────────────────────────────────
 
 const navItems = [
-  { label: "Home", href: "#" },
-  { label: "Come Funziona", href: "#come-funziona" },
-  { label: "I Corsi", href: "#corsi" },
-  { label: "Testimonianze", href: "#testimonianze" },
+  { label: "Home", href: "/" },
+  { label: "Come Funziona", href: "/#come-funziona" },
+  { label: "I Corsi", href: "/#corsi" },
+  { label: "Cerca Lavoro", href: "/servizi-lavoro" },
+  { label: "Testimonianze", href: "/testimonianze" },
   { label: "Proponi un Corso", href: "/proponi-corso" },
-  { label: "Contatti", href: "#contatti" },
+  { label: "Contatti", href: "/#contatti" },
 ];
 
 const courses = [
