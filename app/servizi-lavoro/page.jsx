@@ -214,6 +214,30 @@ export default function ServiziLavoro() {
         </div>
       </div>
 
+      {/* BANNER FINANZIAMENTO */}
+      <div style={{ background: '#f0f7ff', borderBottom: '1px solid #bfdbfe', padding: '20px 24px' }}>
+        <div style={{ maxWidth: '680px', margin: '0 auto', textAlign: 'center' }}>
+          <p style={{ margin: '0 0 10px', fontSize: '13px', fontWeight: '700', color: '#1e40af', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+            Finanziato da misure di Politiche Attive del Lavoro
+          </p>
+          <div style={{ display: 'flex', gap: '16px', justifyContent: 'center', flexWrap: 'wrap', marginBottom: '12px' }}>
+            {[
+              { flag: '🇪🇺', label: 'Unione Europea' },
+              { flag: '🇮🇹', label: 'Ministero del Lavoro e delle Politiche Sociali' },
+              { flag: '🏛️', label: 'Regione Lombardia' },
+            ].map(({ flag, label }) => (
+              <span key={label} style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '14px', color: '#1e3a8a', fontWeight: '600' }}>
+                <span>{flag}</span>
+                <span>{label}</span>
+              </span>
+            ))}
+          </div>
+          <p style={{ margin: 0, fontSize: '14px', color: '#1e40af', fontStyle: 'italic' }}>
+            Nessun costo nascosto. È un investimento pubblico sul tuo sviluppo professionale. <strong>Cogli l'occasione.</strong>
+          </p>
+        </div>
+      </div>
+
       {/* FORM */}
       <div style={{ maxWidth: '680px', margin: '0 auto', padding: '40px 24px 80px' }}>
         <form onSubmit={handleSubmit} noValidate>
