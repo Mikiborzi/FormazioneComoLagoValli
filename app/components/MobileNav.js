@@ -3,12 +3,13 @@
 import { useState } from "react";
 
 const navItems = [
-  { label: "Home", href: "#" },
-  { label: "Come Funziona", href: "#come-funziona" },
-  { label: "I Corsi", href: "#corsi" },
-  { label: "Testimonianze", href: "#testimonianze" },
+  { label: "Home", href: "/" },
+  { label: "Come Funziona", href: "/#come-funziona" },
+  { label: "I Corsi", href: "/#corsi" },
+  { label: "Cerca Lavoro", href: "/servizi-lavoro" },
+  { label: "Testimonianze", href: "/testimonianze" },
   { label: "Proponi un Corso", href: "/proponi-corso" },
-  { label: "Contatti", href: "#contatti" },
+  { label: "Contatti", href: "/#contatti" },
 ];
 
 export default function MobileNav() {

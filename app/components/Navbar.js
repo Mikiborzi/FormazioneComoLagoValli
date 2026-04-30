@@ -4,10 +4,11 @@ import Link from 'next/link'
 import { createClient } from '../lib/supabase'
 
 const navItems = [
-  { label: 'Come Funziona', href: '#come-funziona' },
-  { label: 'I Corsi', href: '#corsi' },
-  { label: 'Testimonianze', href: '#testimonianze' },
-  { label: 'Contatti', href: '#contatti' },
+  { label: 'Come Funziona', href: '/#come-funziona' },
+  { label: 'I Corsi', href: '/#corsi' },
+  { label: 'Cerca Lavoro', href: '/servizi-lavoro' },
+  { label: 'Testimonianze', href: '/testimonianze' },
+  { label: 'Contatti', href: '/#contatti' },
 ]
 
 export default function Navbar() {
