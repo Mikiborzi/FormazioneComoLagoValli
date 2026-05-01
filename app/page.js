@@ -664,12 +664,50 @@ function WhySection() {
             className="font-display font-bold text-3xl sm:text-4xl lg:text-5xl"
             style={{ color: "#1a2e5a" }}
           >
-            Tre buoni motivi per iniziare oggi
+            Quattro buoni motivi per iniziare oggi
           </h2>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {reasons.map((reason) => (
+          {reasons.slice(0, 3).map((reason) => (
+            <div
+              key={reason.title}
+              className="bg-white rounded-2xl p-8 shadow-sm hover:shadow-md transition-shadow duration-200"
+            >
+              <div
+                className="w-14 h-14 rounded-2xl flex items-center justify-center mb-6"
+                style={{
+                  backgroundColor: "rgba(45,122,79,0.1)",
+                  color: "#2d7a4f",
+                }}
+              >
+                {reason.icon}
+              </div>
+              <h3
+                className="font-display font-bold text-xl mb-3 leading-tight"
+                style={{ color: "#1a2e5a" }}
+              >
+                {reason.title}
+              </h3>
+              <p className="font-sans text-gray-500 text-base leading-relaxed">
+                {reason.body}
+              </p>
+            </div>
+          ))}
+        </div>
+
+        <div className="mt-12 mb-6">
+          <h3
+            className="font-display font-bold text-2xl"
+            style={{ color: "#1a2e5a" }}
+          >
+            Definizioni
+          </h3>
+          <div className="mt-2 w-12 h-1 rounded-full" style={{ backgroundColor: "#2d7a4f" }} />
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {reasons.slice(3).map((reason) => (
             <div
               key={reason.title}
               className="bg-white rounded-2xl p-8 shadow-sm hover:shadow-md transition-shadow duration-200"
