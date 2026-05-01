@@ -456,7 +456,7 @@ function HeroSection() {
 
           <div className="flex flex-col sm:flex-row gap-4">
             <a
-              href="#corsi"
+              href="#percorsi"
               className="inline-flex items-center justify-center gap-2 font-sans font-semibold text-white rounded-xl transition-all duration-200 hover:brightness-110 hover:scale-105 shadow-lg text-base"
               style={{
                 backgroundColor: "#c8941a",
@@ -488,7 +488,7 @@ function HeroSection() {
 
 function BiforcazioneSection() {
   return (
-    <section className="py-14 px-4 bg-gray-50">
+    <section id="percorsi" className="py-14 px-4 bg-gray-50">
       <div className="max-w-5xl mx-auto">
         <div className="text-center mb-10">
           <p className="font-sans font-semibold text-sm uppercase tracking-widest mb-3" style={{ color: '#2d7a4f' }}>
