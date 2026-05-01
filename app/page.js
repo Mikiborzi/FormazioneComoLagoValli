@@ -664,7 +664,7 @@ function WhySection() {
             className="font-display font-bold text-3xl sm:text-4xl lg:text-5xl"
             style={{ color: "#1a2e5a" }}
           >
-            Quattro buoni motivi per iniziare oggi
+            Tre buoni motivi per iniziare oggi
           </h2>
         </div>
 
@@ -696,14 +696,14 @@ function WhySection() {
           ))}
         </div>
 
-        <div className="mt-12 mb-6">
+        <div className="mt-12 mb-6 text-center">
           <h3
             className="font-display font-bold text-2xl"
             style={{ color: "#1a2e5a" }}
           >
             Definizioni
           </h3>
-          <div className="mt-2 w-12 h-1 rounded-full" style={{ backgroundColor: "#2d7a4f" }} />
+          <div className="mt-2 w-12 h-1 rounded-full mx-auto" style={{ backgroundColor: "#2d7a4f" }} />
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
