@@ -97,6 +97,13 @@ export default function AdminPage() {
   const [ricerca, setRicerca] = useState('')
   const [selezionato, setSelezionato] = useState(null)
 
+  const [tabAttivo, setTabAttivo] = useState('gol')
+  const [iftsCandidati, setIftsCandidati] = useState([])
+  const [iftsAziende, setIftsAziende] = useState([])
+  const [loadingIfts, setLoadingIfts] = useState(false)
+  const [iftsSubTab, setIftsSubTab] = useState('candidati')
+  const [aggIfts, setAggIfts] = useState(null)
+
   useEffect(() => {
     const t = sessionStorage.getItem('admin_token')
     if (t) { setToken(t); caricaIscrizioni(t) }
@@ -126,6 +133,31 @@ export default function AdminPage() {
       if (selezionato?.id === id) setSelezionato(prev => ({ ...prev, stato: nuovoStato }))
       setAggiornamento(id)
       setTimeout(() => setAggiornamento(null), 2000)
+    }
+  }
+
+  async function caricaIfts(t) {
+    setLoadingIfts(true)
+    const res = await fetch('/api/admin/ifts', { headers: { Authorization: `Bearer ${t}` } })
+    if (res.ok) {
+      const { candidati, aziende } = await res.json()
+      setIftsCandidati(candidati)
+      setIftsAziende(aziende)
+    }
+    setLoadingIfts(false)
+  }
+
+  async function aggiornaStatoIfts(id, tipo, nuovoStato) {
+    const res = await fetch('/api/admin/ifts', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+      body: JSON.stringify({ id, tipo, stato: nuovoStato }),
+    })
+    if (res.ok) {
+      if (tipo === 'candidato') setIftsCandidati(prev => prev.map(c => c.id === id ? { ...c, stato: nuovoStato } : c))
+      else setIftsAziende(prev => prev.map(a => a.id === id ? { ...a, stato: nuovoStato } : a))
+      setAggIfts(id)
+      setTimeout(() => setAggIfts(null), 2000)
     }
   }
 
@@ -195,7 +227,23 @@ export default function AdminPage() {
         </div>
       </div>
 
+      {/* TAB BAR */}
+      <div style={{ background:'white', borderBottom:'2px solid #e2e8f0', padding:'0 24px', display:'flex', gap:'4px' }}>
+        {[
+          { key:'gol', label:'🎓 GOL / Servizi Lavoro' },
+          { key:'ifts', label:'🏭 Percorsi IFTS' },
+        ].map(tab => (
+          <button key={tab.key} onClick={() => { setTabAttivo(tab.key); if (tab.key==='ifts' && iftsCandidati.length===0) caricaIfts(token) }}
+            style={{ padding:'12px 20px', border:'none', borderBottom: tabAttivo===tab.key ? '3px solid #1a2e5a' : '3px solid transparent',
+              background:'none', cursor:'pointer', fontSize:'14px', fontWeight: tabAttivo===tab.key ? '700' : '500',
+              color: tabAttivo===tab.key ? '#1a2e5a' : '#94a3b8', marginBottom:'-2px', transition:'color 0.2s' }}>
+            {tab.label}
+          </button>
+        ))}
+      </div>
+
       <div style={{ padding:'24px', maxWidth:'1400px', margin:'0 auto' }}>
+        {tabAttivo === 'gol' && <>
         {/* STATS */}
         <div style={{ display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:'16px', marginBottom:'24px' }}>
           {[
@@ -402,6 +450,143 @@ export default function AdminPage() {
             </div>
           )}
         </div>
+        </>}
+
+        {tabAttivo === 'ifts' && (
+          <div>
+            {/* Sub-tab */}
+            <div style={{ display:'flex', gap:'8px', marginBottom:'20px' }}>
+              {[{ key:'candidati', label:`👤 Candidati (${iftsCandidati.length})` }, { key:'aziende', label:`🏢 Aziende (${iftsAziende.length})` }].map(t => (
+                <button key={t.key} onClick={() => setIftsSubTab(t.key)}
+                  style={{ padding:'8px 18px', border:'none', borderRadius:'8px', cursor:'pointer', fontSize:'14px', fontWeight:'600',
+                    background: iftsSubTab===t.key ? '#1a2e5a' : '#e2e8f0', color: iftsSubTab===t.key ? 'white' : '#64748b', transition:'all 0.15s' }}>
+                  {t.label}
+                </button>
+              ))}
+              <button onClick={() => caricaIfts(token)} style={{ marginLeft:'auto', background:'#1e293b', color:'#94a3b8', border:'1px solid #334155', borderRadius:'6px', padding:'6px 14px', cursor:'pointer', fontSize:'13px' }}>↻ Aggiorna</button>
+            </div>
+
+            {loadingIfts ? (
+              <div style={{ padding:'60px', textAlign:'center', color:'#94a3b8' }}>Caricamento...</div>
+            ) : iftsSubTab === 'candidati' ? (
+              <div style={{ background:'white', borderRadius:'10px', boxShadow:'0 1px 3px rgba(0,0,0,0.08)', overflow:'hidden' }}>
+                {iftsCandidati.length === 0 ? (
+                  <div style={{ padding:'60px', textAlign:'center', color:'#94a3b8' }}>Nessun candidato ancora</div>
+                ) : (
+                  <div style={{ overflowX:'auto' }}>
+                    <table style={{ width:'100%', borderCollapse:'collapse' }}>
+                      <thead>
+                        <tr style={{ background:'#f8fafc', borderBottom:'2px solid #e2e8f0' }}>
+                          {['Nome','Email / Tel','Titolo','Indirizzo','Azienda','Stato','Data'].map(h => (
+                            <th key={h} style={{ padding:'10px 14px', textAlign:'left', fontSize:'12px', fontWeight:'700', color:'#475569', textTransform:'uppercase', letterSpacing:'0.05em', whiteSpace:'nowrap' }}>{h}</th>
+                          ))}
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {iftsCandidati.map((c, idx) => (
+                          <tr key={c.id} style={{ borderBottom:'1px solid #f1f5f9', background: aggIfts===c.id ? '#f0fdf4' : idx%2===0 ? 'white' : '#fafafa' }}>
+                            <td style={{ padding:'10px 14px' }}>
+                              <div style={{ fontWeight:'600', fontSize:'14px', color:'#0f172a' }}>{c.nome} {c.cognome}</div>
+                            </td>
+                            <td style={{ padding:'10px 14px' }}>
+                              <div style={{ fontSize:'13px', color:'#334155' }}>{c.email}</div>
+                              <div style={{ fontSize:'13px', color:'#64748b' }}>{c.telefono}</div>
+                            </td>
+                            <td style={{ padding:'10px 14px', fontSize:'12px', color:'#475569' }}>
+                              {c.titolo_studio === 'diploma' ? 'Diploma' : c.titolo_studio === 'qualifica_professionale' ? 'Qualifica prof.' : c.titolo_studio || '—'}
+                              {c.anno_titolo && <div style={{ color:'#94a3b8' }}>{c.anno_titolo}</div>}
+                            </td>
+                            <td style={{ padding:'10px 14px' }}>
+                              <span style={{ padding:'2px 8px', borderRadius:'99px', fontSize:'11px', fontWeight:'700',
+                                background: c.indirizzo_interesse==='moda'?'#fce7f3':c.indirizzo_interesse==='amministrativo'?'#dbeafe':'#f3f4f6',
+                                color: c.indirizzo_interesse==='moda'?'#9d174d':c.indirizzo_interesse==='amministrativo'?'#1e40af':'#374151' }}>
+                                {c.indirizzo_interesse==='moda'?'👗 Moda':c.indirizzo_interesse==='amministrativo'?'📋 Amm.':'?'}
+                              </span>
+                            </td>
+                            <td style={{ padding:'10px 14px', fontSize:'12px', color:'#64748b' }}>
+                              {c.ha_azienda ? <span style={{ color:'#059669' }}>✅ {c.nome_azienda||'Sì'}</span> : '—'}
+                            </td>
+                            <td style={{ padding:'10px 14px' }}>
+                              <select value={c.stato||'nuovo'} onChange={e => aggiornaStatoIfts(c.id,'candidato',e.target.value)}
+                                style={{ padding:'4px 8px', borderRadius:'6px', border:'1px solid #e2e8f0', fontSize:'12px', fontWeight:'600', cursor:'pointer', outline:'none',
+                                  background:STATO_COLORS[c.stato]?.bg||'#f3f4f6', color:STATO_COLORS[c.stato]?.text||'#374151' }}>
+                                {STATI.map(s => <option key={s} value={s}>{STATO_COLORS[s]?.label||s}</option>)}
+                              </select>
+                            </td>
+                            <td style={{ padding:'10px 14px', fontSize:'12px', color:'#94a3b8', whiteSpace:'nowrap' }}>
+                              {c.created_at ? new Date(c.created_at).toLocaleDateString('it-IT',{day:'2-digit',month:'2-digit',year:'2-digit'}) : '—'}
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div style={{ background:'white', borderRadius:'10px', boxShadow:'0 1px 3px rgba(0,0,0,0.08)', overflow:'hidden' }}>
+                {iftsAziende.length === 0 ? (
+                  <div style={{ padding:'60px', textAlign:'center', color:'#94a3b8' }}>Nessuna azienda ancora</div>
+                ) : (
+                  <div style={{ overflowX:'auto' }}>
+                    <table style={{ width:'100%', borderCollapse:'collapse' }}>
+                      <thead>
+                        <tr style={{ background:'#f8fafc', borderBottom:'2px solid #e2e8f0' }}>
+                          {['Azienda','Referente','Email / Tel','Settore','Tipo','Indirizzi','Giovani','Stato','Data'].map(h => (
+                            <th key={h} style={{ padding:'10px 14px', textAlign:'left', fontSize:'12px', fontWeight:'700', color:'#475569', textTransform:'uppercase', letterSpacing:'0.05em', whiteSpace:'nowrap' }}>{h}</th>
+                          ))}
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {iftsAziende.map((a, idx) => (
+                          <tr key={a.id} style={{ borderBottom:'1px solid #f1f5f9', background: aggIfts===a.id ? '#f0fdf4' : idx%2===0 ? 'white' : '#fafafa' }}>
+                            <td style={{ padding:'10px 14px' }}>
+                              <div style={{ fontWeight:'600', fontSize:'14px', color:'#0f172a' }}>{a.ragione_sociale}</div>
+                              {a.piva && <div style={{ fontSize:'11px', color:'#94a3b8' }}>P.IVA {a.piva}</div>}
+                            </td>
+                            <td style={{ padding:'10px 14px', fontSize:'13px', color:'#334155' }}>
+                              {a.referente_nome} {a.referente_cognome}
+                              {a.referente_ruolo && <div style={{ fontSize:'11px', color:'#94a3b8' }}>{a.referente_ruolo}</div>}
+                            </td>
+                            <td style={{ padding:'10px 14px' }}>
+                              <div style={{ fontSize:'13px', color:'#334155' }}>{a.referente_email}</div>
+                              <div style={{ fontSize:'13px', color:'#64748b' }}>{a.referente_telefono}</div>
+                            </td>
+                            <td style={{ padding:'10px 14px', fontSize:'12px', color:'#64748b' }}>{a.settore||'—'}</td>
+                            <td style={{ padding:'10px 14px' }}>
+                              <span style={{ padding:'2px 8px', borderRadius:'99px', fontSize:'11px', fontWeight:'700',
+                                background: a.tipo_interesse==='academy'?'#fef3c7':a.tipo_interesse==='singolo'?'#dbeafe':'#f3e8ff',
+                                color: a.tipo_interesse==='academy'?'#92400e':a.tipo_interesse==='singolo'?'#1e40af':'#6b21a8' }}>
+                                {a.tipo_interesse==='academy'?'Academy':a.tipo_interesse==='singolo'?'Singolo':a.tipo_interesse||'—'}
+                              </span>
+                            </td>
+                            <td style={{ padding:'10px 14px', fontSize:'12px', color:'#475569' }}>
+                              {(a.indirizzi_interesse||[]).join(', ')||'—'}
+                            </td>
+                            <td style={{ padding:'10px 14px', fontSize:'13px', color:'#334155', textAlign:'center' }}>
+                              {a.n_giovani_previsti||'—'}
+                            </td>
+                            <td style={{ padding:'10px 14px' }}>
+                              <select value={a.stato||'nuovo'} onChange={e => aggiornaStatoIfts(a.id,'azienda',e.target.value)}
+                                style={{ padding:'4px 8px', borderRadius:'6px', border:'1px solid #e2e8f0', fontSize:'12px', fontWeight:'600', cursor:'pointer', outline:'none',
+                                  background:STATO_COLORS[a.stato]?.bg||'#f3f4f6', color:STATO_COLORS[a.stato]?.text||'#374151' }}>
+                                {STATI.map(s => <option key={s} value={s}>{STATO_COLORS[s]?.label||s}</option>)}
+                              </select>
+                            </td>
+                            <td style={{ padding:'10px 14px', fontSize:'12px', color:'#94a3b8', whiteSpace:'nowrap' }}>
+                              {a.created_at ? new Date(a.created_at).toLocaleDateString('it-IT',{day:'2-digit',month:'2-digit',year:'2-digit'}) : '—'}
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        )}
+
       </div>
     </div>
   )

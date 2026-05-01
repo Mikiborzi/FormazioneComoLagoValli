@@ -6,6 +6,7 @@ const navItems = [
   { label: "Home", href: "/" },
   { label: "Come Funziona", href: "/#come-funziona" },
   { label: "I Corsi", href: "/#corsi" },
+  { label: "Percorsi IFTS", href: "/ifts" },
   { label: "Cerca Lavoro", href: "/servizi-lavoro" },
   { label: "Testimonianze", href: "/testimonianze" },
   { label: "Proponi un Corso", href: "/proponi-corso" },

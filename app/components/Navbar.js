@@ -6,6 +6,7 @@ import { createClient } from '../lib/supabase'
 const navItems = [
   { label: 'Come Funziona', href: '/#come-funziona' },
   { label: 'I Corsi', href: '/#corsi' },
+  { label: 'Percorsi IFTS', href: '/ifts' },
   { label: 'Cerca Lavoro', href: '/servizi-lavoro' },
   { label: 'Testimonianze', href: '/testimonianze' },
   { label: 'Contatti', href: '/#contatti' },

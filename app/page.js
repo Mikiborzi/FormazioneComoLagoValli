@@ -486,6 +486,71 @@ function HeroSection() {
   );
 }
 
+function BiforcazioneSection() {
+  return (
+    <section className="py-14 px-4 bg-gray-50">
+      <div className="max-w-5xl mx-auto">
+        <div className="text-center mb-10">
+          <p className="font-sans font-semibold text-sm uppercase tracking-widest mb-3" style={{ color: '#2d7a4f' }}>
+            Due mondi, una sola missione
+          </p>
+          <h2 className="font-display font-bold text-3xl sm:text-4xl" style={{ color: '#1a2e5a' }}>
+            Qual è il tuo percorso?
+          </h2>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+          {/* GOL */}
+          <div className="rounded-2xl p-8 text-white flex flex-col" style={{ background: 'linear-gradient(135deg, #1a2e5a 0%, #2d4a8a 100%)' }}>
+            <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-5 shrink-0" style={{ backgroundColor: 'rgba(200,148,26,0.2)' }}>
+              <svg className="w-6 h-6" fill="none" stroke="#c8941a" viewBox="0 0 24 24" aria-hidden="true">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <p className="text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: '#c8941a' }}>Programma GOL</p>
+            <h3 className="font-display font-bold text-2xl mb-3">Cerchi lavoro o vuoi formarti?</h3>
+            <p className="text-white/75 text-sm leading-relaxed mb-6 flex-1">
+              Percorsi gratuiti di qualifica e riqualifica professionale finanziati da Unione Europea,
+              Ministero del Lavoro e Regione Lombardia. Per chi è disoccupato o vuole cambiare settore.
+            </p>
+            <a
+              href="#corsi"
+              className="inline-flex items-center gap-2 font-semibold text-sm px-5 py-3 rounded-xl self-start transition-all duration-200 hover:brightness-110"
+              style={{ backgroundColor: '#c8941a', color: '#fff' }}
+            >
+              Scopri i corsi GOL →
+            </a>
+          </div>
+
+          {/* IFTS */}
+          <div className="rounded-2xl p-8 text-white flex flex-col" style={{ background: 'linear-gradient(135deg, #1a6a3a 0%, #2d7a4f 100%)' }}>
+            <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-5 shrink-0" style={{ backgroundColor: 'rgba(255,255,255,0.15)' }}>
+              <svg className="w-6 h-6" fill="none" stroke="#fff" viewBox="0 0 24 24" aria-hidden="true">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+              </svg>
+            </div>
+            <p className="text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: '#a7f3d0' }}>IFTS — Apprendistato di 1° livello</p>
+            <h3 className="font-display font-bold text-2xl mb-3">Hai un diploma e vuoi specializzarti?</h3>
+            <p className="text-white/75 text-sm leading-relaxed mb-6 flex-1">
+              Percorsi post-diploma da 800–1000 ore per Tecnici Amministrativi e Tecnici Moda.
+              Formazione interamente finanziata, con un contratto di lavoro già dal primo giorno.
+              Per ragazzi 18–24 anni e per le aziende del distretto comasco.
+            </p>
+            <Link
+              href="/ifts"
+              className="inline-flex items-center gap-2 font-semibold text-sm px-5 py-3 rounded-xl self-start transition-all duration-200 hover:brightness-110"
+              style={{ backgroundColor: 'rgba(255,255,255,0.2)', color: '#fff', border: '1px solid rgba(255,255,255,0.3)' }}
+            >
+              Scopri i percorsi IFTS →
+            </Link>
+          </div>
+
+        </div>
+      </div>
+    </section>
+  )
+}
+
 function CoursesSection() {
   return (
     <section id="corsi" className="py-10 lg:py-16 bg-white">
@@ -1159,6 +1224,7 @@ export default function HomePage() {
     <>
       <main>
         <HeroSection />
+        <BiforcazioneSection />
         <CoursesSection />
         <ProponCorsoSection />
         <QuoteCarousel />
