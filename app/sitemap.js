@@ -5,7 +5,9 @@ export default function sitemap() {
     'fatti-impresa', 'business-up', 'digital-marketing-ai',
     'giardinaggio-base', 'addetto-cucina', 'centralinista-receptionist',
     'inglese-base', 'inglese-intermedio', 'business-english',
-    'tedesco-base', 'tedesco-intermedio', 'informatica-base',
+    'tedesco-base', 'tedesco-intermedio',
+    'francese-base', 'francese-intermedio', 'spagnolo-base', 'spagnolo-intermedio',
+    'informatica-base',
     'informatica-intermedio', 'intelligenza-artificiale', 'digital-marketing'
   ]
 
