@@ -443,19 +443,34 @@ function HeroSection() {
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-20">
         <div className="max-w-3xl">
-          {/* Badge */}
-          <div
-            className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-sans font-medium mb-6"
-            style={{
-              backgroundColor: "rgba(200,148,26,0.15)",
-              color: "#c8941a",
-            }}
-          >
-            <span
-              className="w-2 h-2 rounded-full shrink-0"
-              style={{ backgroundColor: "#c8941a" }}
-            />
-            Programma GOL – Regione Lombardia / Unione Europea
+          {/* Badges */}
+          <div className="flex flex-wrap gap-3 mb-6">
+            <div
+              className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-sans font-medium"
+              style={{
+                backgroundColor: "rgba(200,148,26,0.15)",
+                color: "#c8941a",
+              }}
+            >
+              <span
+                className="w-2 h-2 rounded-full shrink-0"
+                style={{ backgroundColor: "#c8941a" }}
+              />
+              Programma GOL – Regione Lombardia / Unione Europea
+            </div>
+            <div
+              className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-sans font-medium"
+              style={{
+                backgroundColor: "rgba(45,122,79,0.15)",
+                color: "#7dd3a8",
+              }}
+            >
+              <span
+                className="w-2 h-2 rounded-full shrink-0"
+                style={{ backgroundColor: "#7dd3a8" }}
+              />
+              Percorsi Post Diploma o Post Qualifica IFTS – Regione Lombardia
+            </div>
           </div>
 
           <h1
