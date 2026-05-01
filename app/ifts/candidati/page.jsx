@@ -158,6 +158,7 @@ export default function IftsCandidatiPage() {
               {[
                 { value: 'amministrativo', label: 'Tecnico Amministrativo', desc: 'Contabilità, gestione ufficio, strumenti digitali' },
                 { value: 'moda', label: 'Tecnico Moda — Made in Italy', desc: 'Produzione tessile, supply chain, distretto comasco' },
+                { value: 'multimediale', label: 'Tecniche di Produzione Multimediale', desc: 'Video, fotografia, editing, comunicazione visiva' },
                 { value: 'non_so', label: 'Non ho ancora deciso', desc: 'Ti aiutiamo a scegliere in base al tuo profilo' },
               ].map(opt => (
                 <label

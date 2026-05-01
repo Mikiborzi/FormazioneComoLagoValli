@@ -16,12 +16,13 @@ export default function IftsPage() {
             Istruzione e Formazione Tecnica Superiore
           </p>
           <h1 className="font-display font-bold text-4xl sm:text-5xl leading-tight mb-6">
-            Percorsi IFTS<br />in Apprendistato
+            Percorsi IFTS<br />in Apprendistato di Primo Livello
           </h1>
           <p className="text-lg text-white/80 max-w-2xl mx-auto mb-10 leading-relaxed">
-            800–1000 ore di formazione specialistica, interamente finanziate, con un contratto
-            di lavoro già dal primo giorno. Per chi ha un diploma o una qualifica professionale
-            e vuole costruire una carriera nel tessile-moda o nell'amministrazione.
+            800 ore di formazione specialistica — 300 in aula e 500 in azienda — interamente
+            finanziate, con un contratto di apprendistato già dal primo giorno. Per chi ha un
+            diploma o una qualifica professionale e vuole costruire una carriera nel tessile-moda,
+            nell'amministrazione o nella produzione multimediale.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
@@ -46,22 +47,36 @@ export default function IftsPage() {
       <section className="py-16 px-4 bg-white">
         <div className="max-w-4xl mx-auto">
           <h2 className="font-display font-bold text-3xl mb-4" style={{ color: '#1a2e5a' }}>
-            Cosa sono i percorsi IFTS
+            Cosa sono i percorsi IFTS in apprendistato di primo livello
           </h2>
           <div className="w-12 h-1 rounded-full mb-8" style={{ backgroundColor: '#2d7a4f' }} />
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-gray-600 text-base leading-relaxed">
-            <p>
-              I percorsi IFTS — Istruzione e Formazione Tecnica Superiore — sono programmi di
-              specializzazione post-diploma o post-qualifica professionale della durata di 800–1000 ore.
-              Sono progettati per chi vuole acquisire competenze tecniche avanzate in tempi definiti,
-              con una forte componente pratica in azienda.
-            </p>
-            <p>
-              Il percorso si attiva con l'<strong>apprendistato di primo livello</strong>: il giovane
-              firma un contratto di assunzione con un'azienda prima di iniziare a formarsi. La formazione
-              è interamente finanziata da risorse pubbliche. Per l'azienda è l'opportunità di contribuire
-              alla crescita del futuro collaboratore fin dall'inizio, con il metodo <em>on the job</em>.
-            </p>
+            <div className="space-y-4">
+              <p>
+                I percorsi IFTS — Istruzione e Formazione Tecnica Superiore — sono programmi di
+                specializzazione post-diploma o post-qualifica professionale della durata di <strong>800 ore</strong>:
+                300 ore di formazione d'aula e 500 ore di formazione pratica direttamente in azienda.
+              </p>
+              <p>
+                Per il giovane il vantaggio è doppio: un <strong>percorso di formazione completamente gratuito</strong>,
+                finanziato da risorse pubbliche, e l'ingresso in azienda fin dal primo giorno con un
+                <strong> contratto di apprendistato formativo</strong> che prevede un'indennità di partecipazione.
+                Si acquisiscono competenze reali lavorando, non aspettando.
+              </p>
+            </div>
+            <div className="space-y-4">
+              <p>
+                Per l'azienda è l'opportunità di formare una risorsa secondo le proprie esigenze:
+                delle 800 ore totali, <strong>500 si svolgono on the job</strong>, integrate nel lavoro
+                quotidiano. Il costo del lavoro è molto contenuto grazie alla natura formativa del
+                contratto di apprendistato, che prevede agevolazioni contributive significative.
+              </p>
+              <p>
+                Il percorso si attiva con l'<strong>apprendistato di primo livello</strong>: il giovane
+                firma il contratto con l'azienda prima ancora di iniziare le lezioni. Formazione e
+                lavoro partono insieme.
+              </p>
+            </div>
           </div>
         </div>
       </section>
@@ -73,7 +88,7 @@ export default function IftsPage() {
             Gli indirizzi attivi
           </h2>
           <div className="w-12 h-1 rounded-full mb-10" style={{ backgroundColor: '#2d7a4f' }} />
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
 
             <div className="bg-white rounded-2xl p-8 shadow-sm">
               <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-5" style={{ backgroundColor: 'rgba(26,46,90,0.08)' }}>
@@ -104,6 +119,22 @@ export default function IftsPage() {
                 Produzione tessile, gestione del campionario, controllo qualità, supply chain della
                 moda. Pensato per il distretto comasco, tra i principali fornitori di tessuti dei
                 grandi brand del lusso italiano.
+              </p>
+            </div>
+
+            <div className="bg-white rounded-2xl p-8 shadow-sm">
+              <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-5" style={{ backgroundColor: 'rgba(200,148,26,0.08)' }}>
+                <svg className="w-6 h-6" fill="none" stroke="#c8941a" viewBox="0 0 24 24" aria-hidden="true">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 10l4.553-2.069A1 1 0 0121 8.82v6.36a1 1 0 01-1.447.894L15 14M3 8a2 2 0 012-2h8a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V8z" />
+                </svg>
+              </div>
+              <h3 className="font-display font-bold text-xl mb-3" style={{ color: '#1a2e5a' }}>
+                Tecniche di Produzione Multimediale
+              </h3>
+              <p className="text-gray-500 text-sm leading-relaxed">
+                Produzione video, fotografia digitale, comunicazione visiva, editing e post-produzione.
+                Per chi vuole lavorare nel mondo dei media, della comunicazione d'impresa e del
+                content creation professionale.
               </p>
             </div>
 

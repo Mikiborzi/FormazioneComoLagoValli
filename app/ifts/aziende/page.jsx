@@ -215,6 +215,7 @@ export default function IftsAziendePage() {
                 {[
                   { value: 'amministrativo', label: 'Tecnico Amministrativo' },
                   { value: 'moda', label: 'Tecnico Moda' },
+                  { value: 'multimediale', label: 'Produzione Multimediale' },
                 ].map(opt => (
                   <label key={opt.value} className="flex items-center gap-2 cursor-pointer">
                     <input
