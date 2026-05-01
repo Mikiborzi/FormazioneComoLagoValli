@@ -532,9 +532,9 @@ function BiforcazioneSection() {
             <p className="text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: '#a7f3d0' }}>IFTS — Apprendistato di 1° livello</p>
             <h3 className="font-display font-bold text-2xl mb-3">Hai un diploma e vuoi specializzarti?</h3>
             <p className="text-white/75 text-sm leading-relaxed mb-6 flex-1">
-              Percorsi post-diploma da 800–1000 ore per Tecnici Amministrativi e Tecnici Moda.
-              Formazione interamente finanziata, con un contratto di lavoro già dal primo giorno.
-              Per ragazzi 18–24 anni e per le aziende del distretto comasco.
+              Hai un diploma o una qualifica professionale di quarto anno e vuoi specializzarti?
+              Scegli tra le proposte dei nostri percorsi IFTS — Istruzione Formazione Tecnico
+              Superiore — ed entra subito nel mondo del lavoro. Per ragazzi dai 18 ai 24 anni.
             </p>
             <Link
               href="/ifts"
