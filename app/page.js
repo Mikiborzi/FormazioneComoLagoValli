@@ -230,6 +230,26 @@ const reasons = [
     title: "Cosa sono le Politiche Attive del Lavoro.",
     body: "Sono strumenti pubblici — orientamento, accompagnamento alla ricerca di lavoro, formazione professionale — finanziati da Unione Europea, Stato e Regione per chi vuole rimettere in moto la propria carriera. Non assistenza, non sussidi: investimento. Su di te, sulle tue competenze, sul tuo futuro lavorativo.",
   },
+  {
+    icon: (
+      <svg
+        className="w-8 h-8"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+        aria-hidden="true"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth={1.5}
+          d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
+        />
+      </svg>
+    ),
+    title: "Cosa sono i percorsi IFTS in apprendistato di primo livello.",
+    body: "IFTS — Istruzione e Formazione Tecnica Superiore — sono percorsi post-diploma di 800 ore (300 in aula, 500 in azienda) rivolti a giovani tra i 18 e i 24 anni. Si attivano con un contratto di apprendistato di primo livello: il giovane entra in azienda dal primo giorno, con un'indennità di partecipazione, e segue una formazione completamente finanziata da risorse pubbliche. Per l'azienda: una risorsa in formazione on the job a costo del lavoro contenuto, grazie alle agevolazioni contributive previste per l'apprendistato formativo.",
+  },
 ];
 
 const testimonials = [
