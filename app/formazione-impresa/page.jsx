@@ -77,7 +77,7 @@ export default function FormazioneImpresaPage() {
             Formazione Impresa<br />
             <span style={{ color: '#fca5a5' }}>L&apos;investimento migliore</span>
           </h1>
-          <p className="text-lg text-white/85 max-w-2xl mx-auto mb-10 leading-relaxed">
+          <p className="text-lg text-white/85 max-w-2xl mx-auto mb-10 leading-relaxed text-justify">
             Per chi l&apos;impresa la vive tutti i giorni. Percorsi studiati per chi vuole restare
             aggiornato, cogliere le opportunità del cambiamento e confrontarsi su come navigare
             — con lucidità e concretezza — un&apos;epoca di grandi trasformazioni.
@@ -89,12 +89,12 @@ export default function FormazioneImpresaPage() {
             className="inline-block font-semibold text-base px-8 py-4 rounded-xl transition-all duration-200 hover:scale-105"
             style={{ backgroundColor: 'white', color: '#8b0000' }}
           >
-            Scopri i percorsi disponibili →
+            Scopri il percorso AI ACADEMY →
           </a>
         </div>
       </section>
 
-      {/* La nostra visione */}
+      {/* Di cosa si tratta */}
       <section className="py-16 px-4 bg-white">
         <div className="max-w-4xl mx-auto">
           <h2 className="font-display font-bold text-3xl mb-4" style={{ color: '#1a2e5a' }}>
@@ -103,12 +103,12 @@ export default function FormazioneImpresaPage() {
           <div className="w-12 h-1 rounded-full mb-8" style={{ backgroundColor: '#8b0000' }} />
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-gray-600 text-base leading-relaxed">
             <div className="space-y-4">
-              <p>
+              <p className="text-justify">
                 Formazione Impresa è la proposta di <strong>Starting Work</strong> dedicata a chi
                 lavora dentro le organizzazioni — dipendenti, quadri, manager — e a chi le guida
                 o le supporta dall&apos;esterno: imprenditori, consulenti, liberi professionisti.
               </p>
-              <p>
+              <p className="text-justify">
                 Non corsi generici. Percorsi <strong>studiati attorno alle esigenze reali</strong> di
                 chi ogni giorno deve prendere decisioni, motivare persone, gestire processi e
                 stare al passo con evoluzioni tecnologiche, normative e di mercato che si
@@ -116,13 +116,13 @@ export default function FormazioneImpresaPage() {
               </p>
             </div>
             <div className="space-y-4">
-              <p>
+              <p className="text-justify">
                 L&apos;obiettivo non è solo trasferire contenuti: è creare occasioni di
                 <strong> confronto tra pari</strong>, momenti in cui chi vive le stesse sfide
                 ragiona insieme su come affrontarle, con l&apos;aiuto di chi quelle sfide le ha
                 studiate e vissute sul campo.
               </p>
-              <p>
+              <p className="text-justify">
                 Perché la formazione migliore non è quella che ti dice cosa fare: è quella
                 che ti aiuta a capire <em>perché</em>, ti dà gli strumenti per farlo e ti mette
                 in contatto con chi può aiutarti a farlo meglio.
@@ -132,13 +132,13 @@ export default function FormazioneImpresaPage() {
         </div>
       </section>
 
-      {/* Per chi è */}
+      {/* Per chi è pensata */}
       <section className="py-16 px-4 bg-gray-50">
         <div className="max-w-4xl mx-auto">
           <h2 className="font-display font-bold text-3xl mb-4" style={{ color: '#1a2e5a' }}>
             Per chi è pensata
           </h2>
-          <div className="w-12 h-1 rounded-full mb-10" style={{ backgroundColor: '#8b0000' }} />
+          <div className="w-12 h-1 rounded-full mb-8" style={{ backgroundColor: '#8b0000' }} />
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             {TARGET.map((t) => (
               <div key={t.label} className="bg-white rounded-2xl p-7 shadow-sm">
@@ -148,24 +148,24 @@ export default function FormazioneImpresaPage() {
                 >
                   {t.icon}
                 </div>
-                <h3 className="font-display font-bold text-xl mb-2" style={{ color: '#1a2e5a' }}>
+                <h3 className="font-display font-bold text-xl mb-3" style={{ color: '#1a2e5a' }}>
                   {t.label}
                 </h3>
-                <p className="text-gray-500 text-sm leading-relaxed">{t.desc}</p>
+                <p className="text-gray-500 text-sm leading-relaxed text-justify">{t.desc}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Le sfide */}
+      {/* Le sfide del nostro tempo */}
       <section className="py-16 px-4 bg-white">
         <div className="max-w-4xl mx-auto">
           <h2 className="font-display font-bold text-3xl mb-4" style={{ color: '#1a2e5a' }}>
             Le sfide del nostro tempo
           </h2>
-          <div className="w-12 h-1 rounded-full mb-4" style={{ backgroundColor: '#8b0000' }} />
-          <p className="text-gray-500 text-base leading-relaxed mb-10 max-w-2xl">
+          <div className="w-12 h-1 rounded-full mb-8" style={{ backgroundColor: '#8b0000' }} />
+          <p className="text-gray-500 text-base leading-relaxed mb-10 max-w-2xl text-justify">
             I percorsi Formazione Impresa nascono attorno ai temi che più impattano chi
             lavora e chi gestisce oggi: transizione digitale, intelligenza artificiale,
             sostenibilità, competenze trasversali.
@@ -180,7 +180,7 @@ export default function FormazioneImpresaPage() {
                 <h3 className="font-display font-bold text-lg mb-3" style={{ color: '#8b0000' }}>
                   {s.titolo}
                 </h3>
-                <p className="text-gray-600 text-sm leading-relaxed">{s.testo}</p>
+                <p className="text-gray-600 text-sm leading-relaxed text-justify">{s.testo}</p>
               </div>
             ))}
           </div>
@@ -192,7 +192,7 @@ export default function FormazioneImpresaPage() {
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="font-display font-bold text-3xl mb-4">I percorsi disponibili</h2>
           <div className="w-12 h-1 rounded-full mb-6 mx-auto" style={{ backgroundColor: '#fca5a5' }} />
-          <p className="text-white/85 text-base leading-relaxed max-w-2xl mx-auto mb-10">
+          <p className="text-white/85 text-base leading-relaxed max-w-2xl mx-auto mb-10 text-justify">
             Il catalogo completo dei percorsi Formazione Impresa — contenuti, modalità,
             date e iscrizioni — è disponibile sul portale dedicato di Starting Work.
           </p>
@@ -208,15 +208,15 @@ export default function FormazioneImpresaPage() {
         </div>
       </section>
 
-      {/* ─── VOUCHER FORMAZIONE CONTINUA ─────────────────────────────── */}
+      {/* Voucher Formazione Continua */}
       <section className="py-16 px-4 bg-white">
         <div className="max-w-4xl mx-auto">
 
           <h2 className="font-display font-bold text-3xl mb-4" style={{ color: '#1a2e5a' }}>
             Voucher Formazione Continua — Regione Lombardia
           </h2>
-          <div className="w-12 h-1 rounded-full mb-4" style={{ backgroundColor: '#8b0000' }} />
-          <p className="text-gray-500 text-base leading-relaxed mb-8 max-w-2xl">
+          <div className="w-12 h-1 rounded-full mb-8" style={{ backgroundColor: '#8b0000' }} />
+          <p className="text-gray-500 text-base leading-relaxed mb-10 max-w-2xl text-justify">
             Finanziato dal Programma Regionale Lombardia FSE+ 2021-2027 (Obiettivo ESO 4.4),
             il voucher consente a lavoratori e imprese di finanziare percorsi di formazione
             continua selezionabili da un catalogo regionale di offerte accreditate.
@@ -229,10 +229,10 @@ export default function FormazioneImpresaPage() {
           >
             <span className="text-2xl shrink-0">📋</span>
             <div>
-              <p className="font-semibold text-sm mb-1" style={{ color: '#92400e' }}>
+              <p className="font-semibold text-sm mb-2" style={{ color: '#92400e' }}>
                 Quarta edizione — in attesa dell&apos;avviso attuativo
               </p>
-              <p className="text-sm leading-relaxed" style={{ color: '#78350f' }}>
+              <p className="text-sm leading-relaxed text-justify" style={{ color: '#78350f' }}>
                 Le linee guida della quarta edizione di Formazione Continua sono state approvate
                 in delibera di Giunta Regionale. I percorsi Formazione Impresa di Starting Work
                 saranno inseriti nel catalogo non appena l&apos;avviso attuativo sarà pubblicato.
@@ -246,10 +246,10 @@ export default function FormazioneImpresaPage() {
           </div>
 
           {/* Come funziona */}
-          <h3 className="font-display font-bold text-2xl mb-8" style={{ color: '#1a2e5a' }}>
+          <h3 className="font-display font-bold text-2xl mb-6" style={{ color: '#1a2e5a' }}>
             Come funziona
           </h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-14">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
             {[
               {
                 step: '1',
@@ -264,7 +264,7 @@ export default function FormazioneImpresaPage() {
               {
                 step: '3',
                 titolo: 'Partecipa e ottieni il rimborso',
-                testo: 'Il voucher viene erogato a rimborso dopo la conclusione del corso, a condizione che il destinatario abbia frequentato almeno il 75% delle ore previste e ottenuto la certificazione finale.',
+                testo: 'Il voucher è erogato a rimborso dopo la conclusione del corso, a condizione che il destinatario abbia frequentato almeno il 75% delle ore previste e ottenuto la certificazione finale.',
               },
             ].map((item) => (
               <div key={item.step} className="bg-gray-50 rounded-2xl p-7">
@@ -274,10 +274,10 @@ export default function FormazioneImpresaPage() {
                 >
                   {item.step}
                 </div>
-                <h4 className="font-display font-bold text-base mb-2" style={{ color: '#1a2e5a' }}>
+                <h4 className="font-display font-bold text-base mb-3" style={{ color: '#1a2e5a' }}>
                   {item.titolo}
                 </h4>
-                <p className="text-gray-500 text-sm leading-relaxed">{item.testo}</p>
+                <p className="text-gray-500 text-sm leading-relaxed text-justify">{item.testo}</p>
               </div>
             ))}
           </div>
@@ -286,7 +286,7 @@ export default function FormazioneImpresaPage() {
           <h3 className="font-display font-bold text-2xl mb-6" style={{ color: '#1a2e5a' }}>
             Quanto vale il voucher
           </h3>
-          <div className="overflow-x-auto mb-10">
+          <div className="overflow-x-auto mb-12">
             <table className="w-full text-sm rounded-2xl overflow-hidden" style={{ border: '1px solid #e5e7eb' }}>
               <thead>
                 <tr style={{ backgroundColor: '#8b0000', color: 'white' }}>
@@ -296,26 +296,26 @@ export default function FormazioneImpresaPage() {
                 </tr>
               </thead>
               <tbody>
-                <tr className="border-t" style={{ borderColor: '#f3f4f6' }}>
-                  <td className="px-6 py-4 text-gray-700 font-medium">EQF 6 – 8 (alto)</td>
+                <tr style={{ borderTop: '1px solid #f3f4f6' }}>
+                  <td className="px-6 py-4 text-gray-700 font-medium">EQF 6 – 8 &nbsp;(alto)</td>
                   <td className="px-6 py-4 text-gray-500">40 ore</td>
                   <td className="px-6 py-4 font-bold" style={{ color: '#8b0000' }}>€ 2.000</td>
                 </tr>
-                <tr className="border-t" style={{ borderColor: '#f3f4f6', backgroundColor: '#fafafa' }}>
-                  <td className="px-6 py-4 text-gray-700 font-medium">EQF 4 – 5 (medio)</td>
+                <tr style={{ borderTop: '1px solid #f3f4f6', backgroundColor: '#fafafa' }}>
+                  <td className="px-6 py-4 text-gray-700 font-medium">EQF 4 – 5 &nbsp;(medio)</td>
                   <td className="px-6 py-4 text-gray-500">30 ore</td>
                   <td className="px-6 py-4 font-bold" style={{ color: '#8b0000' }}>€ 1.500</td>
                 </tr>
-                <tr className="border-t" style={{ borderColor: '#f3f4f6' }}>
-                  <td className="px-6 py-4 text-gray-700 font-medium">EQF 3 (base)</td>
+                <tr style={{ borderTop: '1px solid #f3f4f6' }}>
+                  <td className="px-6 py-4 text-gray-700 font-medium">EQF 3 &nbsp;(base)</td>
                   <td className="px-6 py-4 text-gray-500">16 ore</td>
                   <td className="px-6 py-4 font-bold" style={{ color: '#8b0000' }}>€ 800</td>
                 </tr>
-                <tr className="border-t" style={{ borderColor: '#f3f4f6', backgroundColor: '#fef2f2' }}>
+                <tr style={{ borderTop: '1px solid #f3f4f6', backgroundColor: '#fef2f2' }}>
                   <td className="px-6 py-4 text-gray-700 font-semibold" colSpan={2}>Massimale per lavoratore per anno solare</td>
                   <td className="px-6 py-4 font-bold" style={{ color: '#8b0000' }}>€ 2.000</td>
                 </tr>
-                <tr className="border-t" style={{ borderColor: '#f3f4f6', backgroundColor: '#fef2f2' }}>
+                <tr style={{ borderTop: '1px solid #f3f4f6', backgroundColor: '#fef2f2' }}>
                   <td className="px-6 py-4 text-gray-700 font-semibold" colSpan={2}>Massimale per azienda per anno solare</td>
                   <td className="px-6 py-4 font-bold" style={{ color: '#8b0000' }}>€ 50.000</td>
                 </tr>
@@ -327,7 +327,7 @@ export default function FormazioneImpresaPage() {
           <h3 className="font-display font-bold text-2xl mb-6" style={{ color: '#1a2e5a' }}>
             Quota pubblica e cofinanziamento
           </h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-14">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-12">
             {[
               {
                 label: 'Liberi professionisti, lavoratori autonomi e imprese fino a 9 addetti',
@@ -356,8 +356,8 @@ export default function FormazioneImpresaPage() {
                   backgroundColor: item.highlight ? '#fef2f2' : '#f9fafb',
                 }}
               >
-                <p className="text-sm text-gray-600 mb-5 leading-relaxed">{item.label}</p>
-                <div className="space-y-2">
+                <p className="text-sm text-gray-600 mb-5 leading-relaxed text-justify">{item.label}</p>
+                <div className="space-y-3">
                   <div className="flex justify-between items-center">
                     <span className="text-xs text-gray-500 uppercase tracking-wide">Quota pubblica</span>
                     <span className="font-display font-black text-xl" style={{ color: '#8b0000' }}>{item.pubblica}</span>
@@ -375,7 +375,7 @@ export default function FormazioneImpresaPage() {
           <h3 className="font-display font-bold text-2xl mb-6" style={{ color: '#1a2e5a' }}>
             Chi può accedere
           </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-14">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
             <div
               className="rounded-2xl p-7"
               style={{ backgroundColor: '#f9fafb', border: '1px solid #e5e7eb' }}
@@ -383,7 +383,7 @@ export default function FormazioneImpresaPage() {
               <h4 className="font-semibold text-base mb-4" style={{ color: '#1a2e5a' }}>
                 Destinatari della formazione
               </h4>
-              <ul className="space-y-2 text-sm text-gray-600">
+              <ul className="space-y-3 text-sm text-gray-600">
                 {[
                   'Lavoratori dipendenti a tempo indeterminato o determinato (full/part-time)',
                   'Soci-lavoratori di cooperative',
@@ -393,7 +393,7 @@ export default function FormazioneImpresaPage() {
                 ].map((v) => (
                   <li key={v} className="flex gap-2">
                     <span className="shrink-0 mt-0.5" style={{ color: '#8b0000' }}>✓</span>
-                    <span>{v}</span>
+                    <span className="text-justify">{v}</span>
                   </li>
                 ))}
               </ul>
@@ -405,7 +405,7 @@ export default function FormazioneImpresaPage() {
               <h4 className="font-semibold text-base mb-4" style={{ color: '#8b0000' }}>
                 Sono esclusi
               </h4>
-              <ul className="space-y-2 text-sm text-gray-600">
+              <ul className="space-y-3 text-sm text-gray-600">
                 {[
                   'Lavoratori con contratto intermittente o in somministrazione',
                   'Tirocinanti e apprendisti con periodo formativo ancora in corso',
@@ -415,7 +415,7 @@ export default function FormazioneImpresaPage() {
                 ].map((v) => (
                   <li key={v} className="flex gap-2">
                     <span className="shrink-0 mt-0.5 text-red-400">✗</span>
-                    <span>{v}</span>
+                    <span className="text-justify">{v}</span>
                   </li>
                 ))}
               </ul>
@@ -426,7 +426,7 @@ export default function FormazioneImpresaPage() {
           <h3 className="font-display font-bold text-2xl mb-6" style={{ color: '#1a2e5a' }}>
             Aree tematiche del catalogo
           </h3>
-          <div className="flex flex-wrap gap-3 mb-14">
+          <div className="flex flex-wrap gap-3 mb-12">
             {[
               'Competenze digitali',
               'Competenze green / sostenibilità ambientale',
@@ -446,7 +446,7 @@ export default function FormazioneImpresaPage() {
 
           {/* Nota legale */}
           <div
-            className="rounded-2xl p-6 text-xs leading-relaxed"
+            className="rounded-2xl p-6 text-xs leading-relaxed text-justify"
             style={{ backgroundColor: '#f9fafb', border: '1px solid #e5e7eb', color: '#6b7280' }}
           >
             <strong className="text-gray-700">Fonte e regime di aiuto</strong> — Le linee guida riportate
