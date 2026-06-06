@@ -7,12 +7,11 @@ const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const PIVA_REGEX = /^[0-9]{11}$/;
 
 const PERCORSI = [
-  "AI Academy — Intelligenza Artificiale",
-  "Trasformazione Digitale",
-  "Sostenibilità e Transizione Ecologica",
-  "Leadership e Soft Skill",
-  "Lingue per il Business",
-  "Altro / Non ancora deciso",
+  { label: "AI Academy — Intelligenza Artificiale", disponibile: true },
+  { label: "Trasformazione Digitale", disponibile: false },
+  { label: "Sostenibilità e Transizione Ecologica", disponibile: false },
+  { label: "Leadership e Soft Skill", disponibile: false },
+  { label: "Lingue per il Business", disponibile: false },
 ];
 
 const inputClass =
@@ -250,9 +249,16 @@ export default function FormIscrizioneImpresa() {
             <select name="percorso_interesse" value={form.percorso_interesse} onChange={handleChange}
               className={inputClass} style={{ ...inputStyle(false), cursor: "pointer" }}>
               <option value="">Seleziona (opzionale)</option>
-              {PERCORSI.map((p) => <option key={p} value={p}>{p}</option>)}
+              {PERCORSI.map((p) => (
+                <option key={p.label} value={p.label} disabled={!p.disponibile}>
+                  {p.disponibile ? p.label : `${p.label} — prossimamente`}
+                </option>
+              ))}
             </select>
           </FormField>
+          <p className="font-sans text-xs mt-2" style={{ color: '#92400e' }}>
+            Gli altri percorsi sono in fase di definizione e saranno disponibili prossimamente.
+          </p>
         </div>
         <div className="mt-4">
           <FormField label="Note aggiuntive">
