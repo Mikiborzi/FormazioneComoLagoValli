@@ -743,6 +743,7 @@ export default function AdminPage() {
           const CANALE_LABEL = {
             impresa_iscrizione: { label: '📋 Iscrizione Impresa', bg: '#fee2e2', text: '#991b1b' },
             impresa_contatto:   { label: '📞 Contatto Impresa',   bg: '#fef3c7', text: '#92400e' },
+            voucher_attesa:     { label: '🔔 Attesa Voucher',     bg: '#fef9c3', text: '#713f12' },
             gol:                { label: '🎓 GOL',                bg: '#dbeafe', text: '#1e40af' },
             servizi_lavoro:     { label: '💼 Servizi Lavoro',     bg: '#ede9fe', text: '#5b21b6' },
             ifts_candidato:     { label: '🏭 IFTS Candidato',     bg: '#d1fae5', text: '#065f46' },
