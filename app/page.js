@@ -572,7 +572,11 @@ function BiforcazioneSection() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 
           {/* GOL */}
-          <div className="rounded-2xl p-8 text-white flex flex-col" style={{ background: 'linear-gradient(135deg, #1a2e5a 0%, #2d4a8a 100%)' }}>
+          <div className="rounded-2xl p-8 text-white flex flex-col relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #1a2e5a 0%, #2d4a8a 100%)' }}>
+            {/* Badge sospensione */}
+            <div className="absolute top-4 right-4 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold" style={{ background: 'rgba(245,158,11,0.25)', color: '#fcd34d', border: '1px solid rgba(245,158,11,0.45)' }}>
+              ⚠️ Temporaneamente sospeso
+            </div>
             <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-5 shrink-0" style={{ backgroundColor: 'rgba(200,148,26,0.2)' }}>
               <svg className="w-6 h-6" fill="none" stroke="#c8941a" viewBox="0 0 24 24" aria-hidden="true">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -580,12 +584,15 @@ function BiforcazioneSection() {
             </div>
             <p className="text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: '#c8941a' }}>Programma GOL</p>
             <h3 className="font-display font-bold text-2xl mb-3">Cerchi lavoro o vuoi formarti?</h3>
-            <p className="text-white/75 text-sm leading-relaxed mb-6 flex-1">
+            <p className="text-white/75 text-sm leading-relaxed mb-4 flex-1">
               Percorsi gratuiti di qualifica e riqualifica professionale finanziati da Unione Europea,
               Ministero del Lavoro e Regione Lombardia. Per chi è disoccupato o vuole cambiare settore.
             </p>
+            <div className="rounded-xl px-4 py-3 mb-5 text-xs leading-relaxed" style={{ background: 'rgba(245,158,11,0.18)', border: '1px solid rgba(245,158,11,0.35)', color: '#fcd34d' }}>
+              Regione Lombardia sta rivedendo gli strumenti di Politiche Attive del Lavoro. In attesa delle nuove misure, le informazioni presenti non sono da ritenersi aggiornate e valide.
+            </div>
             <a
-              href="#corsi"
+              href="/servizi-lavoro"
               className="inline-flex items-center gap-2 font-semibold text-sm px-5 py-3 rounded-xl self-start transition-all duration-200 hover:brightness-110"
               style={{ backgroundColor: '#c8941a', color: '#fff' }}
             >

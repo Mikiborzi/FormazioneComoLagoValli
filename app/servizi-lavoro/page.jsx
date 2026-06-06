@@ -27,6 +27,7 @@ const CF_REGEX = /^[A-Z]{6}[0-9]{2}[A-Z][0-9]{2}[A-Z][0-9]{3}[A-Z]$/
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 export default function ServiziLavoro() {
+  const [showSospensione, setShowSospensione] = useState(true)
   const [form, setForm] = useState({
     nome: '', cognome: '', email: '', telefono: '',
     codice_fiscale: '', data_nascita: '',
@@ -195,6 +196,36 @@ export default function ServiziLavoro() {
   // FORM
   return (
     <div style={{ minHeight: '100vh', background: '#f8fafc', fontFamily: "'Segoe UI', system-ui, sans-serif" }}>
+
+      {/* POPUP SOSPENSIONE */}
+      {showSospensione && (
+        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.65)', zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }}>
+          <div style={{ background: 'white', borderRadius: '20px', padding: '40px 36px', maxWidth: '560px', width: '100%', boxShadow: '0 25px 60px rgba(0,0,0,0.35)', textAlign: 'center' }}>
+            <div style={{ fontSize: '52px', marginBottom: '12px' }}>⚠️</div>
+            <h2 style={{ fontSize: '22px', fontWeight: '800', color: '#0f172a', marginBottom: '14px', lineHeight: '1.3' }}>
+              Servizio temporaneamente sospeso
+            </h2>
+            <p style={{ color: '#374151', lineHeight: '1.7', marginBottom: '12px', fontSize: '15px' }}>
+              Regione Lombardia sta rivedendo gli strumenti di <strong>Politiche Attive del Lavoro</strong>.
+              Siamo in attesa di conoscere le nuove misure che saranno adottate.
+            </p>
+            <p style={{ color: '#374151', lineHeight: '1.7', marginBottom: '24px', fontSize: '15px' }}>
+              Le informazioni presenti in questa sezione — riferite al <strong>Programma GOL fino al 30/06/2026</strong> — <strong>non sono da ritenersi aggiornate e valide</strong>.
+            </p>
+            <p style={{ color: '#6b7280', fontSize: '13px', marginBottom: '28px' }}>
+              Per informazioni aggiornate contattaci direttamente: saremo felici di aggiornarti non appena le nuove misure saranno disponibili.
+            </p>
+            <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
+              <a href="mailto:como@mestierilombardia.it" style={{ padding: '12px 22px', background: '#1a2e5a', color: 'white', borderRadius: '10px', textDecoration: 'none', fontWeight: '700', fontSize: '14px' }}>
+                Contattaci
+              </a>
+              <button onClick={() => setShowSospensione(false)} style={{ padding: '12px 22px', background: 'white', color: '#1a2e5a', border: '2px solid #1a2e5a', borderRadius: '10px', cursor: 'pointer', fontWeight: '700', fontSize: '14px' }}>
+                Consulta le informazioni archiviate
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
       {/* HERO */}
       <div style={{ background: 'linear-gradient(135deg, #1a2e5a 0%, #2d4a8a 100%)', color: 'white', padding: '48px 24px 40px', textAlign: 'center' }}>
         <div style={{ maxWidth: '680px', margin: '0 auto' }}>
