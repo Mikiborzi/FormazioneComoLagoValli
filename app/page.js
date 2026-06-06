@@ -560,16 +560,16 @@ function HeroSection() {
 function BiforcazioneSection() {
   return (
     <section id="percorsi" className="py-14 px-4 bg-gray-50">
-      <div className="max-w-5xl mx-auto">
+      <div className="max-w-6xl mx-auto">
         <div className="text-center mb-10">
           <p className="font-sans font-semibold text-sm uppercase tracking-widest mb-3" style={{ color: '#2d7a4f' }}>
-            Due mondi, una sola missione
+            Tre percorsi, una sola missione
           </p>
           <h2 className="font-display font-bold text-3xl sm:text-4xl" style={{ color: '#1a2e5a' }}>
             Qual è il tuo percorso?
           </h2>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
 
           {/* GOL */}
           <div className="rounded-2xl p-8 text-white flex flex-col relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #1a2e5a 0%, #2d4a8a 100%)' }}>
@@ -621,6 +621,30 @@ function BiforcazioneSection() {
             >
               Scopri i percorsi IFTS →
             </Link>
+          </div>
+
+          {/* FORMAZIONE IMPRESA */}
+          <div className="rounded-2xl p-8 text-white flex flex-col" style={{ background: 'linear-gradient(135deg, #8b0000 0%, #cc1a1a 100%)' }}>
+            <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-5 shrink-0" style={{ backgroundColor: 'rgba(255,255,255,0.15)' }}>
+              <svg className="w-6 h-6" fill="none" stroke="#fff" viewBox="0 0 24 24" aria-hidden="true">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+              </svg>
+            </div>
+            <p className="text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: '#fca5a5' }}>Formazione Impresa</p>
+            <h3 className="font-display font-bold text-2xl mb-3">L&apos;investimento migliore</h3>
+            <p className="text-white/75 text-sm leading-relaxed mb-6 flex-1">
+              Percorsi formativi per dipendenti, imprenditori, consulenti e professionisti, ideati e proposti da Starting Work.
+              I percorsi possono essere <strong className="text-white">finanziati con i voucher di Regione Lombardia per la Formazione Continua</strong>.
+            </p>
+            <a
+              href="https://sw-aiacademy.duckdns.org/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 font-semibold text-sm px-5 py-3 rounded-xl self-start transition-all duration-200 hover:brightness-110"
+              style={{ backgroundColor: 'rgba(255,255,255,0.2)', color: '#fff', border: '1px solid rgba(255,255,255,0.3)' }}
+            >
+              Scopri i percorsi →
+            </a>
           </div>
 
         </div>
