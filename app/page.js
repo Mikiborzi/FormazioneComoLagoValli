@@ -286,6 +286,26 @@ const reasons = [
     title: "Cosa sono i percorsi IFTS in apprendistato di primo livello.",
     body: "IFTS — Istruzione e Formazione Tecnica Superiore — sono percorsi post-diploma di 800 ore (300 in aula, 500 in azienda) rivolti a giovani tra i 18 e i 24 anni. Si attivano con un contratto di apprendistato di primo livello: il giovane entra in azienda dal primo giorno, con un'indennità di partecipazione, e segue una formazione completamente finanziata da risorse pubbliche. Per l'azienda: una risorsa in formazione on the job a costo del lavoro contenuto, grazie alle agevolazioni contributive previste per l'apprendistato formativo.",
   },
+  {
+    icon: (
+      <svg
+        className="w-8 h-8"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+        aria-hidden="true"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth={1.5}
+          d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z"
+        />
+      </svg>
+    ),
+    title: "Cos'è la Formazione Continua di Regione Lombardia.",
+    body: "È una misura del Programma Regionale FSE+ 2021-2027 che finanzia la formazione di lavoratori dipendenti, autonomi, liberi professionisti e imprenditori lombardi attraverso voucher individuali. Il voucher copre dal 50% al 90% del costo del corso — in funzione della dimensione aziendale — fino a un massimo di € 2.000 per lavoratore per anno solare. I corsi devono essere selezionati da un catalogo regionale di percorsi accreditati, organizzati per aree tematiche: digitale, green, linguistico, tecnico e soft skill. I percorsi Formazione Impresa di Starting Work saranno inseriti nel catalogo non appena l'avviso attuativo della quarta edizione sarà pubblicato.",
+  },
 ];
 
 const testimonials = [
@@ -563,7 +583,7 @@ function BiforcazioneSection() {
             Qual è il tuo percorso?
           </h2>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="flex flex-col gap-6 max-w-2xl mx-auto">
 
           {/* FORMAZIONE IMPRESA */}
           <div className="rounded-2xl p-8 text-white flex flex-col" style={{ background: 'linear-gradient(135deg, #8b0000 0%, #cc1a1a 100%)' }}>
