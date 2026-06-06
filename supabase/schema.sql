@@ -170,6 +170,68 @@ CREATE POLICY "insert_corsi_interesse"
 CREATE POLICY "update_corsi_interesse"
   ON corsi_interesse FOR UPDATE TO anon USING (true) WITH CHECK (true);
 
+-- ─── Tabella iscrizioni_impresa ──────────────────────────────────────────────
+-- Iscrizioni ai percorsi Formazione Impresa con dati di fatturazione.
+
+CREATE TABLE IF NOT EXISTS iscrizioni_impresa (
+  id                       UUID        DEFAULT gen_random_uuid() PRIMARY KEY,
+  nome                     TEXT        NOT NULL,
+  cognome                  TEXT        NOT NULL,
+  email                    TEXT        NOT NULL,
+  telefono                 TEXT        NOT NULL,
+  ragione_sociale          TEXT        NOT NULL,
+  partita_iva              TEXT,
+  codice_fiscale_azienda   TEXT,
+  indirizzo_fatturazione   TEXT        NOT NULL,
+  cap_fatturazione         TEXT,
+  citta_fatturazione       TEXT        NOT NULL,
+  provincia_fatturazione   TEXT,
+  percorso_interesse       TEXT,
+  note                     TEXT,
+  newsletter               BOOLEAN     DEFAULT false,
+  stato                    TEXT        DEFAULT 'nuovo'
+    CHECK (stato IN ('nuovo', 'contattato', 'iscritto', 'annullato')),
+  note_operatore           TEXT,
+  created_at               TIMESTAMPTZ DEFAULT NOW(),
+  updated_at               TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS iscrizioni_impresa_email_idx      ON iscrizioni_impresa (email);
+CREATE INDEX IF NOT EXISTS iscrizioni_impresa_stato_idx      ON iscrizioni_impresa (stato);
+CREATE INDEX IF NOT EXISTS iscrizioni_impresa_created_at_idx ON iscrizioni_impresa (created_at DESC);
+
+CREATE TRIGGER iscrizioni_impresa_updated_at
+  BEFORE UPDATE ON iscrizioni_impresa
+  FOR EACH ROW EXECUTE FUNCTION update_updated_at();
+
+-- ─── Tabella contatti_impresa ─────────────────────────────────────────────────
+-- Richieste di contatto dal form /formazione-impresa/contatto.
+
+CREATE TABLE IF NOT EXISTS contatti_impresa (
+  id         UUID        DEFAULT gen_random_uuid() PRIMARY KEY,
+  nome       TEXT        NOT NULL,
+  cognome    TEXT        NOT NULL,
+  email      TEXT        NOT NULL,
+  telefono   TEXT        NOT NULL,
+  azienda    TEXT,
+  messaggio  TEXT,
+  stato      TEXT        DEFAULT 'nuovo'
+    CHECK (stato IN ('nuovo', 'contattato', 'chiuso')),
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS contatti_impresa_email_idx      ON contatti_impresa (email);
+CREATE INDEX IF NOT EXISTS contatti_impresa_created_at_idx ON contatti_impresa (created_at DESC);
+
+ALTER TABLE iscrizioni_impresa ENABLE ROW LEVEL SECURITY;
+ALTER TABLE contatti_impresa   ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "insert_anonimo_iscrizioni_impresa"
+  ON iscrizioni_impresa FOR INSERT TO anon WITH CHECK (true);
+
+CREATE POLICY "insert_anonimo_contatti_impresa"
+  ON contatti_impresa FOR INSERT TO anon WITH CHECK (true);
+
 -- Gli operatori autenticati vedono tutto
 CREATE POLICY "operatori_iscrizioni"
   ON iscrizioni FOR ALL TO authenticated USING (true) WITH CHECK (true);

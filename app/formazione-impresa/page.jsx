@@ -91,6 +91,22 @@ export default function FormazioneImpresaPage() {
           >
             Scopri il percorso AI ACADEMY →
           </a>
+          <div className="flex flex-col sm:flex-row justify-center gap-4 mt-6">
+            <Link
+              href="/formazione-impresa/iscriviti"
+              className="inline-flex items-center justify-center gap-2 font-semibold text-base px-8 py-4 rounded-xl transition-all duration-200 hover:scale-105"
+              style={{ backgroundColor: 'white', color: '#8b0000' }}
+            >
+              ISCRIVITI ORA
+            </Link>
+            <Link
+              href="/formazione-impresa/contatto"
+              className="inline-flex items-center justify-center gap-2 font-semibold text-base px-8 py-4 rounded-xl transition-all duration-200 hover:scale-105"
+              style={{ backgroundColor: 'transparent', color: 'white', border: '2px solid rgba(255,255,255,0.7)' }}
+            >
+              RICHIEDI CONTATTO
+            </Link>
+          </div>
         </div>
       </section>
 

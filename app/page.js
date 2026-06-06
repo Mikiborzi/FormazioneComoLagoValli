@@ -500,7 +500,7 @@ function HeroSection() {
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-20">
         <div className="max-w-3xl">
           {/* Badges */}
-          <div className="flex flex-wrap gap-3 mb-6">
+          <div className="flex flex-col items-start gap-3 mb-6">
             <div
               className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-sans font-medium"
               style={{ backgroundColor: "rgba(139,0,0,0.25)", color: "#fca5a5" }}
@@ -583,7 +583,7 @@ function BiforcazioneSection() {
             Qual è il tuo percorso?
           </h2>
         </div>
-        <div className="flex flex-col gap-6 max-w-2xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
 
           {/* FORMAZIONE IMPRESA */}
           <div className="rounded-2xl p-8 text-white flex flex-col" style={{ background: 'linear-gradient(135deg, #8b0000 0%, #cc1a1a 100%)' }}>
