@@ -108,6 +108,18 @@ export default function AdminPage() {
   const [iftsSubTab, setIftsSubTab] = useState('candidati')
   const [aggIfts, setAggIfts] = useState(null)
 
+  const [impresaIscrizioni, setImpresaIscrizioni] = useState([])
+  const [impresaContatti, setImpresaContatti] = useState([])
+  const [loadingImpresa, setLoadingImpresa] = useState(false)
+  const [impresaSubTab, setImpresaSubTab] = useState('iscrizioni')
+  const [aggImpresa, setAggImpresa] = useState(null)
+  const [selezionatoImpresa, setSelezionatoImpresa] = useState(null)
+
+  const [contatti, setContatti] = useState([])
+  const [loadingContatti, setLoadingContatti] = useState(false)
+  const [selezionatoContatto, setSelezionatoContatto] = useState(null)
+  const [ricercaContatti, setRicercaContatti] = useState('')
+
   useEffect(() => {
     const t = sessionStorage.getItem('admin_token')
     if (t) { setToken(t); caricaIscrizioni(t) }
@@ -149,6 +161,79 @@ export default function AdminPage() {
       setIftsAziende(aziende)
     }
     setLoadingIfts(false)
+  }
+
+  async function caricaImpresa(t) {
+    setLoadingImpresa(true)
+    const res = await fetch('/api/admin/impresa', { headers: { Authorization: `Bearer ${t}` } })
+    if (res.ok) {
+      const { iscrizioni, contatti } = await res.json()
+      setImpresaIscrizioni(iscrizioni)
+      setImpresaContatti(contatti)
+    }
+    setLoadingImpresa(false)
+  }
+
+  async function aggiornaStatoImpresa(id, tipo, nuovoStato) {
+    const res = await fetch('/api/admin/impresa', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+      body: JSON.stringify({ id, tipo, stato: nuovoStato }),
+    })
+    if (res.ok) {
+      if (tipo === 'iscrizione') {
+        setImpresaIscrizioni(prev => prev.map(i => i.id === id ? { ...i, stato: nuovoStato } : i))
+        if (selezionatoImpresa?.id === id) setSelezionatoImpresa(prev => ({ ...prev, stato: nuovoStato }))
+      } else {
+        setImpresaContatti(prev => prev.map(c => c.id === id ? { ...c, stato: nuovoStato } : c))
+        if (selezionatoImpresa?.id === id) setSelezionatoImpresa(prev => ({ ...prev, stato: nuovoStato }))
+      }
+      setAggImpresa(id)
+      setTimeout(() => setAggImpresa(null), 2000)
+    }
+  }
+
+  async function salvaNoteImpresa(id, tipo, note) {
+    await fetch('/api/admin/impresa', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+      body: JSON.stringify({ id, tipo, note_operatore: note }),
+    })
+  }
+
+  async function caricaContatti(t) {
+    setLoadingContatti(true)
+    const res = await fetch('/api/admin/contatti', { headers: { Authorization: `Bearer ${t}` } })
+    if (res.ok) setContatti(await res.json())
+    setLoadingContatti(false)
+  }
+
+  async function aggiornaStatoInterazione(id, nuovoStato) {
+    const res = await fetch('/api/admin/contatti', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+      body: JSON.stringify({ target: 'interazione', id, stato: nuovoStato }),
+    })
+    if (res.ok) {
+      setContatti(prev => prev.map(c => ({
+        ...c,
+        interazioni: (c.interazioni || []).map(i => i.id === id ? { ...i, stato: nuovoStato } : i)
+      })))
+      if (selezionatoContatto) {
+        setSelezionatoContatto(prev => ({
+          ...prev,
+          interazioni: (prev.interazioni || []).map(i => i.id === id ? { ...i, stato: nuovoStato } : i)
+        }))
+      }
+    }
+  }
+
+  async function salvaNoteContatto(id, note) {
+    await fetch('/api/admin/contatti', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+      body: JSON.stringify({ target: 'contatto', id, note }),
+    })
   }
 
   async function aggiornaStatoIfts(id, tipo, nuovoStato) {
@@ -236,11 +321,18 @@ export default function AdminPage() {
         {[
           { key:'gol', label:'🎓 GOL / Servizi Lavoro' },
           { key:'ifts', label:'🏭 Percorsi IFTS' },
+          { key:'impresa', label:'🔴 Formazione Impresa' },
+          { key:'crm', label:'👥 CRM Contatti' },
         ].map(tab => (
-          <button key={tab.key} onClick={() => { setTabAttivo(tab.key); if (tab.key==='ifts' && iftsCandidati.length===0) caricaIfts(token) }}
-            style={{ padding:'12px 20px', border:'none', borderBottom: tabAttivo===tab.key ? '3px solid #1a2e5a' : '3px solid transparent',
+          <button key={tab.key} onClick={() => {
+            setTabAttivo(tab.key)
+            if (tab.key==='ifts' && iftsCandidati.length===0) caricaIfts(token)
+            if (tab.key==='impresa' && impresaIscrizioni.length===0 && impresaContatti.length===0) caricaImpresa(token)
+            if (tab.key==='crm' && contatti.length===0) caricaContatti(token)
+          }}
+            style={{ padding:'12px 20px', border:'none', borderBottom: tabAttivo===tab.key ? `3px solid ${tab.key==='impresa'?'#8b0000':'#1a2e5a'}` : '3px solid transparent',
               background:'none', cursor:'pointer', fontSize:'14px', fontWeight: tabAttivo===tab.key ? '700' : '500',
-              color: tabAttivo===tab.key ? '#1a2e5a' : '#94a3b8', marginBottom:'-2px', transition:'color 0.2s' }}>
+              color: tabAttivo===tab.key ? (tab.key==='impresa'?'#8b0000':'#1a2e5a') : '#94a3b8', marginBottom:'-2px', transition:'color 0.2s' }}>
             {tab.label}
           </button>
         ))}
@@ -455,6 +547,382 @@ export default function AdminPage() {
           )}
         </div>
         </>}
+
+        {tabAttivo === 'impresa' && (() => {
+          const STATI_ISCR = ['nuovo','contattato','iscritto','annullato']
+          const STATI_CONT = ['nuovo','contattato','chiuso']
+          const COLORS_ISCR = {
+            nuovo:      { bg:'#FEF3C7', text:'#92400E', label:'Nuovo' },
+            contattato: { bg:'#DBEAFE', text:'#1E40AF', label:'Contattato' },
+            iscritto:   { bg:'#D1FAE5', text:'#065F46', label:'Iscritto' },
+            annullato:  { bg:'#FEE2E2', text:'#991B1B', label:'Annullato' },
+          }
+          const COLORS_CONT = {
+            nuovo:      { bg:'#FEF3C7', text:'#92400E', label:'Nuovo' },
+            contattato: { bg:'#DBEAFE', text:'#1E40AF', label:'Contattato' },
+            chiuso:     { bg:'#F3F4F6', text:'#374151', label:'Chiuso' },
+          }
+          const lista = impresaSubTab === 'iscrizioni' ? impresaIscrizioni : impresaContatti
+          const tipo  = impresaSubTab === 'iscrizioni' ? 'iscrizione' : 'contatto'
+          const statiCorretti = impresaSubTab === 'iscrizioni' ? STATI_ISCR : STATI_CONT
+          const colorsCorretti = impresaSubTab === 'iscrizioni' ? COLORS_ISCR : COLORS_CONT
+
+          return (
+            <div>
+              {/* Sub-tab + aggiorna */}
+              <div style={{ display:'flex', gap:'8px', marginBottom:'20px', alignItems:'center' }}>
+                {[
+                  { key:'iscrizioni', label:`📋 Iscrizioni (${impresaIscrizioni.length})` },
+                  { key:'contatti',   label:`📞 Contatti (${impresaContatti.length})` },
+                ].map(t => (
+                  <button key={t.key} onClick={() => { setImpresaSubTab(t.key); setSelezionatoImpresa(null) }}
+                    style={{ padding:'8px 18px', border:'none', borderRadius:'8px', cursor:'pointer', fontSize:'14px', fontWeight:'600',
+                      background: impresaSubTab===t.key ? '#8b0000' : '#e2e8f0',
+                      color: impresaSubTab===t.key ? 'white' : '#64748b', transition:'all 0.15s' }}>
+                    {t.label}
+                  </button>
+                ))}
+                <button onClick={() => caricaImpresa(token)}
+                  style={{ marginLeft:'auto', background:'#1e293b', color:'#94a3b8', border:'1px solid #334155', borderRadius:'6px', padding:'6px 14px', cursor:'pointer', fontSize:'13px' }}>
+                  ↻ Aggiorna
+                </button>
+              </div>
+
+              {loadingImpresa ? (
+                <div style={{ padding:'60px', textAlign:'center', color:'#94a3b8' }}>Caricamento...</div>
+              ) : (
+                <div style={{ display:'flex', gap:'20px', alignItems:'flex-start' }}>
+                  {/* Tabella */}
+                  <div style={{ flex:1, background:'white', borderRadius:'10px', boxShadow:'0 1px 3px rgba(0,0,0,0.08)', overflow:'hidden', minWidth:0 }}>
+                    {lista.length === 0 ? (
+                      <div style={{ padding:'60px', textAlign:'center', color:'#94a3b8' }}>Nessun record ancora</div>
+                    ) : (
+                      <div style={{ overflowX:'auto' }}>
+                        <table style={{ width:'100%', borderCollapse:'collapse' }}>
+                          <thead>
+                            <tr style={{ background:'#f8fafc', borderBottom:'2px solid #e2e8f0' }}>
+                              {impresaSubTab === 'iscrizioni'
+                                ? ['Nome','Email / Tel','Azienda / P.IVA','Percorso','Stato','Data'].map(h => (
+                                    <th key={h} style={{ padding:'10px 14px', textAlign:'left', fontSize:'12px', fontWeight:'700', color:'#475569', textTransform:'uppercase', letterSpacing:'0.05em', whiteSpace:'nowrap' }}>{h}</th>
+                                  ))
+                                : ['Nome','Email / Tel','Azienda','Messaggio','Stato','Data'].map(h => (
+                                    <th key={h} style={{ padding:'10px 14px', textAlign:'left', fontSize:'12px', fontWeight:'700', color:'#475569', textTransform:'uppercase', letterSpacing:'0.05em', whiteSpace:'nowrap' }}>{h}</th>
+                                  ))
+                              }
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {lista.map((r, idx) => (
+                              <tr key={r.id}
+                                onClick={() => setSelezionatoImpresa(selezionatoImpresa?.id===r.id ? null : { ...r, _tipo: tipo })}
+                                style={{ borderBottom:'1px solid #f1f5f9', cursor:'pointer', transition:'background 0.2s',
+                                  background: selezionatoImpresa?.id===r.id ? '#fff5f5' : aggImpresa===r.id ? '#f0fdf4' : idx%2===0 ? 'white' : '#fafafa' }}>
+                                <td style={{ padding:'10px 14px' }}>
+                                  <div style={{ fontWeight:'600', fontSize:'14px', color:'#0f172a' }}>{r.nome} {r.cognome}</div>
+                                </td>
+                                <td style={{ padding:'10px 14px' }}>
+                                  <div style={{ fontSize:'13px', color:'#334155' }}>{r.email}</div>
+                                  <div style={{ fontSize:'13px', color:'#64748b' }}>{r.telefono}</div>
+                                </td>
+                                {impresaSubTab === 'iscrizioni' ? (
+                                  <>
+                                    <td style={{ padding:'10px 14px' }}>
+                                      <div style={{ fontSize:'13px', color:'#334155' }}>{r.ragione_sociale||'—'}</div>
+                                      {r.partita_iva && <div style={{ fontSize:'11px', color:'#94a3b8' }}>P.IVA {r.partita_iva}</div>}
+                                    </td>
+                                    <td style={{ padding:'10px 14px', fontSize:'12px', color:'#475569', maxWidth:'160px' }}>
+                                      {r.percorso_interesse || <span style={{ color:'#94a3b8' }}>—</span>}
+                                    </td>
+                                  </>
+                                ) : (
+                                  <>
+                                    <td style={{ padding:'10px 14px', fontSize:'13px', color:'#64748b' }}>
+                                      {r.azienda || <span style={{ color:'#94a3b8' }}>—</span>}
+                                    </td>
+                                    <td style={{ padding:'10px 14px', fontSize:'12px', color:'#475569', maxWidth:'200px' }}>
+                                      <div style={{ overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap' }}>
+                                        {r.messaggio || <span style={{ color:'#94a3b8' }}>—</span>}
+                                      </div>
+                                    </td>
+                                  </>
+                                )}
+                                <td style={{ padding:'10px 14px' }}>
+                                  <select value={r.stato||'nuovo'} onClick={e => e.stopPropagation()}
+                                    onChange={e => aggiornaStatoImpresa(r.id, tipo, e.target.value)}
+                                    style={{ padding:'4px 8px', borderRadius:'6px', border:'1px solid #e2e8f0', fontSize:'12px', fontWeight:'600', cursor:'pointer', outline:'none',
+                                      background: colorsCorretti[r.stato]?.bg||'#f3f4f6', color: colorsCorretti[r.stato]?.text||'#374151' }}>
+                                    {statiCorretti.map(s => <option key={s} value={s}>{colorsCorretti[s]?.label||s}</option>)}
+                                  </select>
+                                </td>
+                                <td style={{ padding:'10px 14px', fontSize:'12px', color:'#94a3b8', whiteSpace:'nowrap' }}>
+                                  {r.created_at ? new Date(r.created_at).toLocaleDateString('it-IT',{day:'2-digit',month:'2-digit',year:'2-digit'}) : '—'}
+                                  <div style={{ fontSize:'11px', color:'#cbd5e1' }}>
+                                    {r.created_at ? new Date(r.created_at).toLocaleTimeString('it-IT',{hour:'2-digit',minute:'2-digit'}) : ''}
+                                  </div>
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Pannello dettaglio */}
+                  {selezionatoImpresa && (
+                    <div style={{ width:'320px', flexShrink:0, background:'white', borderRadius:'10px', boxShadow:'0 1px 3px rgba(0,0,0,0.08)', padding:'20px', position:'sticky', top:'80px', maxHeight:'calc(100vh - 120px)', overflowY:'auto' }}>
+                      <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start', marginBottom:'16px' }}>
+                        <div>
+                          <h3 style={{ margin:0, fontSize:'16px', fontWeight:'700', color:'#0f172a' }}>{selezionatoImpresa.nome} {selezionatoImpresa.cognome}</h3>
+                          <span style={{ padding:'2px 8px', borderRadius:'99px', fontSize:'11px', fontWeight:'700', marginTop:'4px', display:'inline-block', background:'#fee2e2', color:'#991b1b' }}>
+                            {selezionatoImpresa._tipo === 'iscrizione' ? '📋 Iscrizione' : '📞 Contatto'}
+                          </span>
+                        </div>
+                        <button onClick={() => setSelezionatoImpresa(null)} style={{ background:'none', border:'none', cursor:'pointer', color:'#94a3b8', fontSize:'18px', lineHeight:1 }}>×</button>
+                      </div>
+
+                      {[
+                        { label:'Email', value: selezionatoImpresa.email },
+                        { label:'Telefono', value: selezionatoImpresa.telefono },
+                        ...(selezionatoImpresa._tipo === 'iscrizione' ? [
+                          { label:'Ragione sociale', value: selezionatoImpresa.ragione_sociale },
+                          { label:'Partita IVA', value: selezionatoImpresa.partita_iva },
+                          { label:'Codice Fiscale', value: selezionatoImpresa.codice_fiscale_azienda },
+                          { label:'Indirizzo fatturazione', value: selezionatoImpresa.indirizzo_fatturazione },
+                          { label:'CAP', value: selezionatoImpresa.cap_fatturazione },
+                          { label:'Città', value: selezionatoImpresa.citta_fatturazione },
+                          { label:'Provincia', value: selezionatoImpresa.provincia_fatturazione },
+                          { label:'Percorso interesse', value: selezionatoImpresa.percorso_interesse },
+                          { label:'Note', value: selezionatoImpresa.note },
+                          { label:'Newsletter', value: selezionatoImpresa.newsletter ? '✅ Sì' : 'No' },
+                        ] : [
+                          { label:'Azienda', value: selezionatoImpresa.azienda },
+                          { label:'Messaggio', value: selezionatoImpresa.messaggio },
+                        ]),
+                      ].map(({ label, value }) => value && (
+                        <div key={label} style={{ marginBottom:'10px' }}>
+                          <div style={{ fontSize:'11px', fontWeight:'700', color:'#94a3b8', textTransform:'uppercase', letterSpacing:'0.05em' }}>{label}</div>
+                          <div style={{ fontSize:'13px', color:'#0f172a', marginTop:'2px', whiteSpace:'pre-wrap' }}>{value}</div>
+                        </div>
+                      ))}
+
+                      {selezionatoImpresa._tipo === 'iscrizione' && (
+                        <div style={{ marginTop:'16px' }}>
+                          <div style={{ fontSize:'11px', fontWeight:'700', color:'#94a3b8', textTransform:'uppercase', letterSpacing:'0.05em', marginBottom:'6px' }}>Note operatore</div>
+                          <textarea defaultValue={selezionatoImpresa.note_operatore||''} rows={3} placeholder="Aggiungi note interne..."
+                            onBlur={e => salvaNoteImpresa(selezionatoImpresa.id, 'iscrizione', e.target.value)}
+                            style={{ width:'100%', padding:'8px', border:'1px solid #e2e8f0', borderRadius:'6px', fontSize:'13px', resize:'vertical', outline:'none', boxSizing:'border-box', color:'#334155' }} />
+                        </div>
+                      )}
+
+                      <div style={{ marginTop:'12px' }}>
+                        <div style={{ fontSize:'11px', fontWeight:'700', color:'#94a3b8', textTransform:'uppercase', letterSpacing:'0.05em', marginBottom:'6px' }}>Stato gestione</div>
+                        <select value={selezionatoImpresa.stato||'nuovo'}
+                          onChange={e => aggiornaStatoImpresa(selezionatoImpresa.id, selezionatoImpresa._tipo, e.target.value)}
+                          style={{ width:'100%', padding:'8px 12px', borderRadius:'6px', border:'1px solid #e2e8f0', fontSize:'14px', fontWeight:'600', cursor:'pointer', outline:'none',
+                            background: (selezionatoImpresa._tipo==='iscrizione' ? COLORS_ISCR : COLORS_CONT)[selezionatoImpresa.stato]?.bg||'#f3f4f6',
+                            color: (selezionatoImpresa._tipo==='iscrizione' ? COLORS_ISCR : COLORS_CONT)[selezionatoImpresa.stato]?.text||'#374151' }}>
+                          {(selezionatoImpresa._tipo==='iscrizione' ? STATI_ISCR : STATI_CONT).map(s => (
+                            <option key={s} value={s}>{(selezionatoImpresa._tipo==='iscrizione' ? COLORS_ISCR : COLORS_CONT)[s]?.label||s}</option>
+                          ))}
+                        </select>
+                      </div>
+
+                      <div style={{ marginTop:'16px', paddingTop:'16px', borderTop:'1px solid #f1f5f9', fontSize:'11px', color:'#cbd5e1', textAlign:'center' }}>
+                        Registrato il {selezionatoImpresa.created_at ? new Date(selezionatoImpresa.created_at).toLocaleString('it-IT') : '—'}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          )
+        })()}
+
+        {tabAttivo === 'crm' && (() => {
+          const CANALE_LABEL = {
+            impresa_iscrizione: { label: '📋 Iscrizione Impresa', bg: '#fee2e2', text: '#991b1b' },
+            impresa_contatto:   { label: '📞 Contatto Impresa',   bg: '#fef3c7', text: '#92400e' },
+            gol:                { label: '🎓 GOL',                bg: '#dbeafe', text: '#1e40af' },
+            servizi_lavoro:     { label: '💼 Servizi Lavoro',     bg: '#ede9fe', text: '#5b21b6' },
+            ifts_candidato:     { label: '🏭 IFTS Candidato',     bg: '#d1fae5', text: '#065f46' },
+            ifts_azienda:       { label: '🏢 IFTS Azienda',       bg: '#f3f4f6', text: '#374151' },
+          }
+          const STATO_INT_COLORS = {
+            nuovo:      { bg:'#FEF3C7', text:'#92400E' },
+            contattato: { bg:'#DBEAFE', text:'#1E40AF' },
+            iscritto:   { bg:'#D1FAE5', text:'#065F46' },
+            annullato:  { bg:'#FEE2E2', text:'#991B1B' },
+            chiuso:     { bg:'#F3F4F6', text:'#374151' },
+          }
+          const filtrati = contatti.filter(c => {
+            if (!ricercaContatti) return true
+            const q = ricercaContatti.toLowerCase()
+            return [c.nome, c.cognome, c.email, c.telefono, c.ragione_sociale, c.azienda]
+              .join(' ').toLowerCase().includes(q)
+          })
+          return (
+            <div>
+              <div style={{ display:'flex', gap:'12px', marginBottom:'20px', alignItems:'center', flexWrap:'wrap' }}>
+                <input type="text" placeholder="🔍 Cerca nome, email, azienda…" value={ricercaContatti}
+                  onChange={e => setRicercaContatti(e.target.value)}
+                  style={{ flex:'1', minWidth:'200px', padding:'8px 12px', border:'1px solid #e2e8f0', borderRadius:'6px', fontSize:'14px', outline:'none' }} />
+                <span style={{ fontSize:'13px', color:'#64748b' }}>{filtrati.length} contatti</span>
+                <button onClick={() => caricaContatti(token)}
+                  style={{ background:'#1e293b', color:'#94a3b8', border:'1px solid #334155', borderRadius:'6px', padding:'6px 14px', cursor:'pointer', fontSize:'13px' }}>
+                  ↻ Aggiorna
+                </button>
+              </div>
+
+              {loadingContatti ? (
+                <div style={{ padding:'60px', textAlign:'center', color:'#94a3b8' }}>Caricamento…</div>
+              ) : (
+                <div style={{ display:'flex', gap:'20px', alignItems:'flex-start' }}>
+                  {/* Tabella contatti */}
+                  <div style={{ flex:1, background:'white', borderRadius:'10px', boxShadow:'0 1px 3px rgba(0,0,0,0.08)', overflow:'hidden', minWidth:0 }}>
+                    {filtrati.length === 0 ? (
+                      <div style={{ padding:'60px', textAlign:'center', color:'#94a3b8' }}>Nessun contatto trovato</div>
+                    ) : (
+                      <div style={{ overflowX:'auto' }}>
+                        <table style={{ width:'100%', borderCollapse:'collapse' }}>
+                          <thead>
+                            <tr style={{ background:'#f8fafc', borderBottom:'2px solid #e2e8f0' }}>
+                              {['Nome','Email / Tel','Azienda','Canali','Interazioni','Prima data'].map(h => (
+                                <th key={h} style={{ padding:'10px 14px', textAlign:'left', fontSize:'12px', fontWeight:'700', color:'#475569', textTransform:'uppercase', letterSpacing:'0.05em', whiteSpace:'nowrap' }}>{h}</th>
+                              ))}
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {filtrati.map((c, idx) => {
+                              const canaliUnici = [...new Set((c.interazioni||[]).map(i => i.canale))]
+                              return (
+                                <tr key={c.id}
+                                  onClick={() => setSelezionatoContatto(selezionatoContatto?.id===c.id ? null : c)}
+                                  style={{ borderBottom:'1px solid #f1f5f9', cursor:'pointer', transition:'background 0.2s',
+                                    background: selezionatoContatto?.id===c.id ? '#eff6ff' : idx%2===0 ? 'white' : '#fafafa' }}>
+                                  <td style={{ padding:'10px 14px' }}>
+                                    <div style={{ fontWeight:'600', fontSize:'14px', color:'#0f172a' }}>{c.nome} {c.cognome}</div>
+                                  </td>
+                                  <td style={{ padding:'10px 14px' }}>
+                                    <div style={{ fontSize:'13px', color:'#334155' }}>{c.email}</div>
+                                    <div style={{ fontSize:'13px', color:'#64748b' }}>{c.telefono}</div>
+                                  </td>
+                                  <td style={{ padding:'10px 14px', fontSize:'13px', color:'#64748b' }}>
+                                    {c.ragione_sociale || c.azienda || '—'}
+                                    {c.partita_iva && <div style={{ fontSize:'11px', color:'#94a3b8' }}>P.IVA {c.partita_iva}</div>}
+                                  </td>
+                                  <td style={{ padding:'10px 14px' }}>
+                                    <div style={{ display:'flex', gap:'4px', flexWrap:'wrap' }}>
+                                      {canaliUnici.map(canale => {
+                                        const cfg = CANALE_LABEL[canale] || { label: canale, bg:'#f3f4f6', text:'#374151' }
+                                        return (
+                                          <span key={canale} style={{ padding:'2px 6px', borderRadius:'99px', fontSize:'10px', fontWeight:'700', background: cfg.bg, color: cfg.text, whiteSpace:'nowrap' }}>
+                                            {cfg.label}
+                                          </span>
+                                        )
+                                      })}
+                                    </div>
+                                  </td>
+                                  <td style={{ padding:'10px 14px', textAlign:'center' }}>
+                                    <span style={{ padding:'2px 10px', borderRadius:'99px', fontSize:'13px', fontWeight:'700', background:'#e0f2fe', color:'#0369a1' }}>
+                                      {(c.interazioni||[]).length}
+                                    </span>
+                                  </td>
+                                  <td style={{ padding:'10px 14px', fontSize:'12px', color:'#94a3b8', whiteSpace:'nowrap' }}>
+                                    {c.created_at ? new Date(c.created_at).toLocaleDateString('it-IT',{day:'2-digit',month:'2-digit',year:'2-digit'}) : '—'}
+                                  </td>
+                                </tr>
+                              )
+                            })}
+                          </tbody>
+                        </table>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Pannello dettaglio contatto */}
+                  {selezionatoContatto && (
+                    <div style={{ width:'360px', flexShrink:0, background:'white', borderRadius:'10px', boxShadow:'0 1px 3px rgba(0,0,0,0.08)', padding:'20px', position:'sticky', top:'80px', maxHeight:'calc(100vh - 120px)', overflowY:'auto' }}>
+                      <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start', marginBottom:'16px' }}>
+                        <div>
+                          <h3 style={{ margin:0, fontSize:'16px', fontWeight:'700', color:'#0f172a' }}>{selezionatoContatto.nome} {selezionatoContatto.cognome}</h3>
+                          <div style={{ fontSize:'12px', color:'#64748b', marginTop:'2px' }}>{selezionatoContatto.email}</div>
+                        </div>
+                        <button onClick={() => setSelezionatoContatto(null)} style={{ background:'none', border:'none', cursor:'pointer', color:'#94a3b8', fontSize:'18px', lineHeight:1 }}>×</button>
+                      </div>
+
+                      {/* Dati anagrafici */}
+                      <div style={{ background:'#f8fafc', borderRadius:'8px', padding:'12px', marginBottom:'16px' }}>
+                        {[
+                          { label:'Telefono', value: selezionatoContatto.telefono },
+                          { label:'Azienda / Ragione sociale', value: selezionatoContatto.ragione_sociale || selezionatoContatto.azienda },
+                          { label:'Partita IVA', value: selezionatoContatto.partita_iva },
+                          { label:'Codice Fiscale', value: selezionatoContatto.codice_fiscale },
+                          { label:'Indirizzo', value: selezionatoContatto.indirizzo },
+                          { label:'CAP / Città', value: [selezionatoContatto.cap, selezionatoContatto.citta, selezionatoContatto.provincia].filter(Boolean).join(' ') },
+                        ].map(({ label, value }) => value ? (
+                          <div key={label} style={{ marginBottom:'8px' }}>
+                            <div style={{ fontSize:'10px', fontWeight:'700', color:'#94a3b8', textTransform:'uppercase', letterSpacing:'0.05em' }}>{label}</div>
+                            <div style={{ fontSize:'13px', color:'#0f172a' }}>{value}</div>
+                          </div>
+                        ) : null)}
+                      </div>
+
+                      {/* Note sul contatto */}
+                      <div style={{ marginBottom:'16px' }}>
+                        <div style={{ fontSize:'11px', fontWeight:'700', color:'#94a3b8', textTransform:'uppercase', letterSpacing:'0.05em', marginBottom:'6px' }}>Note CRM</div>
+                        <textarea defaultValue={selezionatoContatto.note||''} rows={3} placeholder="Note interne su questo contatto…"
+                          onBlur={e => salvaNoteContatto(selezionatoContatto.id, e.target.value)}
+                          style={{ width:'100%', padding:'8px', border:'1px solid #e2e8f0', borderRadius:'6px', fontSize:'13px', resize:'vertical', outline:'none', boxSizing:'border-box', color:'#334155' }} />
+                      </div>
+
+                      {/* Storico interazioni */}
+                      <div>
+                        <div style={{ fontSize:'11px', fontWeight:'700', color:'#94a3b8', textTransform:'uppercase', letterSpacing:'0.05em', marginBottom:'10px' }}>
+                          Storico interazioni ({(selezionatoContatto.interazioni||[]).length})
+                        </div>
+                        {(selezionatoContatto.interazioni||[]).length === 0 ? (
+                          <div style={{ fontSize:'13px', color:'#94a3b8', textAlign:'center', padding:'16px' }}>Nessuna interazione</div>
+                        ) : (
+                          <div style={{ display:'flex', flexDirection:'column', gap:'8px' }}>
+                            {(selezionatoContatto.interazioni||[])
+                              .sort((a,b) => new Date(b.created_at) - new Date(a.created_at))
+                              .map(int => {
+                                const cfg = CANALE_LABEL[int.canale] || { label: int.canale, bg:'#f3f4f6', text:'#374151' }
+                                const statiDisponibili = ['nuovo','contattato','iscritto','annullato','chiuso']
+                                return (
+                                  <div key={int.id} style={{ border:'1px solid #e2e8f0', borderRadius:'8px', padding:'10px' }}>
+                                    <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start', marginBottom:'6px' }}>
+                                      <span style={{ padding:'2px 6px', borderRadius:'99px', fontSize:'10px', fontWeight:'700', background: cfg.bg, color: cfg.text }}>
+                                        {cfg.label}
+                                      </span>
+                                      <span style={{ fontSize:'11px', color:'#94a3b8' }}>
+                                        {int.created_at ? new Date(int.created_at).toLocaleDateString('it-IT',{day:'2-digit',month:'2-digit',year:'2-digit'}) : ''}
+                                      </span>
+                                    </div>
+                                    {int.oggetto && <div style={{ fontSize:'12px', color:'#334155', marginBottom:'6px', fontWeight:'500' }}>{int.oggetto}</div>}
+                                    <select value={int.stato||'nuovo'} onChange={e => aggiornaStatoInterazione(int.id, e.target.value)}
+                                      style={{ width:'100%', padding:'4px 8px', borderRadius:'6px', border:'1px solid #e2e8f0', fontSize:'12px', fontWeight:'600', cursor:'pointer', outline:'none',
+                                        background: STATO_INT_COLORS[int.stato]?.bg||'#f3f4f6', color: STATO_INT_COLORS[int.stato]?.text||'#374151' }}>
+                                      {statiDisponibili.map(s => <option key={s} value={s}>{s.charAt(0).toUpperCase()+s.slice(1)}</option>)}
+                                    </select>
+                                  </div>
+                                )
+                              })}
+                          </div>
+                        )}
+                      </div>
+
+                      <div style={{ marginTop:'16px', paddingTop:'16px', borderTop:'1px solid #f1f5f9', fontSize:'11px', color:'#cbd5e1', textAlign:'center' }}>
+                        Primo contatto: {selezionatoContatto.created_at ? new Date(selezionatoContatto.created_at).toLocaleString('it-IT') : '—'}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          )
+        })()}
 
         {tabAttivo === 'ifts' && (
           <div>

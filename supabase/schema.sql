@@ -170,6 +170,86 @@ CREATE POLICY "insert_corsi_interesse"
 CREATE POLICY "update_corsi_interesse"
   ON corsi_interesse FOR UPDATE TO anon USING (true) WITH CHECK (true);
 
+-- ─── Tabella contatti (anagrafica unificata) ────────────────────────────────
+-- Record master per ogni persona/azienda, indipendente dalla fonte.
+
+CREATE TABLE IF NOT EXISTS contatti (
+  id                UUID        DEFAULT gen_random_uuid() PRIMARY KEY,
+  email             TEXT        UNIQUE NOT NULL,
+  nome              TEXT,
+  cognome           TEXT,
+  telefono          TEXT,
+  ragione_sociale   TEXT,
+  partita_iva       TEXT,
+  codice_fiscale    TEXT,
+  indirizzo         TEXT,
+  cap               TEXT,
+  citta             TEXT,
+  provincia         TEXT,
+  nazione           TEXT        DEFAULT 'Italia',
+  azienda           TEXT,
+  note              TEXT,
+  newsletter        BOOLEAN     DEFAULT false,
+  created_at        TIMESTAMPTZ DEFAULT NOW(),
+  updated_at        TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS contatti_email_idx      ON contatti (email);
+CREATE INDEX IF NOT EXISTS contatti_created_at_idx ON contatti (created_at DESC);
+
+CREATE TRIGGER contatti_updated_at
+  BEFORE UPDATE ON contatti
+  FOR EACH ROW EXECUTE FUNCTION update_updated_at();
+
+-- ─── Tabella interazioni (log unificato di tutti i contatti/iscrizioni) ───────
+-- Ogni form submission genera una riga; canale traccia la fonte.
+
+CREATE TABLE IF NOT EXISTS interazioni (
+  id              UUID        DEFAULT gen_random_uuid() PRIMARY KEY,
+  contatto_id     UUID        REFERENCES contatti(id) ON DELETE SET NULL,
+  canale          TEXT        NOT NULL,
+  -- Valori canale: impresa_iscrizione | impresa_contatto | gol | servizi_lavoro
+  --                ifts_candidato | ifts_azienda | proponi_corso
+  tipo            TEXT        NOT NULL,
+  -- Valori tipo: iscrizione | contatto | interesse | acquisto
+  oggetto         TEXT,
+  stato           TEXT        DEFAULT 'nuovo',
+  dati            JSONB,
+  note_operatore  TEXT,
+  created_at      TIMESTAMPTZ DEFAULT NOW(),
+  updated_at      TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS interazioni_contatto_idx    ON interazioni (contatto_id);
+CREATE INDEX IF NOT EXISTS interazioni_canale_idx      ON interazioni (canale);
+CREATE INDEX IF NOT EXISTS interazioni_created_at_idx  ON interazioni (created_at DESC);
+
+CREATE TRIGGER interazioni_updated_at
+  BEFORE UPDATE ON interazioni
+  FOR EACH ROW EXECUTE FUNCTION update_updated_at();
+
+ALTER TABLE contatti    ENABLE ROW LEVEL SECURITY;
+ALTER TABLE interazioni ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "insert_anonimo_contatti"
+  ON contatti FOR INSERT TO anon WITH CHECK (true);
+
+CREATE POLICY "update_anonimo_contatti"
+  ON contatti FOR UPDATE TO anon USING (true) WITH CHECK (true);
+
+CREATE POLICY "insert_anonimo_interazioni"
+  ON interazioni FOR INSERT TO anon WITH CHECK (true);
+
+CREATE POLICY "operatori_contatti"
+  ON contatti FOR ALL TO authenticated USING (true) WITH CHECK (true);
+
+CREATE POLICY "operatori_interazioni"
+  ON interazioni FOR ALL TO authenticated USING (true) WITH CHECK (true);
+
+-- Aggiunge FK contatto_id alle tabelle derivate (idempotente)
+ALTER TABLE iscrizioni_impresa ADD COLUMN IF NOT EXISTS contatto_id UUID REFERENCES contatti(id) ON DELETE SET NULL;
+ALTER TABLE contatti_impresa   ADD COLUMN IF NOT EXISTS contatto_id UUID REFERENCES contatti(id) ON DELETE SET NULL;
+
 -- ─── Tabella iscrizioni_impresa ──────────────────────────────────────────────
 -- Iscrizioni ai percorsi Formazione Impresa con dati di fatturazione.
 
