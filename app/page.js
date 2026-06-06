@@ -1,5 +1,6 @@
 import Link from "next/link";
 import QuoteCarousel from "./components/QuoteCarousel";
+import CorsiLinkInterceptor from "./components/CorsiLinkInterceptor";
 import { supabase } from "@/app/lib/supabase";
 
 // ─── Data ────────────────────────────────────────────────────────────────────
@@ -1336,6 +1337,7 @@ function Footer() {
 export default function HomePage() {
   return (
     <>
+      <CorsiLinkInterceptor />
       <main>
         <HeroSection />
         <BiforcazioneSection />

@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { corsi, getCorsoBySlug } from "@/app/data/corsi";
 import FormIscrizioneConPrompt from "@/app/components/FormIscrizioneConPrompt";
+import CorsoGolPopup from "@/app/components/CorsoGolPopup";
 
 // ─── Componente: banner "fa parte di" ────────────────────────────────────────
 
@@ -121,6 +122,7 @@ export default async function CorsoPage({ params }) {
 
   return (
     <>
+      <CorsoGolPopup />
       {/* ── Header corso ────────────────────────────────────────────── */}
       <div style={{ backgroundColor: corso.colore }}>
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-12 lg:pt-10 lg:pb-16">
@@ -274,15 +276,6 @@ export default async function CorsoPage({ params }) {
                 Lombardia e Unione Europea nell'ambito del Programma GOL
                 (Garanzia di Occupabilità dei Lavoratori). Per accedere
                 occorre essere in possesso dei requisiti di idoneità.
-              </p>
-            </div>
-            {/* Avviso sospensione GOL */}
-            <div
-              className="rounded-2xl p-5"
-              style={{ backgroundColor: "#fffbeb", border: "1px solid #fcd34d" }}
-            >
-              <p className="font-sans text-xs leading-relaxed" style={{ color: '#92400e' }}>
-                <strong>⚠️ Informazioni in sospensione</strong> — Regione Lombardia sta rivedendo gli strumenti di Politiche Attive del Lavoro. Le informazioni sul Programma GOL presenti in questa pagina non sono da ritenersi aggiornate e valide. <a href="mailto:como@mestierilombardia.it" style={{ color: '#92400e', textDecoration: 'underline' }}>Contattaci per aggiornamenti.</a>
               </p>
             </div>
           </div>
