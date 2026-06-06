@@ -1,8 +1,5 @@
 "use client";
 
-import { useState } from "react";
-import Link from "next/link";
-
 export default function PopupGOLSospensione({ onDismiss, onContinua, continuaLabel = "Consulta le informazioni archiviate" }) {
   return (
     <div
@@ -52,13 +49,13 @@ export default function PopupGOLSospensione({ onDismiss, onContinua, continuaLab
 
         {/* Bottoni */}
         <div className="flex flex-col sm:flex-row gap-3 pt-2">
-          <Link
-            href="/"
+          <button
+            onClick={() => { window.location.href = "/"; }}
             className="flex-1 text-center font-sans font-semibold text-sm py-3 px-4 rounded-xl text-white transition-all hover:brightness-110"
             style={{ backgroundColor: "#1a2e5a" }}
           >
             ← Torna alla home
-          </Link>
+          </button>
           <a
             href="mailto:como@mestierilombardia.it"
             className="flex-1 text-center font-sans font-semibold text-sm py-3 px-4 rounded-xl transition-all hover:brightness-105"

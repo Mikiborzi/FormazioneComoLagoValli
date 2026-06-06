@@ -9,7 +9,7 @@ export default function CorsiLinkInterceptor() {
 
   useEffect(() => {
     function handleClick(e) {
-      const link = e.target.closest('a[href^="/corsi/"]');
+      const link = e.target.closest('a[href^="/corsi/"], a[href="/#corsi"], a[href="#corsi"]');
       if (!link) return;
       e.preventDefault();
       e.stopPropagation();
@@ -22,13 +22,22 @@ export default function CorsiLinkInterceptor() {
 
   if (!show) return null;
 
+  function handleContinua() {
+    setShow(false);
+    if (!targetHref) return;
+    if (targetHref === "/#corsi" || targetHref === "#corsi") {
+      setTimeout(() => {
+        document.getElementById("corsi")?.scrollIntoView({ behavior: "smooth" });
+      }, 50);
+    } else {
+      window.location.href = targetHref;
+    }
+  }
+
   return (
     <PopupGOLSospensione
       onDismiss={() => setShow(false)}
-      onContinua={() => {
-        setShow(false);
-        if (targetHref) window.location.href = targetHref;
-      }}
+      onContinua={handleContinua}
       continuaLabel="Consulta le informazioni archiviate"
     />
   );
