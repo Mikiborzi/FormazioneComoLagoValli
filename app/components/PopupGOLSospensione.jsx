@@ -48,28 +48,39 @@ export default function PopupGOLSospensione({ onDismiss, onContinua, continuaLab
         </p>
 
         {/* Bottoni */}
-        <div className="flex flex-col sm:flex-row gap-3 pt-2">
-          <button
-            onClick={() => { window.location.href = "/"; }}
-            className="flex-1 text-center font-sans font-semibold text-sm py-3 px-4 rounded-xl text-white transition-all hover:brightness-110"
-            style={{ backgroundColor: "#1a2e5a" }}
-          >
-            ← Torna alla home
-          </button>
-          <a
-            href="mailto:como@mestierilombardia.it"
-            className="flex-1 text-center font-sans font-semibold text-sm py-3 px-4 rounded-xl transition-all hover:brightness-105"
-            style={{ backgroundColor: "#fffbeb", color: "#92400e", border: "1px solid #fcd34d" }}
-          >
-            Contattaci
-          </a>
-          <button
-            onClick={onContinua || onDismiss}
-            className="flex-1 font-sans text-sm py-3 px-4 rounded-xl transition-all hover:bg-gray-100"
-            style={{ border: "1px solid #e5e7eb", color: "#6b7280" }}
-          >
-            {continuaLabel}
-          </button>
+        <div className="flex flex-col gap-3 pt-2">
+          <div className="flex flex-col sm:flex-row gap-3">
+            <button
+              onClick={() => { window.location.href = "/"; }}
+              className="flex-1 text-center font-sans font-semibold text-sm py-3 px-4 rounded-xl text-white transition-all hover:brightness-110"
+              style={{ backgroundColor: "#1a2e5a" }}
+            >
+              ← Torna alla home
+            </button>
+            <a
+              href="mailto:como@mestierilombardia.it"
+              className="flex-1 text-center font-sans font-semibold text-sm py-3 px-4 rounded-xl transition-all hover:brightness-105"
+              style={{ backgroundColor: "#fffbeb", color: "#92400e", border: "1px solid #fcd34d" }}
+            >
+              Contattaci
+            </a>
+          </div>
+          <div className="flex flex-col sm:flex-row gap-3">
+            <button
+              onClick={() => { window.location.href = "/#percorsi"; }}
+              className="flex-1 text-center font-sans font-semibold text-sm py-3 px-4 rounded-xl text-white transition-all hover:brightness-110"
+              style={{ backgroundColor: "#8b0000" }}
+            >
+              Scopri gli altri percorsi di formazione
+            </button>
+            <button
+              onClick={onContinua || onDismiss}
+              className="flex-1 font-sans text-sm py-3 px-4 rounded-xl transition-all hover:bg-gray-100"
+              style={{ border: "1px solid #e5e7eb", color: "#6b7280" }}
+            >
+              {continuaLabel}
+            </button>
+          </div>
         </div>
       </div>
     </div>
