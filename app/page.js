@@ -197,8 +197,8 @@ const reasons = [
         />
       </svg>
     ),
-    title: "È gratuito. Ma non è gratis.",
-    body: "Finanziati da misure di Politiche Attive messe a disposizione da Unione Europea, Ministero del Lavoro e delle Politiche Sociali e Regione Lombardia. Nessuna tassa d'iscrizione, nessun costo nascosto. È un investimento pubblico sulla tua crescita — e vale la pena non sprecarlo.",
+    title: "Un investimento che vale.",
+    body: "La formazione è l'investimento più importante che puoi fare sulla tua carriera e sulla tua impresa. Alcuni percorsi sono finanziati da misure pubbliche — GOL, IFTS, voucher regionali per la formazione continua — altri sono a pagamento. In ogni caso, il ritorno è reale: competenze concrete, certificate e spendibili nel mercato del lavoro di oggi.",
   },
   {
     icon: (
@@ -483,29 +483,24 @@ function HeroSection() {
           <div className="flex flex-wrap gap-3 mb-6">
             <div
               className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-sans font-medium"
-              style={{
-                backgroundColor: "rgba(200,148,26,0.15)",
-                color: "#c8941a",
-              }}
+              style={{ backgroundColor: "rgba(139,0,0,0.25)", color: "#fca5a5" }}
             >
-              <span
-                className="w-2 h-2 rounded-full shrink-0"
-                style={{ backgroundColor: "#c8941a" }}
-              />
-              Programma GOL – Regione Lombardia / Unione Europea
+              <span className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: "#fca5a5" }} />
+              Formazione Impresa — Starting Work
             </div>
             <div
               className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-sans font-medium"
-              style={{
-                backgroundColor: "rgba(45,122,79,0.15)",
-                color: "#7dd3a8",
-              }}
+              style={{ backgroundColor: "rgba(45,122,79,0.15)", color: "#7dd3a8" }}
             >
-              <span
-                className="w-2 h-2 rounded-full shrink-0"
-                style={{ backgroundColor: "#7dd3a8" }}
-              />
-              Percorsi Post Diploma o Post Qualifica IFTS – Regione Lombardia
+              <span className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: "#7dd3a8" }} />
+              Percorsi IFTS — Apprendistato di 1° livello
+            </div>
+            <div
+              className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-sans font-medium"
+              style={{ backgroundColor: "rgba(245,158,11,0.15)", color: "#fcd34d" }}
+            >
+              <span className="shrink-0">⚠️</span>
+              Programma GOL — in attesa di aggiornamenti
             </div>
           </div>
 
@@ -514,15 +509,14 @@ function HeroSection() {
             className="font-display font-bold leading-tight mb-5 text-4xl sm:text-5xl lg:text-6xl"
             style={{ color: "#ffffff" }}
           >
-            Corsi gratuiti per costruire il tuo futuro
+            Investire in formazione:<br />la scelta che fa la differenza
           </h1>
 
           <p
             className="font-sans text-lg sm:text-xl leading-relaxed mb-8 max-w-2xl"
             style={{ color: "rgba(255,255,255,0.78)" }}
           >
-            Percorsi di qualifica e riqualifica professionale,
-            finanziati da misure di Politiche Attive messe a disposizione da Unione Europea, Ministero del Lavoro e delle Politiche Sociali e Regione Lombardia.
+            In un contesto professionale in continuo mutamento, la formazione è l&apos;investimento più importante che puoi fare su te stesso e sulla tua impresa. Rimani aggiornato sull&apos;offerta formativa e sulle opportunità disponibili nel territorio di Como, del Centro Lago e delle Valli.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4">
@@ -535,7 +529,7 @@ function HeroSection() {
                 padding: "0 2rem",
               }}
             >
-              Scopri i corsi
+              Esplora i percorsi
               <ArrowRight />
             </a>
             <a
@@ -660,7 +654,7 @@ function CoursesSection() {
             className="font-sans font-semibold text-sm uppercase tracking-widest mb-3"
             style={{ color: "#2d7a4f" }}
           >
-            Tutti finanziati dal Programma GOL
+            L&apos;offerta formativa
           </p>
           <h2
             className="font-display font-bold text-3xl sm:text-4xl lg:text-5xl mb-4"
@@ -669,8 +663,8 @@ function CoursesSection() {
             I nostri corsi
           </h2>
           <p className="font-sans text-gray-500 text-lg max-w-2xl mx-auto">
-            Scegli quello che fa per te. Ogni corso è gratuito, certificato e
-            pensato per il mercato del lavoro locale.
+            Scegli quello che fa per te. Ogni corso è certificato e pensato per
+            il mercato del lavoro locale.
           </p>
         </div>
 
@@ -758,7 +752,7 @@ function CoursesSection() {
                   className="relative z-10 font-sans font-bold text-xs uppercase tracking-wider text-white px-3 py-1.5 rounded-full"
                   style={{ backgroundColor: "rgba(0,0,0,0.25)" }}
                 >
-                  GRATUITO
+                  CERTIFICATO
                 </span>
               </div>
 
@@ -823,13 +817,13 @@ function WhySection() {
             className="font-sans font-semibold text-sm uppercase tracking-widest mb-3"
             style={{ color: "#2d7a4f" }}
           >
-            Perché vale la pena
+            Perché investire in formazione
           </p>
           <h2
             className="font-display font-bold text-3xl sm:text-4xl lg:text-5xl"
             style={{ color: "#1a2e5a" }}
           >
-            Tre buoni motivi per iniziare oggi
+            Formazione come investimento strategico
           </h2>
         </div>
 
