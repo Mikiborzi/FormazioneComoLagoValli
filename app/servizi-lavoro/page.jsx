@@ -216,10 +216,13 @@ export default function ServiziLavoro() {
               Per informazioni aggiornate contattaci direttamente: saremo felici di aggiornarti non appena le nuove misure saranno disponibili.
             </p>
             <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
-              <a href="mailto:como@mestierilombardia.it" style={{ padding: '12px 22px', background: '#1a2e5a', color: 'white', borderRadius: '10px', textDecoration: 'none', fontWeight: '700', fontSize: '14px' }}>
+              <a href="/" style={{ padding: '12px 22px', background: '#1a2e5a', color: 'white', borderRadius: '10px', textDecoration: 'none', fontWeight: '700', fontSize: '14px' }}>
+                Torna alla home
+              </a>
+              <a href="mailto:como@mestierilombardia.it" style={{ padding: '12px 22px', background: 'white', color: '#1a2e5a', border: '2px solid #1a2e5a', borderRadius: '10px', textDecoration: 'none', fontWeight: '700', fontSize: '14px' }}>
                 Contattaci
               </a>
-              <button onClick={() => setShowSospensione(false)} style={{ padding: '12px 22px', background: 'white', color: '#1a2e5a', border: '2px solid #1a2e5a', borderRadius: '10px', cursor: 'pointer', fontWeight: '700', fontSize: '14px' }}>
+              <button onClick={() => setShowSospensione(false)} style={{ padding: '12px 22px', background: 'white', color: '#6b7280', border: '2px solid #d1d5db', borderRadius: '10px', cursor: 'pointer', fontWeight: '700', fontSize: '14px' }}>
                 Consulta le informazioni archiviate
               </button>
             </div>
