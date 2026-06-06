@@ -1,10 +1,21 @@
 "use client";
+import { useState } from "react";
 
 export default function PopupGOLSospensione({ onDismiss, onContinua, continuaLabel = "Consulta le informazioni archiviate" }) {
+  const [visible, setVisible] = useState(true);
+
+  if (!visible) return null;
+
+  function chiudi(callback) {
+    setVisible(false);
+    if (onDismiss) onDismiss();
+    if (callback) setTimeout(callback, 50);
+  }
+
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4"
-      style={{ backgroundColor: "rgba(0,0,0,0.65)", backdropFilter: "blur(4px)" }}
+      className="fixed inset-0 flex items-center justify-center p-4"
+      style={{ backgroundColor: "rgba(0,0,0,0.65)", backdropFilter: "blur(4px)", zIndex: 9999 }}
     >
       <div
         className="bg-white rounded-2xl shadow-2xl max-w-lg w-full p-8 flex flex-col gap-6"
@@ -51,7 +62,7 @@ export default function PopupGOLSospensione({ onDismiss, onContinua, continuaLab
         <div className="flex flex-col gap-3 pt-2">
           <div className="flex flex-col sm:flex-row gap-3">
             <button
-              onClick={() => { window.location.href = "/"; }}
+              onClick={() => chiudi(() => { window.location.href = "/"; })}
               className="flex-1 text-center font-sans font-semibold text-sm py-3 px-4 rounded-xl text-white transition-all hover:brightness-110"
               style={{ backgroundColor: "#1a2e5a" }}
             >
@@ -59,6 +70,7 @@ export default function PopupGOLSospensione({ onDismiss, onContinua, continuaLab
             </button>
             <a
               href="mailto:como@mestierilombardia.it"
+              onClick={() => setVisible(false)}
               className="flex-1 text-center font-sans font-semibold text-sm py-3 px-4 rounded-xl transition-all hover:brightness-105"
               style={{ backgroundColor: "#fffbeb", color: "#92400e", border: "1px solid #fcd34d" }}
             >
@@ -67,14 +79,18 @@ export default function PopupGOLSospensione({ onDismiss, onContinua, continuaLab
           </div>
           <div className="flex flex-col sm:flex-row gap-3">
             <button
-              onClick={() => { window.location.href = "/#percorsi"; }}
+              onClick={() => chiudi(() => { window.location.href = "/#percorsi"; })}
               className="flex-1 text-center font-sans font-semibold text-sm py-3 px-4 rounded-xl text-white transition-all hover:brightness-110"
               style={{ backgroundColor: "#8b0000" }}
             >
               Scopri gli altri percorsi di formazione
             </button>
             <button
-              onClick={onContinua || onDismiss}
+              onClick={() => {
+                setVisible(false);
+                if (onContinua) onContinua();
+                else if (onDismiss) onDismiss();
+              }}
               className="flex-1 font-sans text-sm py-3 px-4 rounded-xl transition-all hover:bg-gray-100"
               style={{ border: "1px solid #e5e7eb", color: "#6b7280" }}
             >
