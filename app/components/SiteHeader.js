@@ -14,10 +14,26 @@ const navItems = [
 
 export default function SiteHeader() {
   return (
-    <header
-      className="sticky top-0 z-50 shadow-lg"
-      style={{ backgroundColor: "#1a2e5a", height: "60px" }}
-    >
+    <>
+      <div className="w-full" style={{ backgroundColor: "#2d7a4f" }}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <Link
+            href="/voucher-formazione-continua"
+            className="flex items-center justify-center gap-2 py-2 text-center text-white font-sans text-xs sm:text-sm leading-tight transition-all duration-200 hover:brightness-110"
+          >
+            <span aria-hidden="true">🎓</span>
+            <span>
+              <strong className="font-semibold">Voucher Formazione Continua 2026</strong>
+              {" · "}domande dal 13 luglio 2026{" · "}fino a esaurimento risorse
+            </span>
+            <span aria-hidden="true" className="hidden sm:inline">→</span>
+          </Link>
+        </div>
+      </div>
+      <header
+        className="sticky top-0 z-50 shadow-lg"
+        style={{ backgroundColor: "#1a2e5a", height: "60px" }}
+      >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full">
         <div className="flex items-center justify-between h-full">
           <Link href="/" className="flex items-center gap-3 shrink-0">
@@ -49,6 +65,7 @@ export default function SiteHeader() {
           <MobileNav />
         </div>
       </div>
-    </header>
+      </header>
+    </>
   )
 }

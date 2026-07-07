@@ -518,10 +518,10 @@ function HeroSection() {
             </div>
             <div
               className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-sans font-medium"
-              style={{ backgroundColor: "rgba(245,158,11,0.15)", color: "#fcd34d" }}
+              style={{ backgroundColor: "rgba(45,122,79,0.2)", color: "#7dd3a8" }}
             >
-              <span className="shrink-0">⚠️</span>
-              Programma GOL — in attesa di aggiornamenti
+              <span className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: "#7dd3a8" }} />
+              Voucher Formazione Continua 2026 — domande dal 13 luglio
             </div>
           </div>
 
@@ -530,19 +530,19 @@ function HeroSection() {
             className="font-display font-bold leading-tight mb-5 text-4xl sm:text-5xl lg:text-6xl"
             style={{ color: "#ffffff" }}
           >
-            Investire in formazione:<br />la scelta che fa la differenza
+            Formazione Continua:<br />competenze finanziate per la tua impresa
           </h1>
 
           <p
             className="font-sans text-lg sm:text-xl leading-relaxed mb-8 max-w-2xl"
             style={{ color: "rgba(255,255,255,0.78)" }}
           >
-            In un contesto professionale in continuo mutamento, la formazione è l&apos;investimento più importante che puoi fare su te stesso e sulla tua impresa. Rimani aggiornato sull&apos;offerta formativa e sulle opportunità disponibili nel territorio di Como, del Centro Lago e delle Valli.
+            È in arrivo la quarta edizione dei voucher di Regione Lombardia per la Formazione Continua: dal <strong className="text-white">13 luglio 2026</strong> imprese, professionisti e lavoratori autonomi possono finanziare la formazione dei propri collaboratori. Come <strong className="text-white">ente accreditato</strong>, i nostri corsi sono nel catalogo regionale: ti affianchiamo dalla richiesta del voucher fino al rilascio dell&apos;attestato.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4">
-            <a
-              href="#percorsi"
+            <Link
+              href="/voucher-formazione-continua"
               className="inline-flex items-center justify-center gap-2 font-sans font-semibold text-white rounded-xl transition-all duration-200 hover:brightness-110 hover:scale-105 shadow-lg text-base"
               style={{
                 backgroundColor: "#c8941a",
@@ -550,9 +550,9 @@ function HeroSection() {
                 padding: "0 2rem",
               }}
             >
-              Esplora i percorsi
+              Scopri i voucher Formazione Continua
               <ArrowRight />
-            </a>
+            </Link>
             <a
               href="#come-funziona"
               className="inline-flex items-center justify-center font-sans font-semibold text-white rounded-xl transition-all duration-200 border text-base"
@@ -608,35 +608,6 @@ function BiforcazioneSection() {
             </Link>
           </div>
 
-          {/* GOL */}
-          <div className="rounded-2xl p-8 text-white flex flex-col relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #1a2e5a 0%, #2d4a8a 100%)' }}>
-            {/* Badge sospensione */}
-            <div className="absolute top-4 right-4 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold" style={{ background: 'rgba(245,158,11,0.25)', color: '#fcd34d', border: '1px solid rgba(245,158,11,0.45)' }}>
-              ⚠️ Temporaneamente sospeso
-            </div>
-            <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-5 shrink-0" style={{ backgroundColor: 'rgba(200,148,26,0.2)' }}>
-              <svg className="w-6 h-6" fill="none" stroke="#c8941a" viewBox="0 0 24 24" aria-hidden="true">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-            </div>
-            <p className="text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: '#c8941a' }}>Programma GOL</p>
-            <h3 className="font-display font-bold text-2xl mb-3">Cerchi lavoro o vuoi formarti?</h3>
-            <p className="text-white/75 text-sm leading-relaxed mb-4 flex-1">
-              Percorsi gratuiti di qualifica e riqualifica professionale finanziati da Unione Europea,
-              Ministero del Lavoro e Regione Lombardia. Per chi è disoccupato o vuole cambiare settore.
-            </p>
-            <div className="rounded-xl px-4 py-3 mb-5 text-xs leading-relaxed" style={{ background: 'rgba(245,158,11,0.18)', border: '1px solid rgba(245,158,11,0.35)', color: '#fcd34d' }}>
-              Regione Lombardia sta rivedendo gli strumenti di Politiche Attive del Lavoro. In attesa delle nuove misure, le informazioni presenti non sono da ritenersi aggiornate e valide.
-            </div>
-            <a
-              href="/servizi-lavoro"
-              className="inline-flex items-center gap-2 font-semibold text-sm px-5 py-3 rounded-xl self-start transition-all duration-200 hover:brightness-110"
-              style={{ backgroundColor: '#c8941a', color: '#fff' }}
-            >
-              Scopri i corsi GOL →
-            </a>
-          </div>
-
           {/* IFTS */}
           <div className="rounded-2xl p-8 text-white flex flex-col" style={{ background: 'linear-gradient(135deg, #1a6a3a 0%, #2d7a4f 100%)' }}>
             <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-5 shrink-0" style={{ backgroundColor: 'rgba(255,255,255,0.15)' }}>
@@ -658,6 +629,31 @@ function BiforcazioneSection() {
             >
               Scopri i percorsi IFTS →
             </Link>
+          </div>
+
+          {/* GOL — sospeso, in stand by */}
+          <div className="rounded-2xl p-8 flex flex-col relative overflow-hidden border" style={{ backgroundColor: '#f3f4f6', borderColor: '#e5e7eb' }}>
+            <div className="absolute top-4 right-4 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold" style={{ background: '#e5e7eb', color: '#6b7280' }}>
+              Temporaneamente sospeso
+            </div>
+            <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-5 shrink-0" style={{ backgroundColor: '#e5e7eb' }}>
+              <svg className="w-6 h-6" fill="none" stroke="#9ca3af" viewBox="0 0 24 24" aria-hidden="true">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <p className="text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: '#9ca3af' }}>Programma GOL</p>
+            <h3 className="font-display font-bold text-2xl mb-3" style={{ color: '#6b7280' }}>Percorsi per disoccupati</h3>
+            <p className="text-sm leading-relaxed mb-4 flex-1" style={{ color: '#9ca3af' }}>
+              Regione Lombardia sta rivedendo gli strumenti di Politiche Attive del Lavoro.
+              Il programma GOL è momentaneamente sospeso: le informazioni non sono da ritenersi aggiornate.
+            </p>
+            <a
+              href="/servizi-lavoro"
+              className="inline-flex items-center gap-1.5 font-medium text-sm self-start transition-colors duration-200 hover:underline"
+              style={{ color: '#6b7280' }}
+            >
+              Vai alla sezione →
+            </a>
           </div>
 
         </div>

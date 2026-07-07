@@ -67,6 +67,30 @@ const SFIDE = [
 export default function FormazioneImpresaPage() {
   return (
     <main className="min-h-screen bg-gray-50">
+      <section className="py-10 px-4" style={{ backgroundColor: '#f0fdf4', borderBottom: '1px solid #bbf7d0' }}>
+        <div className="max-w-4xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
+          <div>
+            <p className="text-xs font-bold uppercase tracking-widest mb-1" style={{ color: '#15803d' }}>Decreto n. 8809 del 01/07/2026</p>
+            <h2 className="font-display font-bold text-2xl mb-2" style={{ color: '#052e16' }}>Forma i tuoi dipendenti.<br />Lo Stato paga fino al 90%.</h2>
+            <ul className="space-y-1 text-sm text-gray-700 mb-4">
+              <li className="flex gap-2"><span style={{ color: '#16a34a' }}>&#10003;</span><span>Fino a 2.000 euro per lavoratore per anno</span></li>
+              <li className="flex gap-2"><span style={{ color: '#16a34a' }}>&#10003;</span><span>Fino a 50.000 euro per azienda per anno</span></li>
+              <li className="flex gap-2"><span style={{ color: '#16a34a' }}>&#10003;</span><span>Sportello aperto dal 13 luglio 2026</span></li>
+              <li className="flex gap-2"><span style={{ color: '#16a34a' }}>&#10003;</span><span>Starting Work risponde ai vostri quesiti e vi supporta nella gestione della pratica</span></li>
+            </ul>
+            <a href="/voucher-formazione-continua" className="inline-flex items-center justify-center font-bold text-sm px-6 py-3 rounded-xl" style={{ backgroundColor: '#15803d', color: 'white' }}>Preregistra la tua azienda</a>
+          </div>
+          <div className="rounded-2xl p-6 shrink-0 w-full md:w-80" style={{ backgroundColor: 'white', border: '1px solid #bbf7d0' }}>
+            <p className="font-bold text-sm mb-4" style={{ color: '#052e16' }}>Come accedere</p>
+            <div className="space-y-3">
+              <div className="flex gap-3"><div className="w-6 h-6 rounded-full flex items-center justify-center shrink-0 font-black text-xs text-white" style={{ backgroundColor: '#15803d' }}>1</div><div><p className="font-semibold text-xs" style={{ color: '#052e16' }}>Preregistrati</p><p className="text-xs text-gray-500">Compila il form con i dati aziendali e dei partecipanti</p></div></div>
+              <div className="flex gap-3"><div className="w-6 h-6 rounded-full flex items-center justify-center shrink-0 font-black text-xs text-white" style={{ backgroundColor: '#15803d' }}>2</div><div><p className="font-semibold text-xs" style={{ color: '#052e16' }}>Iscrizione corso</p><p className="text-xs text-gray-500">Starting Work iscrive i partecipanti su SIUF</p></div></div>
+              <div className="flex gap-3"><div className="w-6 h-6 rounded-full flex items-center justify-center shrink-0 font-black text-xs text-white" style={{ backgroundColor: '#15803d' }}>3</div><div><p className="font-semibold text-xs" style={{ color: '#052e16' }}>Domanda voucher</p><p className="text-xs text-gray-500">Tu presenti su Bandi e Servizi dal 13 luglio 2026</p></div></div>
+              <div className="flex gap-3"><div className="w-6 h-6 rounded-full flex items-center justify-center shrink-0 font-black text-xs text-white" style={{ backgroundColor: '#15803d' }}>4</div><div><p className="font-semibold text-xs" style={{ color: '#052e16' }}>Rimborso</p><p className="text-xs text-gray-500">Regione rimborsa fino al 90% entro 80 giorni dal corso</p></div></div>
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* Hero */}
       <section className="py-20 px-4" style={{ background: 'linear-gradient(135deg, #6b0000 0%, #b01a1a 50%, #cc2222 100%)' }}>
@@ -94,7 +118,7 @@ export default function FormazioneImpresaPage() {
           </a>
           <div className="flex flex-col sm:flex-row justify-center gap-4 mt-6">
             <Link
-              href="/formazione-impresa/iscriviti"
+              href="/voucher-formazione-continua"
               className="inline-flex items-center justify-center gap-2 font-semibold text-base px-8 py-4 rounded-xl transition-all duration-200 hover:scale-105"
               style={{ backgroundColor: 'white', color: '#8b0000' }}
             >

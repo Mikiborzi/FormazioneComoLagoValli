@@ -20,9 +20,10 @@ export const metadata = {
   verification: {
     google: "GjLAX1NWAvDUR51ZzWsNQwJsZFAQBCoP0oNoz_TjxjY",
   },
-  title: "Formazione Como Lago e Valli – Corsi gratuiti GOL",
+  title:
+    "Formazione Como Lago e Valli – Formazione Continua · voucher Regione Lombardia",
   description:
-    "Corsi di formazione gratuiti finanziati da Regione Lombardia e Unione Europea tramite il Programma GOL. Per disoccupati, inoccupati, casalinghe e studenti nella provincia di Como.",
+    "Corsi di formazione finanziati dai voucher di Regione Lombardia per la Formazione Continua (FSE+ 2021-2027). Per imprese, professionisti e lavoratori autonomi che vogliono formare i propri collaboratori. Ente accreditato: i nostri corsi sono nel catalogo regionale. Sportello domande dal 13 luglio 2026.",
 };
 
 export default function RootLayout({ children }) {
