@@ -266,22 +266,23 @@ export default function FormazioneImpresaPage() {
           {/* Avviso stato */}
           <div
             className="rounded-2xl p-6 mb-12 flex gap-4"
-            style={{ backgroundColor: '#fffbeb', border: '1px solid #fcd34d' }}
+            style={{ backgroundColor: '#f0fdf4', border: '1px solid #86efac' }}
           >
-            <span className="text-2xl shrink-0">📋</span>
+            <span className="text-2xl shrink-0">✅</span>
             <div>
-              <p className="font-semibold text-sm mb-2" style={{ color: '#92400e' }}>
-                Quarta edizione — in attesa dell&apos;avviso attuativo
+              <p className="font-semibold text-sm mb-2" style={{ color: '#166534' }}>
+                Quarta edizione — Avviso pubblicato · sportello dal 13 luglio 2026
               </p>
-              <p className="text-sm leading-relaxed text-justify" style={{ color: '#78350f' }}>
-                Le linee guida della quarta edizione di Formazione Continua sono state approvate
-                in delibera di Giunta Regionale. I percorsi Formazione Impresa di Starting Work
-                saranno inseriti nel catalogo non appena l&apos;avviso attuativo sarà pubblicato.
-                Scrivici a{' '}
-                <a href="mailto:como@mestierilombardia.it" style={{ color: '#92400e', fontWeight: 700 }}>
+              <p className="text-sm leading-relaxed text-justify" style={{ color: '#14532d' }}>
+                L&apos;Avviso pubblico è stato approvato con Decreto n. 8809 del 1° luglio 2026,
+                in attuazione della DGR n. XII/6232 del 28 maggio 2026: dotazione di € 10 milioni e
+                domande &laquo;a sportello&raquo; sul portale Bandi e Servizi dal 13 luglio 2026, fino a
+                esaurimento risorse. Il nuovo Catalogo regionale è articolato per aree tematiche —
+                digitale, green, linguistico, tecnico e soft skill. Scrivici a{' '}
+                <a href="mailto:como@mestierilombardia.it" style={{ color: '#166534', fontWeight: 700 }}>
                   como@mestierilombardia.it
                 </a>{' '}
-                per essere tra i primi informati.
+                o preregistra la tua azienda per essere seguito passo passo.
               </p>
             </div>
           </div>
@@ -490,8 +491,9 @@ export default function FormazioneImpresaPage() {
             className="rounded-2xl p-6 text-xs leading-relaxed text-justify"
             style={{ backgroundColor: '#f9fafb', border: '1px solid #e5e7eb', color: '#6b7280' }}
           >
-            <strong className="text-gray-700">Fonte e regime di aiuto</strong> — Le linee guida riportate
-            fanno riferimento all&apos;Allegato A della DGR proposta n. 30 — Quarta Edizione Formazione
+            <strong className="text-gray-700">Fonte e regime di aiuto</strong> — Le informazioni riportate
+            fanno riferimento all&apos;Avviso pubblico approvato con Decreto n. 8809 del 1° luglio 2026
+            (Allegato A), in attuazione della DGR n. XII/6232 del 28 maggio 2026 — Quarta Edizione Formazione
             Continua, PR Lombardia FSE+ 2021-2027, Priorità 1 Occupazione, Obiettivo ESO 4.4, Azione d.1.
             Il contributo è concesso ai sensi del Reg. (UE) n. 2831/2023 (de minimis), con un massimale
             cumulativo di € 300.000 per impresa nell&apos;arco di tre anni. Le agevolazioni non sono cumulabili
@@ -521,13 +523,14 @@ export default function FormazioneImpresaPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-start">
             <div>
               <p className="text-gray-700 text-base leading-relaxed mb-5 text-justify">
-                Il Voucher Formazione Continua di Regione Lombardia è in attesa dell&apos;avviso
-                attuativo. Non appena il bando sarà pubblicato e i percorsi Starting Work
-                saranno inseriti nel catalogo regionale, ti contatteremo direttamente.
+                L&apos;Avviso della quarta edizione è stato pubblicato con Decreto n. 8809 del 1° luglio
+                2026: le domande aprono &laquo;a sportello&raquo; su Bandi e Servizi il 13 luglio 2026,
+                fino a esaurimento risorse. Preregistra la tua azienda e ti contatteremo direttamente
+                per seguirti nella richiesta del voucher.
               </p>
               <ul className="space-y-3 text-sm text-gray-600">
                 {[
-                  'Sarai tra i primi a saperlo, prima della comunicazione pubblica',
+                  'Ti avvisiamo all’apertura dello sportello, il 13 luglio 2026',
                   'Ti guideremo passo per passo nella richiesta del voucher',
                   'Potrai prenotare il tuo percorso con priorità',
                 ].map((v) => (

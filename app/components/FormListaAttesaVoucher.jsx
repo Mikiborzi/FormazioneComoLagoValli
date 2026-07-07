@@ -147,8 +147,8 @@ export default function FormListaAttesaVoucher() {
           Sei in lista!
         </h3>
         <p className="font-sans text-gray-600 text-sm leading-relaxed max-w-md mx-auto">
-          Ti contatteremo non appena l&apos;avviso attuativo di Regione Lombardia sarà pubblicato
-          e i percorsi saranno inseribili nel catalogo voucher.
+          Ti contatteremo all&apos;apertura dello sportello del 13 luglio 2026 per seguirti nella
+          richiesta del voucher e nella scelta del percorso a catalogo.
         </p>
       </div>
     );

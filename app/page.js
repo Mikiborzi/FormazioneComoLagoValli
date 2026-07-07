@@ -305,7 +305,7 @@ const reasons = [
       </svg>
     ),
     title: "Cos'è la Formazione Continua di Regione Lombardia.",
-    body: "È una misura del Programma Regionale FSE+ 2021-2027 che finanzia la formazione di lavoratori dipendenti, autonomi, liberi professionisti e imprenditori lombardi attraverso voucher individuali. Il voucher copre dal 50% al 90% del costo del corso — in funzione della dimensione aziendale — fino a un massimo di € 2.000 per lavoratore per anno solare. I corsi devono essere selezionati da un catalogo regionale di percorsi accreditati, organizzati per aree tematiche: digitale, green, linguistico, tecnico e soft skill. I percorsi Formazione Impresa di Starting Work saranno inseriti nel catalogo non appena l'avviso attuativo della quarta edizione sarà pubblicato.",
+    body: "È una misura del Programma Regionale FSE+ 2021-2027 che finanzia la formazione di lavoratori dipendenti, autonomi, liberi professionisti e imprenditori lombardi attraverso voucher individuali. Il voucher copre dal 50% al 90% del costo del corso — in funzione della dimensione aziendale — fino a un massimo di € 2.000 per lavoratore per anno solare. I corsi devono essere selezionati da un catalogo regionale di percorsi accreditati, organizzati per aree tematiche: digitale, green, linguistico, tecnico e soft skill. L'avviso attuativo della quarta edizione è stato pubblicato con Decreto n. 8809 del 1° luglio 2026: le domande si presentano «a sportello» sul portale Bandi e Servizi dal 13 luglio 2026, fino a esaurimento risorse.",
   },
 ];
 
@@ -537,7 +537,7 @@ function HeroSection() {
             className="font-sans text-lg sm:text-xl leading-relaxed mb-8 max-w-2xl"
             style={{ color: "rgba(255,255,255,0.78)" }}
           >
-            È in arrivo la quarta edizione dei voucher di Regione Lombardia per la Formazione Continua: dal <strong className="text-white">13 luglio 2026</strong> imprese, professionisti e lavoratori autonomi possono finanziare la formazione dei propri collaboratori. Come <strong className="text-white">ente accreditato</strong>, i nostri corsi sono nel catalogo regionale: ti affianchiamo dalla richiesta del voucher fino al rilascio dell&apos;attestato.
+            È stato pubblicato l&apos;avviso della quarta edizione dei voucher di Regione Lombardia per la Formazione Continua: dal <strong className="text-white">13 luglio 2026</strong> imprese, professionisti e lavoratori autonomi possono finanziare la formazione dei propri collaboratori. Come <strong className="text-white">ente accreditato</strong>, i nostri corsi sono nel catalogo regionale: ti affianchiamo dalla richiesta del voucher fino al rilascio dell&apos;attestato.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4">
