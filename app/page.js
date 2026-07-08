@@ -530,14 +530,14 @@ function HeroSection() {
             className="font-display font-bold leading-tight mb-5 text-4xl sm:text-5xl lg:text-6xl"
             style={{ color: "#ffffff" }}
           >
-            Formazione Continua:<br />competenze finanziate per la tua impresa
+            La formazione dei tuoi dipendenti, finanziata.
           </h1>
 
           <p
             className="font-sans text-lg sm:text-xl leading-relaxed mb-8 max-w-2xl"
             style={{ color: "rgba(255,255,255,0.78)" }}
           >
-            È stato pubblicato l&apos;avviso della quarta edizione dei voucher di Regione Lombardia per la Formazione Continua: dal <strong className="text-white">13 luglio 2026</strong> imprese, professionisti e lavoratori autonomi possono finanziare la formazione dei propri collaboratori. Come <strong className="text-white">ente accreditato</strong>, i nostri corsi sono nel catalogo regionale: ti affianchiamo dalla richiesta del voucher fino al rilascio dell&apos;attestato.
+            Voucher fino a <strong className="text-white">€2.000 per lavoratore</strong>. Domande dal <strong className="text-white">13 luglio 2026</strong>. Come <strong className="text-white">ente accreditato</strong>, i nostri corsi sono nel Catalogo regionale: l&apos;azienda richiede il voucher, noi eroghiamo la formazione.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4">
@@ -566,6 +566,182 @@ function HeroSection() {
               Come funziona
             </a>
           </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function FormazioneContinuaSection() {
+  const coperture = [
+    { profilo: "Fino a 9 addetti · autonomi · professionisti", quota: "90%" },
+    { profilo: "Da 10 a 50 addetti", quota: "70%" },
+    { profilo: "Da 51 addetti in su", quota: "50%" },
+  ];
+
+  const tettiEqf = [
+    { livello: "EQF 6 – 8", importo: "€ 2.000" },
+    { livello: "EQF 4 – 5", importo: "€ 1.500" },
+    { livello: "EQF 3", importo: "€ 800" },
+  ];
+
+  const aree = ["Digitali", "Green", "Linguistiche", "Tecniche", "Trasversali"];
+
+  return (
+    <section id="formazione-continua" className="py-14 lg:py-20 bg-white">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-10 lg:mb-12">
+          <p
+            className="font-sans font-semibold text-sm uppercase tracking-widest mb-3"
+            style={{ color: "#2d7a4f" }}
+          >
+            Voucher Regione Lombardia · 4ª edizione
+          </p>
+          <h2
+            className="font-display font-bold text-3xl sm:text-4xl lg:text-5xl mb-4"
+            style={{ color: "#1a2e5a" }}
+          >
+            Formazione Continua: come funziona il finanziamento
+          </h2>
+          <p className="font-sans text-gray-500 text-lg max-w-3xl mx-auto">
+            Una misura del Programma Regionale FSE+ 2021-2027 che finanzia la
+            formazione di lavoratori occupati — dipendenti, autonomi,
+            professionisti e imprenditori — tramite voucher individuali. I nostri
+            corsi sono nel <strong style={{ color: "#1a2e5a" }}>Catalogo
+            regionale</strong>: l&apos;azienda seleziona il percorso e richiede il
+            voucher, noi eroghiamo la formazione.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+          {/* Copertura pubblica per dimensione */}
+          <div
+            className="rounded-2xl p-7 sm:p-8 shadow-sm"
+            style={{ backgroundColor: "#f0f4f8", border: "1px solid #e2e8f0" }}
+          >
+            <h3
+              className="font-display font-bold text-xl mb-1"
+              style={{ color: "#1a2e5a" }}
+            >
+              Quanto copre il voucher
+            </h3>
+            <p className="font-sans text-gray-500 text-sm mb-5">
+              Quota pubblica sul costo del corso, in base alla dimensione
+              dell&apos;impresa.
+            </p>
+            <ul className="flex flex-col gap-2.5">
+              {coperture.map((c) => (
+                <li
+                  key={c.profilo}
+                  className="flex items-center justify-between gap-4 bg-white rounded-xl px-4 py-3"
+                  style={{ border: "1px solid #e2e8f0" }}
+                >
+                  <span className="font-sans text-gray-600 text-sm leading-snug">
+                    {c.profilo}
+                  </span>
+                  <span
+                    className="font-display font-bold text-lg shrink-0"
+                    style={{ color: "#2d7a4f" }}
+                  >
+                    {c.quota}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Tetto per lavoratore per EQF */}
+          <div
+            className="rounded-2xl p-7 sm:p-8 shadow-sm"
+            style={{ backgroundColor: "#f0f4f8", border: "1px solid #e2e8f0" }}
+          >
+            <h3
+              className="font-display font-bold text-xl mb-1"
+              style={{ color: "#1a2e5a" }}
+            >
+              Tetto per lavoratore
+            </h3>
+            <p className="font-sans text-gray-500 text-sm mb-5">
+              Importo massimo del voucher per livello del corso (EQF).
+            </p>
+            <ul className="flex flex-col gap-2.5">
+              {tettiEqf.map((t) => (
+                <li
+                  key={t.livello}
+                  className="flex items-center justify-between gap-4 bg-white rounded-xl px-4 py-3"
+                  style={{ border: "1px solid #e2e8f0" }}
+                >
+                  <span className="font-sans text-gray-600 text-sm leading-snug">
+                    {t.livello}
+                  </span>
+                  <span
+                    className="font-display font-bold text-lg shrink-0"
+                    style={{ color: "#c8941a" }}
+                  >
+                    {t.importo}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+
+        {/* Massimali */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
+          <div
+            className="rounded-2xl p-6 text-center"
+            style={{ backgroundColor: "#1a2e5a" }}
+          >
+            <p className="font-display font-bold text-3xl text-white mb-1">
+              € 2.000
+            </p>
+            <p className="font-sans text-white/70 text-sm">
+              massimo per persona, per anno solare
+            </p>
+          </div>
+          <div
+            className="rounded-2xl p-6 text-center"
+            style={{ backgroundColor: "#1a2e5a" }}
+          >
+            <p className="font-display font-bold text-3xl text-white mb-1">
+              € 50.000
+            </p>
+            <p className="font-sans text-white/70 text-sm">
+              massimo per impresa, per anno solare
+            </p>
+          </div>
+        </div>
+
+        {/* Aree del Catalogo 2026 */}
+        <div className="text-center">
+          <p
+            className="font-sans font-semibold text-sm uppercase tracking-widest mb-4"
+            style={{ color: "#2d7a4f" }}
+          >
+            Aree del Catalogo 2026
+          </p>
+          <div className="flex flex-wrap justify-center gap-3 mb-8">
+            {aree.map((a) => (
+              <span
+                key={a}
+                className="font-sans font-medium text-sm px-4 py-2 rounded-full"
+                style={{
+                  backgroundColor: "rgba(45,122,79,0.1)",
+                  color: "#2d7a4f",
+                }}
+              >
+                {a}
+              </span>
+            ))}
+          </div>
+          <Link
+            href="/voucher-formazione-continua"
+            className="inline-flex items-center gap-2 font-sans font-semibold text-white rounded-xl transition-all duration-200 hover:brightness-110 hover:scale-105 shadow-lg text-base"
+            style={{ backgroundColor: "#c8941a", minHeight: "52px", padding: "0 2rem" }}
+          >
+            Scopri i voucher Formazione Continua
+            <ArrowRight />
+          </Link>
         </div>
       </div>
     </section>
@@ -1336,6 +1512,7 @@ export default function HomePage() {
       <CorsiLinkInterceptor />
       <main>
         <HeroSection />
+        <FormazioneContinuaSection />
         <BiforcazioneSection />
         <CoursesSection />
         <ProponCorsoSection />
