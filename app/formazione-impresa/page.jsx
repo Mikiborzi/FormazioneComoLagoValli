@@ -544,7 +544,7 @@ export default function FormazioneImpresaPage() {
 
             <div className="bg-white rounded-2xl p-6 shadow-sm" style={{ border: '1px solid #fcd34d' }}>
               <p className="font-sans font-semibold text-sm mb-5" style={{ color: '#92400e' }}>
-                Lascia i tuoi dati — nessun impegno, solo un avviso quando sarà il momento.
+                Lascia i tuoi dati — nessun impegno: ti contattiamo per seguirti nella richiesta del voucher.
               </p>
               <FormListaAttesaVoucher />
             </div>
