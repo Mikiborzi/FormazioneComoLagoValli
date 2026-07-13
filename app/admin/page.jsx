@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, useMemo, Fragment } from 'react'
+import * as XLSX from 'xlsx'
 
 const STATI = ['nuovo', 'contattato', 'iscritto', 'in_attesa', 'non_idoneo']
 const STATO_COLORS = {
@@ -269,7 +270,10 @@ export default function AdminPage() {
     }
   }
 
-  function esportaVoucherCSV(aziende, nomeFile = 'voucher_partecipanti') {
+  // Costruisce header + righe (una per partecipante) per l'export.
+  // Le aziende senza partecipanti non compaiono (il file serve a caricare i
+  // partecipanti in SIUF).
+  function buildVoucherMatrice(aziende) {
     const colAz = [
       ['Ragione sociale', a => a.ragione_sociale],
       ['P.IVA/CF azienda', a => a.piva_cf],
@@ -294,25 +298,44 @@ export default function AdminPage() {
       ['Privacy firmata', p => p.privacy_firmata ? 'SI' : 'NO'],
       ['Data registrazione', p => p.created_at ? new Date(p.created_at).toLocaleDateString('it-IT') : ''],
     ]
-    const q = v => `"${String(v ?? '').replace(/"/g, '""')}"`
-    const header = [...colAz.map(c => c[0]), ...colPart.map(c => c[0])].join(',')
-    const righe = []
+    const header = [...colAz.map(c => c[0]), ...colPart.map(c => c[0])]
+    const rows = []
     for (const a of aziende) {
-      // Una riga per partecipante; le aziende senza partecipanti non compaiono
-      // (il file serve al caricamento dei partecipanti in SIUF).
       for (const p of (a.partecipanti || [])) {
-        const vals = [...colAz.map(c => c[1](a)), ...colPart.map(c => c[1](p))]
-        righe.push(vals.map(q).join(','))
+        rows.push([...colAz.map(c => c[1](a) ?? ''), ...colPart.map(c => c[1](p) ?? '')])
       }
     }
-    const csv = [header, ...righe].join('\n')
-    const blob = new Blob(['﻿' + csv], { type: 'text/csv;charset=utf-8;' })
+    return { header, rows }
+  }
+
+  function scaricaBlob(blob, filename) {
     const url = URL.createObjectURL(blob)
     const link = document.createElement('a')
     link.href = url
-    link.download = `${nomeFile}_${new Date().toISOString().split('T')[0]}.csv`
+    link.download = filename
     link.click()
     URL.revokeObjectURL(url)
+  }
+
+  // Vero file .xlsx (apertura pulita in Excel, nessun problema di separatore).
+  function esportaVoucherXLSX(aziende, nomeFile = 'voucher_partecipanti') {
+    const { header, rows } = buildVoucherMatrice(aziende)
+    if (rows.length === 0) return
+    const ws = XLSX.utils.aoa_to_sheet([header, ...rows])
+    const wb = XLSX.utils.book_new()
+    XLSX.utils.book_append_sheet(wb, ws, 'Partecipanti')
+    XLSX.writeFile(wb, `${nomeFile}_${new Date().toISOString().split('T')[0]}.xlsx`)
+  }
+
+  // CSV con separatore ';' e riga 'sep=;' che Excel italiano riconosce → colonne
+  // corrette anche con doppio clic. BOM UTF-8 per gli accenti.
+  function esportaVoucherCSV(aziende, nomeFile = 'voucher_partecipanti') {
+    const { header, rows } = buildVoucherMatrice(aziende)
+    if (rows.length === 0) return
+    const q = v => `"${String(v ?? '').replace(/"/g, '""')}"`
+    const linee = ['sep=;', header.map(q).join(';'), ...rows.map(r => r.map(q).join(';'))]
+    const blob = new Blob(['﻿' + linee.join('\r\n')], { type: 'text/csv;charset=utf-8;' })
+    scaricaBlob(blob, `${nomeFile}_${new Date().toISOString().split('T')[0]}.csv`)
   }
 
   async function aggiornaStatoIfts(id, tipo, nuovoStato) {
@@ -1178,9 +1201,13 @@ export default function AdminPage() {
                   onChange={e => setRicercaVoucher(e.target.value)}
                   style={{ flex:'1', minWidth:'200px', padding:'8px 12px', border:'1px solid #e2e8f0', borderRadius:'6px', fontSize:'14px', outline:'none' }} />
                 <span style={{ fontSize:'13px', color:'#64748b' }}>{filtrate.length} aziende · {totPart} partecipanti</span>
-                <button onClick={() => esportaVoucherCSV(filtrate)} disabled={totPart === 0}
+                <button onClick={() => esportaVoucherXLSX(filtrate)} disabled={totPart === 0}
                   style={{ background: totPart===0 ? '#e2e8f0' : '#166534', color: totPart===0 ? '#94a3b8' : 'white', border:'none', borderRadius:'6px', padding:'6px 14px', cursor: totPart===0 ? 'not-allowed' : 'pointer', fontSize:'13px', fontWeight:'600' }}>
-                  ↓ Esporta CSV (SIUF)
+                  ↓ Excel (.xlsx)
+                </button>
+                <button onClick={() => esportaVoucherCSV(filtrate)} disabled={totPart === 0}
+                  style={{ background:'white', color: totPart===0 ? '#94a3b8' : '#166534', border:`1px solid ${totPart===0 ? '#e2e8f0' : '#166534'}`, borderRadius:'6px', padding:'6px 14px', cursor: totPart===0 ? 'not-allowed' : 'pointer', fontSize:'13px', fontWeight:'600' }}>
+                  ↓ CSV (SIUF)
                 </button>
                 <button onClick={() => caricaVoucher(token)}
                   style={{ background:'#1e293b', color:'#94a3b8', border:'1px solid #334155', borderRadius:'6px', padding:'6px 14px', cursor:'pointer', fontSize:'13px' }}>
@@ -1266,12 +1293,21 @@ export default function AdminPage() {
 
                                       <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:'8px' }}>
                                         <span style={{ fontSize:'12px', fontWeight:'700', color:'#334155' }}>Partecipanti ({parts.length})</span>
-                                        {parts.length > 0 && (
-                                          <button onClick={() => esportaVoucherCSV([a], `voucher_${(a.ragione_sociale||'azienda').replace(/[^a-zA-Z0-9]+/g,'_')}`)}
-                                            style={{ background:'#166534', color:'white', border:'none', borderRadius:'6px', padding:'4px 10px', cursor:'pointer', fontSize:'12px', fontWeight:'600' }}>
-                                            ↓ Esporta questa azienda
-                                          </button>
-                                        )}
+                                        {parts.length > 0 && (() => {
+                                          const nomeFile = `voucher_${(a.ragione_sociale||'azienda').replace(/[^a-zA-Z0-9]+/g,'_')}`
+                                          return (
+                                            <span style={{ display:'flex', gap:'8px' }}>
+                                              <button onClick={() => esportaVoucherXLSX([a], nomeFile)}
+                                                style={{ background:'#166534', color:'white', border:'none', borderRadius:'6px', padding:'4px 10px', cursor:'pointer', fontSize:'12px', fontWeight:'600' }}>
+                                                ↓ Excel
+                                              </button>
+                                              <button onClick={() => esportaVoucherCSV([a], nomeFile)}
+                                                style={{ background:'white', color:'#166534', border:'1px solid #166534', borderRadius:'6px', padding:'4px 10px', cursor:'pointer', fontSize:'12px', fontWeight:'600' }}>
+                                                ↓ CSV
+                                              </button>
+                                            </span>
+                                          )
+                                        })()}
                                       </div>
 
                                       {parts.length === 0 ? (
