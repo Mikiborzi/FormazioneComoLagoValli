@@ -120,13 +120,11 @@ export default function AdminPage() {
   const [selezionatoContatto, setSelezionatoContatto] = useState(null)
   const [ricercaContatti, setRicercaContatti] = useState('')
 
-  useEffect(() => {
-    const t = sessionStorage.getItem('admin_token')
-    if (t) { setToken(t); caricaIscrizioni(t) }
-    else setLoading(false)
-  }, [])
-
-  function handleLogin(t) { setToken(t); caricaIscrizioni(t) }
+  const [voucherAziende, setVoucherAziende] = useState([])
+  const [loadingVoucher, setLoadingVoucher] = useState(false)
+  const [selezionatoVoucher, setSelezionatoVoucher] = useState(null)
+  const [aggVoucher, setAggVoucher] = useState(null)
+  const [ricercaVoucher, setRicercaVoucher] = useState('')
 
   async function caricaIscrizioni(t) {
     setLoading(true)
@@ -137,6 +135,18 @@ export default function AdminPage() {
     else { sessionStorage.removeItem('admin_token'); setToken(null) }
     setLoading(false)
   }
+
+  /* eslint-disable react-hooks/set-state-in-effect --
+     Bootstrap sessione: sessionStorage è disponibile solo lato client, quindi va
+     letto in effect; il setState al mount è intenzionale (una tantum). */
+  useEffect(() => {
+    const t = sessionStorage.getItem('admin_token')
+    if (t) { setToken(t); caricaIscrizioni(t) }
+    else setLoading(false)
+  }, [])
+  /* eslint-enable react-hooks/set-state-in-effect */
+
+  function handleLogin(t) { setToken(t); caricaIscrizioni(t) }
 
   async function aggiornaStato(id, nuovoStato) {
     const res = await fetch('/api/admin/iscrizioni', {
@@ -236,6 +246,30 @@ export default function AdminPage() {
     })
   }
 
+  async function caricaVoucher(t) {
+    setLoadingVoucher(true)
+    const res = await fetch('/api/admin/voucher', { headers: { Authorization: `Bearer ${t}` } })
+    if (res.ok) {
+      const { aziende } = await res.json()
+      setVoucherAziende(aziende || [])
+    }
+    setLoadingVoucher(false)
+  }
+
+  async function aggiornaStatoVoucher(id, nuovoStato) {
+    const res = await fetch('/api/admin/voucher', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+      body: JSON.stringify({ id, stato: nuovoStato }),
+    })
+    if (res.ok) {
+      setVoucherAziende(prev => prev.map(a => a.id === id ? { ...a, stato: nuovoStato } : a))
+      if (selezionatoVoucher?.id === id) setSelezionatoVoucher(prev => ({ ...prev, stato: nuovoStato }))
+      setAggVoucher(id)
+      setTimeout(() => setAggVoucher(null), 2000)
+    }
+  }
+
   async function aggiornaStatoIfts(id, tipo, nuovoStato) {
     const res = await fetch('/api/admin/ifts', {
       method: 'PATCH',
@@ -320,12 +354,14 @@ export default function AdminPage() {
       <div style={{ background:'white', borderBottom:'2px solid #e2e8f0', padding:'0 24px', display:'flex', gap:'4px' }}>
         {[
           { key:'gol', label:'🎓 GOL / Servizi Lavoro' },
+          { key:'voucher', label:'🎟️ Voucher Formazione Continua' },
           { key:'ifts', label:'🏭 Percorsi IFTS' },
           { key:'impresa', label:'🔴 Formazione Impresa' },
           { key:'crm', label:'👥 CRM Contatti' },
         ].map(tab => (
           <button key={tab.key} onClick={() => {
             setTabAttivo(tab.key)
+            if (tab.key==='voucher' && voucherAziende.length===0) caricaVoucher(token)
             if (tab.key==='ifts' && iftsCandidati.length===0) caricaIfts(token)
             if (tab.key==='impresa' && impresaIscrizioni.length===0 && impresaContatti.length===0) caricaImpresa(token)
             if (tab.key==='crm' && contatti.length===0) caricaContatti(token)
@@ -1059,6 +1095,162 @@ export default function AdminPage() {
             )}
           </div>
         )}
+
+        {tabAttivo === 'voucher' && (() => {
+          const STATI_V = ['nuovo','contattato','iscritto','annullato']
+          const COLORS_V = {
+            nuovo:      { bg:'#FEF3C7', text:'#92400E', label:'Nuovo' },
+            contattato: { bg:'#DBEAFE', text:'#1E40AF', label:'Contattato' },
+            iscritto:   { bg:'#D1FAE5', text:'#065F46', label:'Iscritto' },
+            annullato:  { bg:'#FEE2E2', text:'#991B1B', label:'Annullato' },
+          }
+          const filtrate = voucherAziende.filter(a => {
+            if (!ricercaVoucher) return true
+            const q = ricercaVoucher.toLowerCase()
+            return [a.ragione_sociale, a.piva_cf, a.referente_nome, a.referente_cognome, a.referente_email]
+              .join(' ').toLowerCase().includes(q)
+          })
+          const totPart = voucherAziende.reduce((n, a) => n + (a.partecipanti?.length || 0), 0)
+          return (
+            <div>
+              {/* Stats */}
+              <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:'16px', marginBottom:'20px' }}>
+                {[
+                  { label:'Aziende preregistrate', value: voucherAziende.length, color:'#1e3a8a', emoji:'🏢' },
+                  { label:'Partecipanti totali', value: totPart, color:'#0369a1', emoji:'👥' },
+                  { label:'Da contattare', value: voucherAziende.filter(a => (a.stato||'nuovo')==='nuovo').length, color:'#d97706', emoji:'🔔' },
+                ].map((s,i) => (
+                  <div key={i} style={{ background:'white', borderRadius:'10px', padding:'20px', boxShadow:'0 1px 3px rgba(0,0,0,0.08)', borderLeft:`4px solid ${s.color}` }}>
+                    <div style={{ fontSize:'24px', marginBottom:'4px' }}>{s.emoji}</div>
+                    <div style={{ fontSize:'32px', fontWeight:'800', color:s.color }}>{s.value}</div>
+                    <div style={{ fontSize:'13px', color:'#64748b', marginTop:'4px' }}>{s.label}</div>
+                  </div>
+                ))}
+              </div>
+
+              <div style={{ display:'flex', gap:'12px', marginBottom:'20px', alignItems:'center', flexWrap:'wrap' }}>
+                <input type="text" placeholder="🔍 Cerca ragione sociale, P.IVA, referente…" value={ricercaVoucher}
+                  onChange={e => setRicercaVoucher(e.target.value)}
+                  style={{ flex:'1', minWidth:'200px', padding:'8px 12px', border:'1px solid #e2e8f0', borderRadius:'6px', fontSize:'14px', outline:'none' }} />
+                <span style={{ fontSize:'13px', color:'#64748b' }}>{filtrate.length} aziende</span>
+                <button onClick={() => caricaVoucher(token)}
+                  style={{ background:'#1e293b', color:'#94a3b8', border:'1px solid #334155', borderRadius:'6px', padding:'6px 14px', cursor:'pointer', fontSize:'13px' }}>
+                  ↻ Aggiorna
+                </button>
+              </div>
+
+              {loadingVoucher ? (
+                <div style={{ padding:'60px', textAlign:'center', color:'#94a3b8' }}>Caricamento…</div>
+              ) : (
+                <div style={{ display:'flex', gap:'20px', alignItems:'flex-start' }}>
+                  <div style={{ flex:1, background:'white', borderRadius:'10px', boxShadow:'0 1px 3px rgba(0,0,0,0.08)', overflow:'hidden', minWidth:0 }}>
+                    {filtrate.length === 0 ? (
+                      <div style={{ padding:'60px', textAlign:'center', color:'#94a3b8' }}>Nessuna azienda preregistrata</div>
+                    ) : (
+                      <div style={{ overflowX:'auto' }}>
+                        <table style={{ width:'100%', borderCollapse:'collapse' }}>
+                          <thead>
+                            <tr style={{ background:'#f8fafc', borderBottom:'2px solid #e2e8f0' }}>
+                              {['Azienda','Referente','Email / Tel','Partecipanti','Addetti','Stato','Data'].map(h => (
+                                <th key={h} style={{ padding:'10px 14px', textAlign:'left', fontSize:'12px', fontWeight:'700', color:'#475569', textTransform:'uppercase', letterSpacing:'0.05em', whiteSpace:'nowrap' }}>{h}</th>
+                              ))}
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {filtrate.map((a, idx) => (
+                              <tr key={a.id} onClick={() => setSelezionatoVoucher(selezionatoVoucher?.id===a.id ? null : a)}
+                                style={{ borderBottom:'1px solid #f1f5f9', cursor:'pointer', transition:'background 0.2s',
+                                  background: selezionatoVoucher?.id===a.id ? '#eff6ff' : aggVoucher===a.id ? '#f0fdf4' : idx%2===0 ? 'white' : '#fafafa' }}>
+                                <td style={{ padding:'10px 14px' }}>
+                                  <div style={{ fontWeight:'600', fontSize:'14px', color:'#0f172a' }}>{a.ragione_sociale}</div>
+                                  <div style={{ fontSize:'11px', color:'#94a3b8' }}>{a.piva_cf}</div>
+                                </td>
+                                <td style={{ padding:'10px 14px', fontSize:'13px', color:'#334155' }}>{a.referente_nome} {a.referente_cognome}</td>
+                                <td style={{ padding:'10px 14px' }}>
+                                  <div style={{ fontSize:'13px', color:'#334155' }}>{a.referente_email}</div>
+                                  <div style={{ fontSize:'13px', color:'#64748b' }}>{a.referente_telefono}</div>
+                                </td>
+                                <td style={{ padding:'10px 14px', textAlign:'center' }}>
+                                  <span style={{ padding:'2px 10px', borderRadius:'99px', fontSize:'13px', fontWeight:'700', background:'#e0f2fe', color:'#0369a1' }}>
+                                    {a.partecipanti?.length || 0}
+                                  </span>
+                                </td>
+                                <td style={{ padding:'10px 14px', fontSize:'12px', color:'#64748b' }}>{a.numero_addetti || '—'}</td>
+                                <td style={{ padding:'10px 14px' }}>
+                                  <select value={a.stato||'nuovo'} onClick={e => e.stopPropagation()} onChange={e => aggiornaStatoVoucher(a.id, e.target.value)}
+                                    style={{ padding:'4px 8px', borderRadius:'6px', border:'1px solid #e2e8f0', fontSize:'12px', fontWeight:'600', cursor:'pointer', outline:'none',
+                                      background: COLORS_V[a.stato]?.bg||'#f3f4f6', color: COLORS_V[a.stato]?.text||'#374151' }}>
+                                    {STATI_V.map(s => <option key={s} value={s}>{COLORS_V[s]?.label||s}</option>)}
+                                  </select>
+                                </td>
+                                <td style={{ padding:'10px 14px', fontSize:'12px', color:'#94a3b8', whiteSpace:'nowrap' }}>
+                                  {a.created_at ? new Date(a.created_at).toLocaleDateString('it-IT',{day:'2-digit',month:'2-digit',year:'2-digit'}) : '—'}
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Dettaglio azienda + partecipanti */}
+                  {selezionatoVoucher && (
+                    <div style={{ width:'380px', flexShrink:0, background:'white', borderRadius:'10px', boxShadow:'0 1px 3px rgba(0,0,0,0.08)', padding:'20px', position:'sticky', top:'80px', maxHeight:'calc(100vh - 120px)', overflowY:'auto' }}>
+                      <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start', marginBottom:'16px' }}>
+                        <div>
+                          <h3 style={{ margin:0, fontSize:'16px', fontWeight:'700', color:'#0f172a' }}>{selezionatoVoucher.ragione_sociale}</h3>
+                          <div style={{ fontSize:'12px', color:'#64748b', marginTop:'2px' }}>P.IVA/C.F. {selezionatoVoucher.piva_cf}</div>
+                        </div>
+                        <button onClick={() => setSelezionatoVoucher(null)} style={{ background:'none', border:'none', cursor:'pointer', color:'#94a3b8', fontSize:'18px', lineHeight:1 }}>×</button>
+                      </div>
+
+                      <div style={{ background:'#f8fafc', borderRadius:'8px', padding:'12px', marginBottom:'16px' }}>
+                        {[
+                          { label:'Codice ATECO', value: selezionatoVoucher.codice_ateco },
+                          { label:'Sede operativa', value: selezionatoVoucher.sede_operativa },
+                          { label:'Numero addetti', value: selezionatoVoucher.numero_addetti },
+                          { label:'Referente', value: `${selezionatoVoucher.referente_nome||''} ${selezionatoVoucher.referente_cognome||''}`.trim() },
+                          { label:'Email referente', value: selezionatoVoucher.referente_email },
+                          { label:'Telefono referente', value: selezionatoVoucher.referente_telefono },
+                          { label:'Legale rappresentante', value: `${selezionatoVoucher.legale_rappresentante_nome||''} ${selezionatoVoucher.legale_rappresentante_cognome||''}`.trim() },
+                          { label:'C.F. legale rappr.', value: selezionatoVoucher.legale_rappresentante_cf },
+                        ].map(({ label, value }) => value ? (
+                          <div key={label} style={{ marginBottom:'8px' }}>
+                            <div style={{ fontSize:'10px', fontWeight:'700', color:'#94a3b8', textTransform:'uppercase', letterSpacing:'0.05em' }}>{label}</div>
+                            <div style={{ fontSize:'13px', color:'#0f172a' }}>{value}</div>
+                          </div>
+                        ) : null)}
+                      </div>
+
+                      <div style={{ fontSize:'11px', fontWeight:'700', color:'#94a3b8', textTransform:'uppercase', letterSpacing:'0.05em', marginBottom:'10px' }}>
+                        Partecipanti ({selezionatoVoucher.partecipanti?.length || 0})
+                      </div>
+                      {(selezionatoVoucher.partecipanti || []).length === 0 ? (
+                        <div style={{ fontSize:'13px', color:'#94a3b8', textAlign:'center', padding:'16px' }}>Nessun partecipante</div>
+                      ) : (
+                        <div style={{ display:'flex', flexDirection:'column', gap:'8px' }}>
+                          {selezionatoVoucher.partecipanti.map(p => (
+                            <div key={p.id} style={{ border:'1px solid #e2e8f0', borderRadius:'8px', padding:'10px' }}>
+                              <div style={{ fontWeight:'600', fontSize:'13px', color:'#0f172a' }}>{p.nome} {p.cognome}</div>
+                              <div style={{ fontSize:'11px', color:'#64748b', marginTop:'2px' }}>{p.codice_fiscale}</div>
+                              <div style={{ fontSize:'11px', color:'#475569', marginTop:'4px' }}>{p.tipologia_rapporto}</div>
+                              <div style={{ fontSize:'11px', color:'#94a3b8' }}>{p.email} · {p.telefono}</div>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+
+                      <div style={{ marginTop:'16px', paddingTop:'16px', borderTop:'1px solid #f1f5f9', fontSize:'11px', color:'#cbd5e1', textAlign:'center' }}>
+                        Preregistrata il {selezionatoVoucher.created_at ? new Date(selezionatoVoucher.created_at).toLocaleString('it-IT') : '—'}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          )
+        })()}
 
       </div>
     </div>

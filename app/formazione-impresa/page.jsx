@@ -1,5 +1,4 @@
 import Link from 'next/link'
-import FormListaAttesaVoucher from '@/app/components/FormListaAttesaVoucher'
 
 export const metadata = {
   title: 'Formazione Impresa — L\'investimento migliore | Formazione Como Lago e Valli',
@@ -503,52 +502,29 @@ export default function FormazioneImpresaPage() {
         </div>
       </section>
 
-      {/* Pre-registrazione lista attesa voucher */}
+      {/* Pre-registrazione voucher (CTA verso il form di preregistrazione) */}
       <section className="py-16 px-4" style={{ backgroundColor: '#fffbeb', borderTop: '2px solid #fcd34d' }}>
-        <div className="max-w-4xl mx-auto">
-          <div className="flex items-start gap-4 mb-8">
-            <div className="w-12 h-12 rounded-xl flex items-center justify-center shrink-0 text-2xl" style={{ backgroundColor: '#fef3c7' }}>
-              🔔
-            </div>
-            <div>
-              <p className="font-sans font-bold text-xs uppercase tracking-widest mb-1" style={{ color: '#92400e' }}>
-                Lista d&apos;attesa — Voucher Formazione Continua
-              </p>
-              <h2 className="font-display font-bold text-3xl leading-tight" style={{ color: '#78350f' }}>
-                Vuoi usare il voucher per i tuoi corsi?
-              </h2>
-            </div>
+        <div className="max-w-4xl mx-auto text-center">
+          <div className="w-12 h-12 rounded-xl flex items-center justify-center shrink-0 text-2xl mx-auto mb-5" style={{ backgroundColor: '#fef3c7' }}>
+            🔔
           </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-start">
-            <div>
-              <p className="text-gray-700 text-base leading-relaxed mb-5 text-justify">
-                L&apos;Avviso della quarta edizione è stato pubblicato con Decreto n. 8809 del 1° luglio
-                2026: le domande aprono &laquo;a sportello&raquo; su Bandi e Servizi il 13 luglio 2026,
-                fino a esaurimento risorse. Preregistra la tua azienda e ti contatteremo direttamente
-                per seguirti nella richiesta del voucher.
-              </p>
-              <ul className="space-y-3 text-sm text-gray-600">
-                {[
-                  'Ti avvisiamo all’apertura dello sportello, il 13 luglio 2026',
-                  'Ti guideremo passo per passo nella richiesta del voucher',
-                  'Potrai prenotare il tuo percorso con priorità',
-                ].map((v) => (
-                  <li key={v} className="flex items-start gap-2">
-                    <span className="shrink-0 font-bold mt-0.5" style={{ color: '#92400e' }}>→</span>
-                    <span>{v}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <div className="bg-white rounded-2xl p-6 shadow-sm" style={{ border: '1px solid #fcd34d' }}>
-              <p className="font-sans font-semibold text-sm mb-5" style={{ color: '#92400e' }}>
-                Lascia i tuoi dati — nessun impegno: ti contattiamo per seguirti nella richiesta del voucher.
-              </p>
-              <FormListaAttesaVoucher />
-            </div>
-          </div>
+          <p className="font-sans font-bold text-xs uppercase tracking-widest mb-1" style={{ color: '#92400e' }}>
+            Voucher Formazione Continua — Quarta Edizione
+          </p>
+          <h2 className="font-display font-bold text-3xl leading-tight mb-4" style={{ color: '#78350f' }}>
+            Vuoi usare il voucher per i tuoi corsi?
+          </h2>
+          <p className="text-gray-700 text-base leading-relaxed mb-8 max-w-2xl mx-auto">
+            L&apos;Avviso della quarta edizione è stato pubblicato con Decreto n. 8809 del 1° luglio
+            2026: le domande aprono &laquo;a sportello&raquo; su Bandi e Servizi il 13 luglio 2026,
+            fino a esaurimento risorse. Preregistra la tua azienda e i tuoi collaboratori: ti seguiremo
+            passo per passo nella richiesta del voucher.
+          </p>
+          <a href="/voucher-formazione-continua"
+            className="inline-flex items-center justify-center font-bold text-base px-8 py-4 rounded-xl transition"
+            style={{ backgroundColor: '#92400e', color: 'white' }}>
+            Preregistra la tua azienda →
+          </a>
         </div>
       </section>
 
