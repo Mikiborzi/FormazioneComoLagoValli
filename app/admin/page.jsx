@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect, useMemo, Fragment } from 'react'
 
 const STATI = ['nuovo', 'contattato', 'iscritto', 'in_attesa', 'non_idoneo']
 const STATO_COLORS = {
@@ -122,7 +122,7 @@ export default function AdminPage() {
 
   const [voucherAziende, setVoucherAziende] = useState([])
   const [loadingVoucher, setLoadingVoucher] = useState(false)
-  const [selezionatoVoucher, setSelezionatoVoucher] = useState(null)
+  const [espansiVoucher, setEspansiVoucher] = useState(() => new Set())
   const [aggVoucher, setAggVoucher] = useState(null)
   const [ricercaVoucher, setRicercaVoucher] = useState('')
 
@@ -264,10 +264,55 @@ export default function AdminPage() {
     })
     if (res.ok) {
       setVoucherAziende(prev => prev.map(a => a.id === id ? { ...a, stato: nuovoStato } : a))
-      if (selezionatoVoucher?.id === id) setSelezionatoVoucher(prev => ({ ...prev, stato: nuovoStato }))
       setAggVoucher(id)
       setTimeout(() => setAggVoucher(null), 2000)
     }
+  }
+
+  function esportaVoucherCSV(aziende, nomeFile = 'voucher_partecipanti') {
+    const colAz = [
+      ['Ragione sociale', a => a.ragione_sociale],
+      ['P.IVA/CF azienda', a => a.piva_cf],
+      ['Codice ATECO', a => a.codice_ateco],
+      ['Sede operativa', a => a.sede_operativa],
+      ['Numero addetti', a => a.numero_addetti],
+      ['Referente', a => `${a.referente_nome||''} ${a.referente_cognome||''}`.trim()],
+      ['Email referente', a => a.referente_email],
+      ['Tel referente', a => a.referente_telefono],
+      ['Legale rappr.', a => `${a.legale_rappresentante_nome||''} ${a.legale_rappresentante_cognome||''}`.trim()],
+      ['CF legale rappr.', a => a.legale_rappresentante_cf],
+      ['Stato azienda', a => a.stato],
+    ]
+    const colPart = [
+      ['Nome', p => p.nome], ['Cognome', p => p.cognome], ['Codice fiscale', p => p.codice_fiscale],
+      ['Data nascita', p => p.data_nascita], ['Luogo nascita', p => p.luogo_nascita], ['Sesso', p => p.sesso],
+      ['Cittadinanza', p => p.cittadinanza], ['Titolo studio', p => p.titolo_studio],
+      ['Condizione occupazionale', p => p.condizione_occupazionale], ['Vulnerabilità', p => p.condizione_vulnerabilita],
+      ['Indirizzo', p => p.indirizzo], ['Comune', p => p.comune], ['Provincia', p => p.provincia], ['CAP', p => p.cap],
+      ['Tipologia rapporto', p => p.tipologia_rapporto], ['N. COB', p => p.numero_cob], ['Data assunzione', p => p.data_assunzione],
+      ['Orario lavoro', p => p.orario_lavoro], ['Partita IVA', p => p.partita_iva], ['Email', p => p.email], ['Telefono', p => p.telefono],
+      ['Privacy firmata', p => p.privacy_firmata ? 'SI' : 'NO'],
+      ['Data registrazione', p => p.created_at ? new Date(p.created_at).toLocaleDateString('it-IT') : ''],
+    ]
+    const q = v => `"${String(v ?? '').replace(/"/g, '""')}"`
+    const header = [...colAz.map(c => c[0]), ...colPart.map(c => c[0])].join(',')
+    const righe = []
+    for (const a of aziende) {
+      // Una riga per partecipante; le aziende senza partecipanti non compaiono
+      // (il file serve al caricamento dei partecipanti in SIUF).
+      for (const p of (a.partecipanti || [])) {
+        const vals = [...colAz.map(c => c[1](a)), ...colPart.map(c => c[1](p))]
+        righe.push(vals.map(q).join(','))
+      }
+    }
+    const csv = [header, ...righe].join('\n')
+    const blob = new Blob(['﻿' + csv], { type: 'text/csv;charset=utf-8;' })
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    link.href = url
+    link.download = `${nomeFile}_${new Date().toISOString().split('T')[0]}.csv`
+    link.click()
+    URL.revokeObjectURL(url)
   }
 
   async function aggiornaStatoIfts(id, tipo, nuovoStato) {
@@ -1132,7 +1177,11 @@ export default function AdminPage() {
                 <input type="text" placeholder="🔍 Cerca ragione sociale, P.IVA, referente…" value={ricercaVoucher}
                   onChange={e => setRicercaVoucher(e.target.value)}
                   style={{ flex:'1', minWidth:'200px', padding:'8px 12px', border:'1px solid #e2e8f0', borderRadius:'6px', fontSize:'14px', outline:'none' }} />
-                <span style={{ fontSize:'13px', color:'#64748b' }}>{filtrate.length} aziende</span>
+                <span style={{ fontSize:'13px', color:'#64748b' }}>{filtrate.length} aziende · {totPart} partecipanti</span>
+                <button onClick={() => esportaVoucherCSV(filtrate)} disabled={totPart === 0}
+                  style={{ background: totPart===0 ? '#e2e8f0' : '#166534', color: totPart===0 ? '#94a3b8' : 'white', border:'none', borderRadius:'6px', padding:'6px 14px', cursor: totPart===0 ? 'not-allowed' : 'pointer', fontSize:'13px', fontWeight:'600' }}>
+                  ↓ Esporta CSV (SIUF)
+                </button>
                 <button onClick={() => caricaVoucher(token)}
                   style={{ background:'#1e293b', color:'#94a3b8', border:'1px solid #334155', borderRadius:'6px', padding:'6px 14px', cursor:'pointer', fontSize:'13px' }}>
                   ↻ Aggiorna
@@ -1142,108 +1191,128 @@ export default function AdminPage() {
               {loadingVoucher ? (
                 <div style={{ padding:'60px', textAlign:'center', color:'#94a3b8' }}>Caricamento…</div>
               ) : (
-                <div style={{ display:'flex', gap:'20px', alignItems:'flex-start' }}>
-                  <div style={{ flex:1, background:'white', borderRadius:'10px', boxShadow:'0 1px 3px rgba(0,0,0,0.08)', overflow:'hidden', minWidth:0 }}>
-                    {filtrate.length === 0 ? (
-                      <div style={{ padding:'60px', textAlign:'center', color:'#94a3b8' }}>Nessuna azienda preregistrata</div>
-                    ) : (
-                      <div style={{ overflowX:'auto' }}>
-                        <table style={{ width:'100%', borderCollapse:'collapse' }}>
-                          <thead>
-                            <tr style={{ background:'#f8fafc', borderBottom:'2px solid #e2e8f0' }}>
-                              {['Azienda','Referente','Email / Tel','Partecipanti','Addetti','Stato','Data'].map(h => (
-                                <th key={h} style={{ padding:'10px 14px', textAlign:'left', fontSize:'12px', fontWeight:'700', color:'#475569', textTransform:'uppercase', letterSpacing:'0.05em', whiteSpace:'nowrap' }}>{h}</th>
-                              ))}
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {filtrate.map((a, idx) => (
-                              <tr key={a.id} onClick={() => setSelezionatoVoucher(selezionatoVoucher?.id===a.id ? null : a)}
-                                style={{ borderBottom:'1px solid #f1f5f9', cursor:'pointer', transition:'background 0.2s',
-                                  background: selezionatoVoucher?.id===a.id ? '#eff6ff' : aggVoucher===a.id ? '#f0fdf4' : idx%2===0 ? 'white' : '#fafafa' }}>
-                                <td style={{ padding:'10px 14px' }}>
-                                  <div style={{ fontWeight:'600', fontSize:'14px', color:'#0f172a' }}>{a.ragione_sociale}</div>
-                                  <div style={{ fontSize:'11px', color:'#94a3b8' }}>{a.piva_cf}</div>
-                                </td>
-                                <td style={{ padding:'10px 14px', fontSize:'13px', color:'#334155' }}>{a.referente_nome} {a.referente_cognome}</td>
-                                <td style={{ padding:'10px 14px' }}>
-                                  <div style={{ fontSize:'13px', color:'#334155' }}>{a.referente_email}</div>
-                                  <div style={{ fontSize:'13px', color:'#64748b' }}>{a.referente_telefono}</div>
-                                </td>
-                                <td style={{ padding:'10px 14px', textAlign:'center' }}>
-                                  <span style={{ padding:'2px 10px', borderRadius:'99px', fontSize:'13px', fontWeight:'700', background:'#e0f2fe', color:'#0369a1' }}>
-                                    {a.partecipanti?.length || 0}
-                                  </span>
-                                </td>
-                                <td style={{ padding:'10px 14px', fontSize:'12px', color:'#64748b' }}>{a.numero_addetti || '—'}</td>
-                                <td style={{ padding:'10px 14px' }}>
-                                  <select value={a.stato||'nuovo'} onClick={e => e.stopPropagation()} onChange={e => aggiornaStatoVoucher(a.id, e.target.value)}
-                                    style={{ padding:'4px 8px', borderRadius:'6px', border:'1px solid #e2e8f0', fontSize:'12px', fontWeight:'600', cursor:'pointer', outline:'none',
-                                      background: COLORS_V[a.stato]?.bg||'#f3f4f6', color: COLORS_V[a.stato]?.text||'#374151' }}>
-                                    {STATI_V.map(s => <option key={s} value={s}>{COLORS_V[s]?.label||s}</option>)}
-                                  </select>
-                                </td>
-                                <td style={{ padding:'10px 14px', fontSize:'12px', color:'#94a3b8', whiteSpace:'nowrap' }}>
-                                  {a.created_at ? new Date(a.created_at).toLocaleDateString('it-IT',{day:'2-digit',month:'2-digit',year:'2-digit'}) : '—'}
-                                </td>
-                              </tr>
+                <div style={{ background:'white', borderRadius:'10px', boxShadow:'0 1px 3px rgba(0,0,0,0.08)', overflow:'hidden' }}>
+                  {filtrate.length === 0 ? (
+                    <div style={{ padding:'60px', textAlign:'center', color:'#94a3b8' }}>Nessuna azienda preregistrata</div>
+                  ) : (
+                    <div style={{ overflowX:'auto' }}>
+                      <table style={{ width:'100%', borderCollapse:'collapse' }}>
+                        <thead>
+                          <tr style={{ background:'#f8fafc', borderBottom:'2px solid #e2e8f0' }}>
+                            {['','Azienda','Referente','Email / Tel','Partecipanti','Addetti','Stato','Data'].map((h, hi) => (
+                              <th key={hi} style={{ padding:'10px 14px', textAlign:'left', fontSize:'12px', fontWeight:'700', color:'#475569', textTransform:'uppercase', letterSpacing:'0.05em', whiteSpace:'nowrap' }}>{h}</th>
                             ))}
-                          </tbody>
-                        </table>
-                      </div>
-                    )}
-                  </div>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {filtrate.map((a, idx) => {
+                            const aperta = espansiVoucher.has(a.id)
+                            const toggle = () => setEspansiVoucher(prev => {
+                              const n = new Set(prev)
+                              if (n.has(a.id)) n.delete(a.id); else n.add(a.id)
+                              return n
+                            })
+                            const parts = a.partecipanti || []
+                            return (
+                              <Fragment key={a.id}>
+                                <tr onClick={toggle}
+                                  style={{ borderBottom: aperta ? 'none' : '1px solid #f1f5f9', cursor:'pointer', transition:'background 0.2s',
+                                    background: aperta ? '#eff6ff' : aggVoucher===a.id ? '#f0fdf4' : idx%2===0 ? 'white' : '#fafafa' }}>
+                                  <td style={{ padding:'10px 0 10px 14px', width:'24px', color:'#94a3b8', fontSize:'12px' }}>{aperta ? '▾' : '▸'}</td>
+                                  <td style={{ padding:'10px 14px' }}>
+                                    <div style={{ fontWeight:'600', fontSize:'14px', color:'#0f172a' }}>{a.ragione_sociale}</div>
+                                    <div style={{ fontSize:'11px', color:'#94a3b8' }}>{a.piva_cf}</div>
+                                  </td>
+                                  <td style={{ padding:'10px 14px', fontSize:'13px', color:'#334155' }}>{a.referente_nome} {a.referente_cognome}</td>
+                                  <td style={{ padding:'10px 14px' }}>
+                                    <div style={{ fontSize:'13px', color:'#334155' }}>{a.referente_email}</div>
+                                    <div style={{ fontSize:'13px', color:'#64748b' }}>{a.referente_telefono}</div>
+                                  </td>
+                                  <td style={{ padding:'10px 14px', textAlign:'center' }}>
+                                    <span style={{ padding:'2px 10px', borderRadius:'99px', fontSize:'13px', fontWeight:'700', background:'#e0f2fe', color:'#0369a1' }}>
+                                      {parts.length}
+                                    </span>
+                                  </td>
+                                  <td style={{ padding:'10px 14px', fontSize:'12px', color:'#64748b' }}>{a.numero_addetti || '—'}</td>
+                                  <td style={{ padding:'10px 14px' }}>
+                                    <select value={a.stato||'nuovo'} onClick={e => e.stopPropagation()} onChange={e => aggiornaStatoVoucher(a.id, e.target.value)}
+                                      style={{ padding:'4px 8px', borderRadius:'6px', border:'1px solid #e2e8f0', fontSize:'12px', fontWeight:'600', cursor:'pointer', outline:'none',
+                                        background: COLORS_V[a.stato]?.bg||'#f3f4f6', color: COLORS_V[a.stato]?.text||'#374151' }}>
+                                      {STATI_V.map(s => <option key={s} value={s}>{COLORS_V[s]?.label||s}</option>)}
+                                    </select>
+                                  </td>
+                                  <td style={{ padding:'10px 14px', fontSize:'12px', color:'#94a3b8', whiteSpace:'nowrap' }}>
+                                    {a.created_at ? new Date(a.created_at).toLocaleDateString('it-IT',{day:'2-digit',month:'2-digit',year:'2-digit'}) : '—'}
+                                  </td>
+                                </tr>
 
-                  {/* Dettaglio azienda + partecipanti */}
-                  {selezionatoVoucher && (
-                    <div style={{ width:'380px', flexShrink:0, background:'white', borderRadius:'10px', boxShadow:'0 1px 3px rgba(0,0,0,0.08)', padding:'20px', position:'sticky', top:'80px', maxHeight:'calc(100vh - 120px)', overflowY:'auto' }}>
-                      <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start', marginBottom:'16px' }}>
-                        <div>
-                          <h3 style={{ margin:0, fontSize:'16px', fontWeight:'700', color:'#0f172a' }}>{selezionatoVoucher.ragione_sociale}</h3>
-                          <div style={{ fontSize:'12px', color:'#64748b', marginTop:'2px' }}>P.IVA/C.F. {selezionatoVoucher.piva_cf}</div>
-                        </div>
-                        <button onClick={() => setSelezionatoVoucher(null)} style={{ background:'none', border:'none', cursor:'pointer', color:'#94a3b8', fontSize:'18px', lineHeight:1 }}>×</button>
-                      </div>
+                                {aperta && (
+                                  <tr style={{ borderBottom:'2px solid #e2e8f0', background:'#f8fafc' }}>
+                                    <td colSpan={8} style={{ padding:'0 16px 16px' }}>
+                                      {/* Dati azienda estesi */}
+                                      <div style={{ display:'flex', flexWrap:'wrap', gap:'16px 32px', padding:'12px 0 14px', fontSize:'12px', color:'#475569' }}>
+                                        {[
+                                          ['Codice ATECO', a.codice_ateco],
+                                          ['Sede operativa', a.sede_operativa],
+                                          ['Legale rappresentante', `${a.legale_rappresentante_nome||''} ${a.legale_rappresentante_cognome||''}`.trim()],
+                                          ['C.F. legale rappr.', a.legale_rappresentante_cf],
+                                        ].filter(([, v]) => v).map(([label, value]) => (
+                                          <div key={label}>
+                                            <div style={{ fontSize:'10px', fontWeight:'700', color:'#94a3b8', textTransform:'uppercase', letterSpacing:'0.05em' }}>{label}</div>
+                                            <div style={{ color:'#0f172a' }}>{value}</div>
+                                          </div>
+                                        ))}
+                                      </div>
 
-                      <div style={{ background:'#f8fafc', borderRadius:'8px', padding:'12px', marginBottom:'16px' }}>
-                        {[
-                          { label:'Codice ATECO', value: selezionatoVoucher.codice_ateco },
-                          { label:'Sede operativa', value: selezionatoVoucher.sede_operativa },
-                          { label:'Numero addetti', value: selezionatoVoucher.numero_addetti },
-                          { label:'Referente', value: `${selezionatoVoucher.referente_nome||''} ${selezionatoVoucher.referente_cognome||''}`.trim() },
-                          { label:'Email referente', value: selezionatoVoucher.referente_email },
-                          { label:'Telefono referente', value: selezionatoVoucher.referente_telefono },
-                          { label:'Legale rappresentante', value: `${selezionatoVoucher.legale_rappresentante_nome||''} ${selezionatoVoucher.legale_rappresentante_cognome||''}`.trim() },
-                          { label:'C.F. legale rappr.', value: selezionatoVoucher.legale_rappresentante_cf },
-                        ].map(({ label, value }) => value ? (
-                          <div key={label} style={{ marginBottom:'8px' }}>
-                            <div style={{ fontSize:'10px', fontWeight:'700', color:'#94a3b8', textTransform:'uppercase', letterSpacing:'0.05em' }}>{label}</div>
-                            <div style={{ fontSize:'13px', color:'#0f172a' }}>{value}</div>
-                          </div>
-                        ) : null)}
-                      </div>
+                                      <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:'8px' }}>
+                                        <span style={{ fontSize:'12px', fontWeight:'700', color:'#334155' }}>Partecipanti ({parts.length})</span>
+                                        {parts.length > 0 && (
+                                          <button onClick={() => esportaVoucherCSV([a], `voucher_${(a.ragione_sociale||'azienda').replace(/[^a-zA-Z0-9]+/g,'_')}`)}
+                                            style={{ background:'#166534', color:'white', border:'none', borderRadius:'6px', padding:'4px 10px', cursor:'pointer', fontSize:'12px', fontWeight:'600' }}>
+                                            ↓ Esporta questa azienda
+                                          </button>
+                                        )}
+                                      </div>
 
-                      <div style={{ fontSize:'11px', fontWeight:'700', color:'#94a3b8', textTransform:'uppercase', letterSpacing:'0.05em', marginBottom:'10px' }}>
-                        Partecipanti ({selezionatoVoucher.partecipanti?.length || 0})
-                      </div>
-                      {(selezionatoVoucher.partecipanti || []).length === 0 ? (
-                        <div style={{ fontSize:'13px', color:'#94a3b8', textAlign:'center', padding:'16px' }}>Nessun partecipante</div>
-                      ) : (
-                        <div style={{ display:'flex', flexDirection:'column', gap:'8px' }}>
-                          {selezionatoVoucher.partecipanti.map(p => (
-                            <div key={p.id} style={{ border:'1px solid #e2e8f0', borderRadius:'8px', padding:'10px' }}>
-                              <div style={{ fontWeight:'600', fontSize:'13px', color:'#0f172a' }}>{p.nome} {p.cognome}</div>
-                              <div style={{ fontSize:'11px', color:'#64748b', marginTop:'2px' }}>{p.codice_fiscale}</div>
-                              <div style={{ fontSize:'11px', color:'#475569', marginTop:'4px' }}>{p.tipologia_rapporto}</div>
-                              <div style={{ fontSize:'11px', color:'#94a3b8' }}>{p.email} · {p.telefono}</div>
-                            </div>
-                          ))}
-                        </div>
-                      )}
-
-                      <div style={{ marginTop:'16px', paddingTop:'16px', borderTop:'1px solid #f1f5f9', fontSize:'11px', color:'#cbd5e1', textAlign:'center' }}>
-                        Preregistrata il {selezionatoVoucher.created_at ? new Date(selezionatoVoucher.created_at).toLocaleString('it-IT') : '—'}
-                      </div>
+                                      {parts.length === 0 ? (
+                                        <div style={{ fontSize:'13px', color:'#94a3b8', padding:'12px 0' }}>Nessun partecipante registrato per questa azienda.</div>
+                                      ) : (
+                                        <div style={{ overflowX:'auto', background:'white', borderRadius:'8px', border:'1px solid #e2e8f0' }}>
+                                          <table style={{ width:'100%', borderCollapse:'collapse' }}>
+                                            <thead>
+                                              <tr style={{ background:'#f1f5f9' }}>
+                                                {['#','Nome e cognome','Codice fiscale','Nascita','Sesso','Titolo studio','Rapporto','N. COB','Email','Telefono'].map((h, hi) => (
+                                                  <th key={hi} style={{ padding:'8px 12px', textAlign:'left', fontSize:'11px', fontWeight:'700', color:'#475569', whiteSpace:'nowrap' }}>{h}</th>
+                                                ))}
+                                              </tr>
+                                            </thead>
+                                            <tbody>
+                                              {parts.map((p, pi) => (
+                                                <tr key={p.id} style={{ borderTop:'1px solid #f1f5f9' }}>
+                                                  <td style={{ padding:'8px 12px', fontSize:'12px', color:'#94a3b8' }}>{pi + 1}</td>
+                                                  <td style={{ padding:'8px 12px', fontSize:'13px', color:'#0f172a', fontWeight:'600', whiteSpace:'nowrap' }}>{p.nome} {p.cognome}</td>
+                                                  <td style={{ padding:'8px 12px', fontSize:'12px', color:'#475569', fontFamily:'monospace' }}>{p.codice_fiscale}</td>
+                                                  <td style={{ padding:'8px 12px', fontSize:'12px', color:'#475569', whiteSpace:'nowrap' }}>{p.data_nascita || '—'}{p.luogo_nascita ? ` · ${p.luogo_nascita}` : ''}</td>
+                                                  <td style={{ padding:'8px 12px', fontSize:'12px', color:'#475569' }}>{p.sesso || '—'}</td>
+                                                  <td style={{ padding:'8px 12px', fontSize:'12px', color:'#475569' }}>{p.titolo_studio || '—'}</td>
+                                                  <td style={{ padding:'8px 12px', fontSize:'12px', color:'#475569' }}>{p.tipologia_rapporto || '—'}</td>
+                                                  <td style={{ padding:'8px 12px', fontSize:'12px', color:'#475569' }}>{p.numero_cob || '—'}</td>
+                                                  <td style={{ padding:'8px 12px', fontSize:'12px', color:'#475569' }}>{p.email || '—'}</td>
+                                                  <td style={{ padding:'8px 12px', fontSize:'12px', color:'#475569', whiteSpace:'nowrap' }}>{p.telefono || '—'}</td>
+                                                </tr>
+                                              ))}
+                                            </tbody>
+                                          </table>
+                                        </div>
+                                      )}
+                                    </td>
+                                  </tr>
+                                )}
+                              </Fragment>
+                            )
+                          })}
+                        </tbody>
+                      </table>
                     </div>
                   )}
                 </div>
