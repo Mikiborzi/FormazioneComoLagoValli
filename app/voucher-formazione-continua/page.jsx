@@ -116,7 +116,11 @@ export default function VoucherFormazioneContinua() {
   const annullaModificaAzienda = () => { setAzienda(aziendaBackup); setEditAzienda(false) }
   const salvaAzienda = async () => {
     setLoading(true); setErrore(null)
-    const { ok, json } = await postJSON('/api/voucher/azienda', { ...azienda, id: azienda.id }, 'PATCH')
+    const { ok, json } = await postJSON(
+      '/api/voucher/azienda',
+      { ...azienda, id: azienda.id, token: azienda.token_accesso },
+      'PATCH'
+    )
     setLoading(false)
     if (!ok) { setErrore(json.error || 'Errore nell\'aggiornamento.'); return }
     setAzienda(json.azienda)
@@ -132,12 +136,18 @@ export default function VoucherFormazioneContinua() {
     e.preventDefault()
     setLoading(true); setErrore(null)
     if (partModal.mode === 'new') {
-      const { ok, json } = await postJSON('/api/voucher/partecipante', { ...partModal.data, azienda_id: azienda.id })
+      const { ok, json } = await postJSON('/api/voucher/partecipante', {
+        ...partModal.data, azienda_id: azienda.id, token: azienda.token_accesso,
+      })
       setLoading(false)
       if (!ok) { setErrore(json.error || 'Errore nel salvataggio del partecipante.'); return }
       setPartecipanti((arr) => [...arr, json.partecipante])
     } else {
-      const { ok, json } = await postJSON('/api/voucher/partecipante', partModal.data, 'PATCH')
+      const { ok, json } = await postJSON(
+        '/api/voucher/partecipante',
+        { ...partModal.data, token: azienda.token_accesso },
+        'PATCH'
+      )
       setLoading(false)
       if (!ok) { setErrore(json.error || 'Errore nell\'aggiornamento del partecipante.'); return }
       setPartecipanti((arr) => arr.map((p) => (p.id === json.partecipante.id ? json.partecipante : p)))
@@ -148,16 +158,29 @@ export default function VoucherFormazioneContinua() {
   const eliminaPart = async (p) => {
     if (!confirm(`Rimuovere ${p.nome} ${p.cognome} dalla pratica?`)) return
     setLoading(true); setErrore(null)
-    const res = await fetch(`/api/voucher/partecipante?id=${encodeURIComponent(p.id)}`, { method: 'DELETE' })
+    const qs = new URLSearchParams({ id: p.id, token: azienda.token_accesso || '' })
+    const res = await fetch(`/api/voucher/partecipante?${qs}`, { method: 'DELETE' })
     setLoading(false)
     if (!res.ok) { setErrore('Errore nella rimozione del partecipante.'); return }
     setPartecipanti((arr) => arr.filter((x) => x.id !== p.id))
   }
 
   // ── Conclusione ────────────────────────────────────────────────────────────
-  // I dati sono già salvati a ogni passaggio: la conclusione mostra solo il
-  // riepilogo con le istruzioni di riaccesso e la possibilità di stampare.
-  const concludi = () => { setErrore(null); setView('fine') }
+  // I dati sono già salvati a ogni passaggio; qui si marca la pratica come
+  // conclusa, così in admin una bozza abbandonata non sembra completata.
+  // La pratica resta comunque riapribile e modificabile.
+  const concludi = async () => {
+    setLoading(true); setErrore(null)
+    const { ok, json } = await postJSON(
+      '/api/voucher/azienda',
+      { id: azienda.id, token: azienda.token_accesso, concludi: true },
+      'PATCH'
+    )
+    setLoading(false)
+    if (!ok) { setErrore(json.error || 'Errore nella conclusione della pratica.'); return }
+    setAzienda(json.azienda)
+    setView('fine')
+  }
 
   // ── Stampa / salva PDF ─────────────────────────────────────────────────────
   const stampaPratica = () => {
@@ -264,7 +287,7 @@ export default function VoucherFormazioneContinua() {
 
               {editAzienda ? (
                 <div className="space-y-6">
-                  <AziendaFields azienda={azienda} onChange={handleAzienda} bare />
+                  <AziendaFields azienda={azienda} onChange={handleAzienda} bare pivaBloccata />
                   <div className="flex gap-3">
                     <button onClick={annullaModificaAzienda} className="text-gray-500 underline text-sm">Annulla</button>
                     <button onClick={salvaAzienda} disabled={loading} className={`${btnPrimary} ml-auto py-2 px-4`}>
@@ -397,7 +420,7 @@ export default function VoucherFormazioneContinua() {
 }
 
 // ── Campi Azienda (riusati per creazione e modifica) ──────────────────────────
-function AziendaFields({ azienda, onChange, bare = false }) {
+function AziendaFields({ azienda, onChange, bare = false, pivaBloccata = false }) {
   return (
     <div className="space-y-8">
       <div className={bare ? '' : card}>
@@ -413,7 +436,14 @@ function AziendaFields({ azienda, onChange, bare = false }) {
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className={labelCls}>P.IVA / Codice Fiscale *</label>
-              <input name="piva_cf" value={azienda.piva_cf} onChange={onChange} required className={field} />
+              <input name="piva_cf" value={azienda.piva_cf} onChange={onChange} required
+                readOnly={pivaBloccata} disabled={pivaBloccata}
+                className={pivaBloccata ? `${field} bg-gray-100 text-gray-500 cursor-not-allowed` : field} />
+              {pivaBloccata && (
+                <p className="text-xs text-gray-400 mt-1">
+                  Identifica la pratica e serve per riaprirla: non è modificabile.
+                </p>
+              )}
             </div>
             <div>
               <label className={labelCls}>Codice ATECO</label>

@@ -1,5 +1,32 @@
 import { NextResponse } from 'next/server'
-import { getSupabaseAdmin, pick, CAMPI_PARTECIPANTE } from '@/app/lib/supabaseServer'
+import {
+  getSupabaseAdmin,
+  pick,
+  verificaAccessoPratica,
+  CAMPI_PARTECIPANTE,
+} from '@/app/lib/supabaseServer'
+
+const NON_AUTORIZZATO = () =>
+  NextResponse.json({ error: 'Accesso alla pratica non autorizzato' }, { status: 403 })
+
+// Un partecipante si tocca solo dimostrando l'accesso alla pratica che lo
+// contiene: risale dall'id del partecipante alla sua azienda e verifica il token.
+async function autorizzaPartecipante(supabase, partecipanteId, token) {
+  const { data: partecipante, error } = await supabase
+    .from('voucher_partecipanti')
+    .select('id, azienda_id')
+    .eq('id', partecipanteId)
+    .maybeSingle()
+
+  if (error) {
+    console.error('partecipante/autorizza', error)
+    return null
+  }
+  if (!partecipante) return null
+
+  const pratica = await verificaAccessoPratica(supabase, partecipante.azienda_id, token)
+  return pratica ? partecipante : null
+}
 
 const OBBLIGATORI = [
   'nome', 'cognome', 'codice_fiscale', 'data_nascita', 'luogo_nascita', 'sesso',
@@ -31,10 +58,9 @@ export async function POST(request) {
 
   const supabase = getSupabaseAdmin()
 
-  // Verifica che la pratica esista
-  const { data: azienda } = await supabase
-    .from('voucher_aziende').select('id').eq('id', aziendaId).maybeSingle()
-  if (!azienda) return NextResponse.json({ error: 'Pratica azienda inesistente' }, { status: 404 })
+  // Verifica che la pratica esista e che il chiamante ne abbia il token
+  const azienda = await verificaAccessoPratica(supabase, aziendaId, body?.token)
+  if (!azienda) return NON_AUTORIZZATO()
 
   const { data, error } = await supabase
     .from('voucher_partecipanti')
@@ -50,7 +76,7 @@ export async function POST(request) {
   return NextResponse.json({ partecipante: data }, { status: 201 })
 }
 
-// PATCH /api/voucher/partecipante — modifica un partecipante. Body: { id, ...campi }
+// PATCH /api/voucher/partecipante — modifica un partecipante. Body: { id, token, ...campi }
 export async function PATCH(request) {
   let body
   try {
@@ -68,6 +94,8 @@ export async function PATCH(request) {
   }
 
   const supabase = getSupabaseAdmin()
+  if (!(await autorizzaPartecipante(supabase, id, body?.token))) return NON_AUTORIZZATO()
+
   const { data, error } = await supabase
     .from('voucher_partecipanti')
     .update(dati)
@@ -83,13 +111,15 @@ export async function PATCH(request) {
   return NextResponse.json({ partecipante: data })
 }
 
-// DELETE /api/voucher/partecipante?id=...
+// DELETE /api/voucher/partecipante?id=...&token=...
 export async function DELETE(request) {
   const { searchParams } = new URL(request.url)
   const id = String(searchParams.get('id') || '').trim()
   if (!id) return NextResponse.json({ error: 'id partecipante mancante' }, { status: 400 })
 
   const supabase = getSupabaseAdmin()
+  if (!(await autorizzaPartecipante(supabase, id, searchParams.get('token')))) return NON_AUTORIZZATO()
+
   const { error } = await supabase.from('voucher_partecipanti').delete().eq('id', id)
 
   if (error) {

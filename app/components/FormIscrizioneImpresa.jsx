@@ -89,15 +89,17 @@ export default function FormIscrizioneImpresa() {
     setErrors((prev) => ({ ...prev, [name]: undefined }));
   }, []);
 
-  // Auto-fill: cerca per email nel DB unificato
+  // Auto-fill dei propri dati: la route risponde solo a chi è autenticato e
+  // restituisce esclusivamente la scheda dell'utente in sessione. Se il campo
+  // contiene l'email di un'altra persona non si precompila nulla.
   const handleEmailBlur = useCallback(async (e) => {
     const email = e.target.value.toLowerCase().trim();
     if (!EMAIL_REGEX.test(email)) return;
     setLookupLoading(true);
     try {
-      const res = await fetch(`/api/lookup-email?email=${encodeURIComponent(email)}`);
+      const res = await fetch("/api/lookup-email");
       const data = await res.json();
-      if (data) {
+      if (data && data.email?.toLowerCase() === email) {
         setContattoTrovato(true);
         setForm((prev) => ({
           ...prev,

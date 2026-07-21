@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { getSupabaseAdmin } from '@/app/lib/supabaseServer'
+import { getSupabaseAdmin, normalizzaPiva } from '@/app/lib/supabaseServer'
 
 // POST /api/voucher/riprendi
 // Body: { piva_cf, referente_email }
@@ -12,7 +12,7 @@ export async function POST(request) {
     return NextResponse.json({ error: 'Body non valido' }, { status: 400 })
   }
 
-  const piva = String(body?.piva_cf || '').trim()
+  const piva = normalizzaPiva(body?.piva_cf)
   const email = String(body?.referente_email || '').trim().toLowerCase()
 
   if (!piva || !email) {
