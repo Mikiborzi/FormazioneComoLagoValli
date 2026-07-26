@@ -39,9 +39,9 @@ export default function PrivacyPolicy() {
             </thead>
             <tbody>
               {[
-                ["Nome, cognome, email, telefono, codice fiscale, data di nascita, indirizzo", "Gestione preiscrizioni ai corsi GOL e contatto da parte degli operatori", "Consenso esplicito (art. 6.1.a GDPR)"],
-                ["Comune e indirizzo di residenza/domicilio", "Verifica dei requisiti di idoneità al Programma GOL", "Esecuzione di un contratto o misure precontrattuali (art. 6.1.b GDPR)"],
-                ["Status occupazionale", "Determinazione dell'idoneità al Programma GOL", "Esecuzione di un contratto o misure precontrattuali (art. 6.1.b GDPR)"],
+                ["Nome, cognome, email, telefono, codice fiscale, data di nascita, indirizzo", "Gestione preiscrizioni ai corsi e contatto da parte degli operatori", "Consenso esplicito (art. 6.1.a GDPR)"],
+                ["Comune e indirizzo di residenza/domicilio", "Verifica dei requisiti di idoneità alla Dote Inserimento Lavorativo (DIL)", "Esecuzione di un contratto o misure precontrattuali (art. 6.1.b GDPR)"],
+                ["Status occupazionale", "Determinazione dell'idoneità alla Dote Inserimento Lavorativo (DIL)", "Esecuzione di un contratto o misure precontrattuali (art. 6.1.b GDPR)"],
                 ["Email (per newsletter)", "Invio di comunicazioni sui corsi disponibili", "Consenso esplicito (art. 6.1.a GDPR) — facoltativo"],
                 ["Email e password (area personale)", "Autenticazione e accesso all'area personale utente", "Consenso esplicito (art. 6.1.a GDPR)"],
               ].map(([dati, finalita, base], i) => (
@@ -59,14 +59,14 @@ export default function PrivacyPolicy() {
       <section className="mb-8">
         <h2 className="font-display font-bold text-xl mb-3" style={{ color: "#1a2e5a" }}>3. Modalità del trattamento e conservazione</h2>
         <p className="text-gray-600 text-sm leading-relaxed">
-          I dati sono trattati con strumenti elettronici e conservati in forma sicura su database Supabase (Supabase Inc., con server in Europa). I dati relativi alle preiscrizioni sono conservati per tutta la durata del Programma GOL e per i successivi 10 anni ai fini amministrativi e di rendicontazione, salvo diversa indicazione normativa. I dati dell'area personale (credenziali di accesso) sono conservati fino alla cancellazione dell'account da parte dell'utente.
+          I dati sono trattati con strumenti elettronici e conservati in forma sicura su database Supabase (Supabase Inc., con server in Europa). I dati relativi alle preiscrizioni sono conservati per tutta la durata della misura Dote Inserimento Lavorativo (DIL) — che dal 1° luglio 2026 sostituisce il Programma GOL — e per i successivi 10 anni ai fini amministrativi e di rendicontazione, salvo diversa indicazione normativa. I dati dell'area personale (credenziali di accesso) sono conservati fino alla cancellazione dell'account da parte dell'utente.
         </p>
       </section>
 
       <section className="mb-8">
         <h2 className="font-display font-bold text-xl mb-3" style={{ color: "#1a2e5a" }}>4. Comunicazione e diffusione dei dati</h2>
         <p className="text-gray-600 text-sm leading-relaxed">
-          I dati raccolti possono essere comunicati a: Centri per l'Impiego della Provincia di Como, Regione Lombardia, ANPAL e soggetti istituzionali coinvolti nel Programma GOL, esclusivamente per le finalità connesse all'erogazione del servizio. I dati non sono diffusi a terzi per finalità commerciali né ceduti a soggetti non coinvolti nel Programma GOL.
+          I dati raccolti possono essere comunicati a: Centri per l'Impiego della Provincia di Como, Regione Lombardia, ANPAL e soggetti istituzionali coinvolti nella Dote Inserimento Lavorativo (DIL), esclusivamente per le finalità connesse all'erogazione del servizio. I dati non sono diffusi a terzi per finalità commerciali né ceduti a soggetti non coinvolti nella misura.
         </p>
       </section>
 
@@ -78,7 +78,7 @@ export default function PrivacyPolicy() {
         <ul className="list-disc list-inside text-gray-600 text-sm leading-relaxed space-y-1">
           <li>Accedere ai propri dati personali</li>
           <li>Richiederne la rettifica o l'aggiornamento</li>
-          <li>Richiederne la cancellazione (diritto all'oblio), nei limiti previsti dalla normativa GOL</li>
+          <li>Richiederne la cancellazione (diritto all'oblio), nei limiti previsti dalla normativa sulla Dote Inserimento Lavorativo</li>
           <li>Opporsi al trattamento o richiederne la limitazione</li>
           <li>Richiedere la portabilità dei dati</li>
           <li>Revocare il consenso in qualsiasi momento, senza pregiudizio per la liceità del trattamento precedente</li>

@@ -381,7 +381,7 @@ export default function AdminPage() {
   }), [iscrizioniFiltrate])
 
   function esportaCSV() {
-    const header = ['Tipo','Nome','Cognome','Email','Telefono','CF','Status','GOL','Corsi','Sede','Stato','CPI','GOL attivo','Ente GOL','Fonte','CV','Data'].join(',')
+    const header = ['Tipo','Nome','Cognome','Email','Telefono','CF','Status','DIL','Corsi','Sede','Stato','CPI','GOL pregresso','Ente','Fonte','CV','Data'].join(',')
     const righe = iscrizioniFiltrate.map(i => [
       i.tipo||'formazione', i.nome||'', i.cognome||'', i.email||'', i.telefono||'', i.codice_fiscale||'',
       i.status||'', i.idoneo_gol?'SI':'NO', (i.corsi_interesse||[]).join('|'),
@@ -421,7 +421,7 @@ export default function AdminPage() {
       {/* TAB BAR */}
       <div style={{ background:'white', borderBottom:'2px solid #e2e8f0', padding:'0 24px', display:'flex', gap:'4px' }}>
         {[
-          { key:'gol', label:'🎓 GOL / Servizi Lavoro' },
+          { key:'gol', label:'🎓 DIL / Servizi Lavoro' },
           { key:'voucher', label:'🎟️ Voucher Formazione Continua' },
           { key:'ifts', label:'🏭 Percorsi IFTS' },
           { key:'impresa', label:'🔴 Formazione Impresa' },
@@ -450,7 +450,7 @@ export default function AdminPage() {
             { label:'Totale contatti', value:stats.totale, color:'#0f172a', emoji:'📋' },
             { label:'Da contattare',   value:stats.nuovi,  color:'#d97706', emoji:'🔔' },
             { label:'Iscritti/Presi in carico', value:stats.iscritti, color:'#059669', emoji:'✅' },
-            { label:'Idonei GOL',      value:stats.gol,    color:'#2563eb', emoji:'🎯' },
+            { label:'Idonei DIL',      value:stats.gol,    color:'#2563eb', emoji:'🎯' },
           ].map((s,i) => (
             <div key={i} style={{ background:'white', borderRadius:'10px', padding:'20px', boxShadow:'0 1px 3px rgba(0,0,0,0.08)', borderLeft:`4px solid ${s.color}` }}>
               <div style={{ fontSize:'24px', marginBottom:'4px' }}>{s.emoji}</div>
@@ -481,8 +481,8 @@ export default function AdminPage() {
             </select>
           )}
           <select value={filtroGol} onChange={e => setFiltroGol(e.target.value)} style={sel}>
-            <option value="tutti">GOL: tutti</option>
-            <option value="si">Solo idonei GOL</option>
+            <option value="tutti">DIL: tutti</option>
+            <option value="si">Solo idonei DIL</option>
             <option value="no">Solo non idonei</option>
           </select>
           <span style={{ fontSize:'13px', color:'#64748b', whiteSpace:'nowrap' }}>{iscrizioniFiltrate.length} risultati</span>
@@ -500,7 +500,7 @@ export default function AdminPage() {
                 <table style={{ width:'100%', borderCollapse:'collapse' }}>
                   <thead>
                     <tr style={{ background:'#f8fafc', borderBottom:'2px solid #e2e8f0' }}>
-                      {['Tipo','Nome','Email / Tel','Interesse','Sede','GOL','Stato','Data'].map(h => (
+                      {['Tipo','Nome','Email / Tel','Interesse','Sede','DIL','Stato','Data'].map(h => (
                         <th key={h} style={{ padding:'10px 14px', textAlign:'left', fontSize:'12px', fontWeight:'700', color:'#475569', textTransform:'uppercase', letterSpacing:'0.05em', whiteSpace:'nowrap' }}>{h}</th>
                       ))}
                     </tr>
@@ -593,9 +593,9 @@ export default function AdminPage() {
                 { label:'Comune domicilio', value:selezionato.comune_domicilio },
                 { label:'Indirizzo', value:selezionato.indirizzo },
                 { label:'Status lavorativo', value:selezionato.status },
-                { label:'Idoneo GOL', value:selezionato.idoneo_gol?'✅ Sì':'❌ No' },
+                { label:'Idoneo DIL', value:selezionato.idoneo_gol?'✅ Sì':'❌ No' },
                 { label:'Iscritto CPI', value:selezionato.iscritto_cpi?`✅ Sì — ${selezionato.cpi_riferimento||''}`:'❌ No' },
-                { label:'GOL attivo', value:selezionato.gol_attivo?`✅ Sì — ${selezionato.ente_gol||''}`:'❌ No' },
+                { label:'GOL pregresso / altro ente', value:selezionato.gol_attivo?`✅ Sì — ${selezionato.ente_gol||''}`:'❌ No' },
                 { label:'Interessato alla formazione', value:selezionato.interessato_formazione?'✅ Sì':selezionato.tipo==='servizi_lavoro'?'No':'—' },
                 { label:'Sedi preferite', value:(selezionato.sedi_preferite||[]).join(', ') },
                 { label:'Online', value:selezionato.modalita_online?'✅ Sì':'No' },
@@ -848,7 +848,7 @@ export default function AdminPage() {
             impresa_iscrizione: { label: '📋 Iscrizione Impresa', bg: '#fee2e2', text: '#991b1b' },
             impresa_contatto:   { label: '📞 Contatto Impresa',   bg: '#fef3c7', text: '#92400e' },
             voucher_attesa:     { label: '🔔 Attesa Voucher',     bg: '#fef9c3', text: '#713f12' },
-            gol:                { label: '🎓 GOL',                bg: '#dbeafe', text: '#1e40af' },
+            gol:                { label: '🎓 DIL',                bg: '#dbeafe', text: '#1e40af' },
             servizi_lavoro:     { label: '💼 Servizi Lavoro',     bg: '#ede9fe', text: '#5b21b6' },
             ifts_candidato:     { label: '🏭 IFTS Candidato',     bg: '#d1fae5', text: '#065f46' },
             ifts_azienda:       { label: '🏢 IFTS Azienda',       bg: '#f3f4f6', text: '#374151' },

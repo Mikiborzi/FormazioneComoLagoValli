@@ -54,6 +54,20 @@ ALTER TABLE iscrizioni ADD COLUMN IF NOT EXISTS cpi_riferimento TEXT;
 ALTER TABLE iscrizioni ADD COLUMN IF NOT EXISTS gol_attivo BOOLEAN;
 ALTER TABLE iscrizioni ADD COLUMN IF NOT EXISTS ente_gol TEXT;
 
+-- Residenza e domicilio estesi. La provincia serve a verificare il requisito
+-- territoriale della Dote Inserimento Lavorativo (residenza O domicilio in
+-- Lombardia); le colonne conservano il nome storico "gol" per compatibilità.
+ALTER TABLE iscrizioni ADD COLUMN IF NOT EXISTS cap_residenza TEXT;
+ALTER TABLE iscrizioni ADD COLUMN IF NOT EXISTS provincia_residenza TEXT;
+ALTER TABLE iscrizioni ADD COLUMN IF NOT EXISTS nazione_residenza TEXT DEFAULT 'Italia';
+ALTER TABLE iscrizioni ADD COLUMN IF NOT EXISTS comune_domicilio TEXT;
+ALTER TABLE iscrizioni ADD COLUMN IF NOT EXISTS indirizzo_domicilio TEXT;
+ALTER TABLE iscrizioni ADD COLUMN IF NOT EXISTS cap_domicilio TEXT;
+ALTER TABLE iscrizioni ADD COLUMN IF NOT EXISTS provincia_domicilio TEXT;
+ALTER TABLE iscrizioni ADD COLUMN IF NOT EXISTS nazione_domicilio TEXT;
+ALTER TABLE iscrizioni ADD COLUMN IF NOT EXISTS interessato_formazione BOOLEAN;
+ALTER TABLE iscrizioni ADD COLUMN IF NOT EXISTS cv_url TEXT;
+
 -- Indici utili per la gestione backoffice
 CREATE INDEX IF NOT EXISTS iscrizioni_stato_idx      ON iscrizioni (stato);
 CREATE INDEX IF NOT EXISTS iscrizioni_idoneo_idx     ON iscrizioni (idoneo_gol);

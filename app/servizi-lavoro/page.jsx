@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { supabase } from '@/app/lib/supabase'
+import { inLombardia } from '@/app/lib/idoneitaDil'
 
 const STATUS_OPTIONS = [
   { value: 'disoccupato', label: 'Disoccupato/a (ex lavoratore in cerca di impiego)' },
@@ -11,7 +12,9 @@ const STATUS_OPTIONS = [
   { value: 'imprenditore', label: 'Imprenditore/trice' },
 ]
 
-const GOL_IDONEI = ['disoccupato', 'inoccupato', 'studente_universitario']
+// Status che danno accesso alla Dote Inserimento Lavorativo (DIL), la misura
+// che dal 1° luglio 2026 sostituisce il Programma GOL.
+const DIL_IDONEI = ['disoccupato', 'inoccupato', 'studente_universitario']
 
 const COME_SAPUTO_OPTIONS = [
   { value: 'indeed', label: 'Annuncio Indeed' },
@@ -27,11 +30,10 @@ const CF_REGEX = /^[A-Z]{6}[0-9]{2}[A-Z][0-9]{2}[A-Z][0-9]{3}[A-Z]$/
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 export default function ServiziLavoro() {
-  const [showSospensione, setShowSospensione] = useState(true)
   const [form, setForm] = useState({
     nome: '', cognome: '', email: '', telefono: '',
     codice_fiscale: '', data_nascita: '',
-    comune_residenza: '', indirizzo: '',
+    comune_residenza: '', provincia_residenza: '', indirizzo: '',
     status: '',
     iscritto_cpi: false, cpi_riferimento: '',
     gol_attivo: false, ente_gol: '',
@@ -45,7 +47,11 @@ export default function ServiziLavoro() {
   const [step, setStep] = useState('form') // form | success | error
   const [loading, setLoading] = useState(false)
 
-  const idoneoGol = GOL_IDONEI.includes(form.status)
+  // Idoneità DIL: status compatibile + territorio lombardo. La provincia non
+  // ancora compilata non fa decadere il requisito, lo lascia da verificare.
+  const idoneoDil =
+    DIL_IDONEI.includes(form.status) &&
+    (!form.provincia_residenza.trim() || inLombardia(form.provincia_residenza))
 
   function set(campo, valore) {
     setForm(prev => ({ ...prev, [campo]: valore }))
@@ -60,6 +66,7 @@ export default function ServiziLavoro() {
     if (!form.telefono.trim()) e.telefono = 'Campo obbligatorio'
     if (form.codice_fiscale && !CF_REGEX.test(form.codice_fiscale.toUpperCase())) e.codice_fiscale = 'Codice fiscale non valido'
     if (!form.comune_residenza.trim()) e.comune_residenza = 'Campo obbligatorio'
+    if (!form.provincia_residenza.trim()) e.provincia_residenza = 'Obbligatoria'
     if (!form.status) e.status = 'Seleziona la tua situazione lavorativa'
     if (!form.come_saputo) e.come_saputo = 'Seleziona come ci hai trovato'
     if (!form.gdpr) e.gdpr = 'Il consenso è obbligatorio'
@@ -97,9 +104,12 @@ export default function ServiziLavoro() {
         codice_fiscale: form.codice_fiscale ? form.codice_fiscale.toUpperCase().trim() : null,
         data_nascita: form.data_nascita || null,
         comune_residenza: form.comune_residenza.trim(),
+        provincia_residenza: form.provincia_residenza.trim().toUpperCase() || null,
         indirizzo: form.indirizzo.trim() || null,
         status: form.status,
-        idoneo_gol: idoneoGol,
+        // Le colonne del DB conservano il nome storico "gol": la misura è
+        // cambiata (GOL → DIL), lo schema dati no.
+        idoneo_gol: idoneoDil,
         iscritto_cpi: form.iscritto_cpi,
         cpi_riferimento: form.cpi_riferimento.trim() || null,
         gol_attivo: form.gol_attivo,
@@ -146,10 +156,10 @@ export default function ServiziLavoro() {
         <div style={{ background: 'white', borderRadius: '16px', padding: '48px', maxWidth: '560px', width: '100%', textAlign: 'center', boxShadow: '0 25px 50px rgba(0,0,0,0.3)' }}>
           <div style={{ fontSize: '64px', marginBottom: '16px' }}>✅</div>
           <h1 style={{ fontSize: '26px', fontWeight: '800', color: '#0f172a', marginBottom: '12px' }}>Richiesta ricevuta!</h1>
-          {idoneoGol ? (
+          {idoneoDil ? (
             <>
               <p style={{ color: '#374151', lineHeight: '1.6', marginBottom: '16px' }}>
-                Hai i requisiti per accedere ai <strong>servizi gratuiti GOL</strong>: orientamento professionale, accompagnamento alla ricerca del lavoro e formazione finanziata.
+                Hai i requisiti per attivare la <strong>Dote Inserimento Lavorativo (DIL)</strong>: orientamento professionale, accompagnamento alla ricerca del lavoro e formazione fino a 40 ore, tutto gratuito.
               </p>
               <div style={{ background: '#f0fdf4', border: '1px solid #bbf7d0', borderRadius: '10px', padding: '16px', marginBottom: '24px' }}>
                 <p style={{ color: '#065f46', fontSize: '14px', margin: 0, fontWeight: '600' }}>
@@ -160,7 +170,7 @@ export default function ServiziLavoro() {
           ) : (
             <>
               <p style={{ color: '#374151', lineHeight: '1.6', marginBottom: '16px' }}>
-                Abbiamo ricevuto la tua richiesta. Anche se non rientri nel programma GOL, possiamo valutare insieme le opzioni più adatte alla tua situazione.
+                Abbiamo ricevuto la tua richiesta. Anche se non rientri nella Dote Inserimento Lavorativo, possiamo valutare insieme le opzioni più adatte alla tua situazione.
               </p>
               <div style={{ background: '#eff6ff', border: '1px solid #bfdbfe', borderRadius: '10px', padding: '16px', marginBottom: '24px' }}>
                 <p style={{ color: '#1e40af', fontSize: '14px', margin: 0, fontWeight: '600' }}>
@@ -197,38 +207,6 @@ export default function ServiziLavoro() {
   return (
     <div style={{ minHeight: '100vh', background: '#f8fafc', fontFamily: "'Segoe UI', system-ui, sans-serif" }}>
 
-      {/* POPUP SOSPENSIONE */}
-      {showSospensione && (
-        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.65)', zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }}>
-          <div style={{ background: 'white', borderRadius: '20px', padding: '40px 36px', maxWidth: '560px', width: '100%', boxShadow: '0 25px 60px rgba(0,0,0,0.35)', textAlign: 'center' }}>
-            <div style={{ fontSize: '52px', marginBottom: '12px' }}>⚠️</div>
-            <h2 style={{ fontSize: '22px', fontWeight: '800', color: '#0f172a', marginBottom: '14px', lineHeight: '1.3' }}>
-              Servizio temporaneamente sospeso
-            </h2>
-            <p style={{ color: '#374151', lineHeight: '1.7', marginBottom: '12px', fontSize: '15px' }}>
-              Regione Lombardia sta rivedendo gli strumenti di <strong>Politiche Attive del Lavoro</strong>.
-              Siamo in attesa di conoscere le nuove misure che saranno adottate.
-            </p>
-            <p style={{ color: '#374151', lineHeight: '1.7', marginBottom: '24px', fontSize: '15px' }}>
-              Le informazioni presenti in questa sezione — riferite al <strong>Programma GOL fino al 30/06/2026</strong> — <strong>non sono da ritenersi aggiornate e valide</strong>.
-            </p>
-            <p style={{ color: '#6b7280', fontSize: '13px', marginBottom: '28px' }}>
-              Per informazioni aggiornate contattaci direttamente: saremo felici di aggiornarti non appena le nuove misure saranno disponibili.
-            </p>
-            <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
-              <a href="/" style={{ padding: '12px 22px', background: '#1a2e5a', color: 'white', borderRadius: '10px', textDecoration: 'none', fontWeight: '700', fontSize: '14px' }}>
-                Torna alla home
-              </a>
-              <a href="mailto:como@mestierilombardia.it" style={{ padding: '12px 22px', background: 'white', color: '#1a2e5a', border: '2px solid #1a2e5a', borderRadius: '10px', textDecoration: 'none', fontWeight: '700', fontSize: '14px' }}>
-                Contattaci
-              </a>
-              <button onClick={() => setShowSospensione(false)} style={{ padding: '12px 22px', background: 'white', color: '#6b7280', border: '2px solid #d1d5db', borderRadius: '10px', cursor: 'pointer', fontWeight: '700', fontSize: '14px' }}>
-                Consulta le informazioni archiviate
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
       {/* HERO */}
       <div style={{ background: 'linear-gradient(135deg, #1a2e5a 0%, #2d4a8a 100%)', color: 'white', padding: '48px 24px 40px', textAlign: 'center' }}>
         <div style={{ maxWidth: '680px', margin: '0 auto' }}>
@@ -237,11 +215,12 @@ export default function ServiziLavoro() {
             Supporto gratuito alla ricerca del lavoro
           </h1>
           <p style={{ fontSize: '17px', color: '#bfdbfe', lineHeight: '1.6', margin: '0 0 24px' }}>
-            Mestieri Lombardia Como ti offre orientamento professionale, accompagnamento al lavoro e formazione finanziata.
+            Con la <strong style={{ color: 'white' }}>Dote Inserimento Lavorativo</strong> di Regione Lombardia
+            ti offriamo orientamento professionale, formazione fino a 40 ore e accompagnamento al lavoro.
             Compila il form: ti contatteremo entro 3 giorni lavorativi.
           </p>
           <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
-            {['✅ Servizio completamente gratuito', '🎯 Operatori specializzati', '📍 Como e Tremezzina'].map(t => (
+            {['✅ Completamente gratuito', '🗓️ Doti attivabili entro il 31/12/2026', '📍 Como e Tremezzina'].map(t => (
               <span key={t} style={{ background: 'rgba(255,255,255,0.15)', padding: '6px 14px', borderRadius: '99px', fontSize: '13px', fontWeight: '600' }}>{t}</span>
             ))}
           </div>
@@ -252,7 +231,12 @@ export default function ServiziLavoro() {
       <div style={{ background: '#f0f7ff', borderBottom: '1px solid #bfdbfe', padding: '20px 24px' }}>
         <div style={{ maxWidth: '680px', margin: '0 auto', textAlign: 'center' }}>
           <p style={{ margin: '0 0 10px', fontSize: '13px', fontWeight: '700', color: '#1e40af', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-            Finanziato da misure di Politiche Attive del Lavoro
+            DIL — Dote Inserimento Lavorativo · PR FSE+ 2021-2027
+          </p>
+          <p style={{ margin: '0 0 12px', fontSize: '14px', color: '#1e3a8a', lineHeight: '1.6' }}>
+            Dal 1° luglio 2026 la <strong>Dote Inserimento Lavorativo</strong> sostituisce il Programma GOL.
+            È rivolta alle persone disoccupate residenti o domiciliate in Lombardia, <strong>senza limiti di età</strong>:
+            dura al massimo 6 mesi e si attiva una sola volta.
           </p>
           <div style={{ display: 'flex', gap: '16px', justifyContent: 'center', flexWrap: 'wrap', marginBottom: '12px' }}>
             {[
@@ -312,11 +296,25 @@ export default function ServiziLavoro() {
                 <input type="date" style={inputStyle('data_nascita')} value={form.data_nascita} onChange={e => set('data_nascita', e.target.value)} />
               </div>
             </div>
-            <div style={fieldStyle}>
-              <label style={labelStyle}>Comune di residenza *</label>
-              <input style={inputStyle('comune_residenza')} value={form.comune_residenza} onChange={e => set('comune_residenza', e.target.value)} placeholder="es. Como, Menaggio, Tremezzina..." />
-              {errori.comune_residenza && <p style={errStyle}>{errori.comune_residenza}</p>}
+            <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '16px' }}>
+              <div style={fieldStyle}>
+                <label style={labelStyle}>Comune di residenza *</label>
+                <input style={inputStyle('comune_residenza')} value={form.comune_residenza} onChange={e => set('comune_residenza', e.target.value)} placeholder="es. Como, Menaggio, Tremezzina..." />
+                {errori.comune_residenza && <p style={errStyle}>{errori.comune_residenza}</p>}
+              </div>
+              <div style={fieldStyle}>
+                <label style={labelStyle}>Provincia *</label>
+                <input style={inputStyle('provincia_residenza')} value={form.provincia_residenza} onChange={e => set('provincia_residenza', e.target.value.toUpperCase())} placeholder="CO" maxLength={2} />
+                {errori.provincia_residenza && <p style={errStyle}>{errori.provincia_residenza}</p>}
+              </div>
             </div>
+            {form.provincia_residenza.trim() && !inLombardia(form.provincia_residenza) && (
+              <div style={{ padding: '14px 16px', borderRadius: '10px', marginBottom: '20px', background: '#fffbeb', border: '1px solid #fcd34d' }}>
+                <p style={{ margin: 0, color: '#92400e', fontSize: '14px', lineHeight: '1.6' }}>
+                  ⚠️ La Dote Inserimento Lavorativo è riservata a chi è <strong>residente o domiciliato in Lombardia</strong>. Se il tuo domicilio è in regione segnalacelo nel campo indirizzo: puoi comunque inviare la richiesta, la valuteremo insieme.
+                </p>
+              </div>
+            )}
             <div style={fieldStyle}>
               <label style={labelStyle}>Indirizzo</label>
               <input style={inputStyle('indirizzo')} value={form.indirizzo} onChange={e => set('indirizzo', e.target.value)} />
@@ -337,16 +335,25 @@ export default function ServiziLavoro() {
               {errori.status && <p style={errStyle}>{errori.status}</p>}
             </div>
 
-            {/* Banner GOL */}
+            {/* Studenti: idonei solo se disoccupati, va verificato */}
+            {form.status === 'studente_universitario' && (
+              <div style={{ padding: '14px 16px', borderRadius: '10px', marginBottom: '20px', background: '#eff6ff', border: '1px solid #bfdbfe' }}>
+                <p style={{ margin: 0, color: '#1e40af', fontSize: '14px', lineHeight: '1.6' }}>
+                  ℹ️ <strong>Da verificare insieme.</strong> La Dote Inserimento Lavorativo è rivolta alle persone <strong>disoccupate</strong>. Essere studente non esclude di per sé l&apos;accesso — conta la tua situazione rispetto al lavoro, in particolare se hai rilasciato la dichiarazione di immediata disponibilità (DID) al Centro per l&apos;Impiego. Invia pure la richiesta: verifichiamo noi la tua posizione.
+                </p>
+              </div>
+            )}
+
+            {/* Banner idoneità DIL */}
             {form.status && (
-              <div style={{ padding: '14px 16px', borderRadius: '10px', marginBottom: '20px', background: idoneoGol ? '#f0fdf4' : '#fef9c3', border: idoneoGol ? '1px solid #bbf7d0' : '1px solid #fde68a' }}>
-                {idoneoGol ? (
+              <div style={{ padding: '14px 16px', borderRadius: '10px', marginBottom: '20px', background: idoneoDil ? '#f0fdf4' : '#fef9c3', border: idoneoDil ? '1px solid #bbf7d0' : '1px solid #fde68a' }}>
+                {idoneoDil ? (
                   <p style={{ margin: 0, color: '#065f46', fontSize: '14px', fontWeight: '600' }}>
-                    ✅ Con la tua situazione puoi accedere ai <strong>servizi GOL completamente gratuiti</strong>: orientamento, accompagnamento al lavoro e formazione finanziata.
+                    ✅ Con la tua situazione puoi attivare la <strong>Dote Inserimento Lavorativo</strong>, completamente gratuita: orientamento, accompagnamento al lavoro e formazione fino a 40 ore.
                   </p>
                 ) : (
                   <p style={{ margin: 0, color: '#92400e', fontSize: '14px', fontWeight: '600' }}>
-                    ℹ️ Non rientri nel programma GOL, ma possiamo comunque supportarti con altri servizi. Compila il form e ti contatteremo.
+                    ℹ️ Non rientri nella Dote Inserimento Lavorativo, ma possiamo comunque supportarti con altri servizi. Compila il form e ti contatteremo.
                   </p>
                 )}
               </div>
@@ -368,12 +375,15 @@ export default function ServiziLavoro() {
             <div style={fieldStyle}>
               <label style={{ display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer', fontSize: '14px', color: '#374151' }}>
                 <input type="checkbox" checked={form.gol_attivo} onChange={e => set('gol_attivo', e.target.checked)} style={{ width: '18px', height: '18px', accentColor: '#1a2e5a' }} />
-                Sono già inserito/a in un percorso GOL con un altro ente
+                Ho avuto una Dote GOL negli ultimi 12 mesi, o sono già seguito/a da un altro ente
               </label>
+              <p style={{ margin: '6px 0 0 28px', fontSize: '12px', color: '#6b7280', lineHeight: '1.5' }}>
+                Chi ha beneficiato di una dote GOL negli ultimi 12 mesi non può accedere alla DIL. Segnalacelo: verifichiamo insieme le alternative.
+              </p>
             </div>
             {form.gol_attivo && (
               <div style={fieldStyle}>
-                <label style={labelStyle}>Ente che gestisce il tuo percorso GOL</label>
+                <label style={labelStyle}>Ente che ha gestito o gestisce il tuo percorso</label>
                 <input style={inputStyle('ente_gol')} value={form.ente_gol} onChange={e => set('ente_gol', e.target.value)} />
               </div>
             )}

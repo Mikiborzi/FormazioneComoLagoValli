@@ -2,6 +2,7 @@ export default function sitemap() {
   const baseUrl = 'https://formazionecomolago.it'
   
   const corsi = [
+    'gestione-cliente', 'ai-base-ai-act', 'controllo-gestione-base',
     'fatti-impresa', 'business-up', 'digital-marketing-ai',
     'giardinaggio-base', 'addetto-cucina', 'centralinista-receptionist',
     'inglese-base', 'inglese-intermedio', 'business-english',

@@ -84,7 +84,7 @@ export async function GET(request) {
         </div>
         <div style="flex:1;background:#eff6ff;border-radius:12px;padding:20px;text-align:center;border:1px solid #bfdbfe">
           <div style="font-size:36px;font-weight:700;color:#1e40af">${iscrizioni.filter(i => i.idoneo_gol).length}</div>
-          <div style="font-size:13px;color:#1e40af;margin-top:4px">Idonei GOL</div>
+          <div style="font-size:13px;color:#1e40af;margin-top:4px">Idonei DIL</div>
         </div>
         <div style="flex:1;background:#fff7ed;border-radius:12px;padding:20px;text-align:center;border:1px solid #fed7aa">
           <div style="font-size:36px;font-weight:700;color:#c96a00">${iscrizioni.filter(i => !i.idoneo_gol).length}</div>
@@ -99,7 +99,7 @@ export async function GET(request) {
             <th style="padding:10px 16px;text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:0.05em;color:#6b7280;border-bottom:2px solid #e2e8f0">Corso</th>
             <th style="padding:10px 16px;text-align:center;font-size:11px;text-transform:uppercase;letter-spacing:0.05em;color:#6b7280;border-bottom:2px solid #e2e8f0">Como</th>
             <th style="padding:10px 16px;text-align:center;font-size:11px;text-transform:uppercase;letter-spacing:0.05em;color:#6b7280;border-bottom:2px solid #e2e8f0">Tremezzina</th>
-            <th style="padding:10px 16px;text-align:center;font-size:11px;text-transform:uppercase;letter-spacing:0.05em;color:#2d7a4f;border-bottom:2px solid #e2e8f0">Idonei GOL</th>
+            <th style="padding:10px 16px;text-align:center;font-size:11px;text-transform:uppercase;letter-spacing:0.05em;color:#2d7a4f;border-bottom:2px solid #e2e8f0">Idonei DIL</th>
             <th style="padding:10px 16px;text-align:center;font-size:11px;text-transform:uppercase;letter-spacing:0.05em;color:#c96a00;border-bottom:2px solid #e2e8f0">Non idonei</th>
             <th style="padding:10px 16px;text-align:center;font-size:11px;text-transform:uppercase;letter-spacing:0.05em;color:#1a2e5a;border-bottom:2px solid #e2e8f0">Totale</th>
           </tr>

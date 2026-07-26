@@ -1,35 +1,123 @@
 export const corsi = [
+  // ── Cluster 1 DIL — tetto di 16 ore ────────────────────────────────────────
+  {
+    slug: "gestione-cliente",
+    titolo: "Gestione Cliente",
+    durata: "16 ore",
+    cluster: 1,
+    sede: "Tremezzina + Como",
+    colore: "#b45309",
+    descrizione:
+      "Il cliente non si conquista una volta sola: si guadagna a ogni contatto. Sedici ore concrete su accoglienza, ascolto, gestione del reclamo e cura della relazione nel tempo — per chi lavora a contatto con il pubblico e vuole farlo con metodo, non solo con buona volontà.",
+    contenuti: [
+      "Chi è il cliente oggi: aspettative, abitudini, canali",
+      "Il primo contatto: di persona, al telefono, per iscritto",
+      "Ascolto attivo e domande efficaci per capire il bisogno reale",
+      "Comunicazione chiara: tono, linguaggio, tempi di risposta",
+      "Gestione del reclamo e del cliente difficile",
+      "Recuperare la relazione dopo un errore",
+      "Fidelizzazione: follow-up, cura nel tempo, passaparola",
+      "Tenere traccia dei contatti: strumenti CRM essenziali",
+      "Dati del cliente e privacy: cosa si può e cosa non si può fare",
+    ],
+    competenze_finali: [
+      "Gestire accoglienza e primo contatto in modo professionale",
+      "Individuare il bisogno reale del cliente con l'ascolto attivo",
+      "Gestire reclami e situazioni critiche senza perdere la relazione",
+      "Impostare azioni di follow-up e fidelizzazione",
+      "Registrare e trattare correttamente i dati dei clienti",
+    ],
+  },
+  {
+    slug: "ai-base-ai-act",
+    titolo: "AI Base e AI Act",
+    durata: "16 ore",
+    cluster: 1,
+    sede: "Tremezzina + Como",
+    colore: "#5b21b6",
+    descrizione:
+      "Capire l'intelligenza artificiale prima di usarla. Sedici ore per orientarsi nel contesto — cos'è davvero l'AI, dove la incontriamo già — e nella normativa che la governa: il Regolamento europeo sull'AI (AI Act), gli obblighi per chi la usa al lavoro e le regole per farlo senza mettersi nei guai.",
+    contenuti: [
+      "Cos'è l'intelligenza artificiale: concetti essenziali, senza tecnicismi",
+      "Dove incontriamo già l'AI nel lavoro e nella vita quotidiana",
+      "Come funzionano gli strumenti generativi (ChatGPT, Claude e simili)",
+      "Il Regolamento europeo sull'AI (AI Act): perché nasce e cosa disciplina",
+      "L'approccio basato sul rischio: pratiche vietate, sistemi ad alto rischio, obblighi di trasparenza",
+      "Ruoli e responsabilità: fornitore, deployer, utilizzatore finale",
+      "Alfabetizzazione AI: l'obbligo di formare chi usa questi strumenti",
+      "AI e dati personali: il rapporto con il GDPR",
+      "Uso responsabile: bias, allucinazioni, verifica delle fonti, riservatezza",
+      "Cosa cambia concretamente per imprese e lavoratori",
+    ],
+    competenze_finali: [
+      "Riconoscere cos'è e cosa non è un sistema di intelligenza artificiale",
+      "Orientarsi tra le categorie di rischio previste dall'AI Act",
+      "Capire quali obblighi ricadono su chi usa l'AI sul lavoro",
+      "Usare gli strumenti di AI in modo consapevole e conforme",
+      "Tutelare dati riservati e personali nell'uso quotidiano dell'AI",
+    ],
+  },
+  {
+    slug: "controllo-gestione-base",
+    titolo: "Controllo di Gestione Base",
+    durata: "16 ore",
+    cluster: 1,
+    sede: "Tremezzina + Como",
+    colore: "#0f766e",
+    descrizione:
+      "Smettere di decidere a sensazione. Sedici ore per capire i numeri della propria attività o del proprio ufficio: quanto costa davvero quello che facciamo, a che punto si va in pari, come si costruisce un budget e perché utile e liquidità non sono la stessa cosa.",
+    contenuti: [
+      "A cosa serve il controllo di gestione: decidere con i numeri",
+      "Costi fissi e costi variabili: distinguerli davvero",
+      "Margine di contribuzione: quanto rende ogni vendita",
+      "Il punto di pareggio: quanto devo vendere per non perdere",
+      "Centri di costo e attribuzione delle spese",
+      "Costruire un budget essenziale e usarlo davvero",
+      "Scostamenti: confrontare previsto e consuntivo, e reagire",
+      "Flusso di cassa: perché l'utile non è la liquidità",
+      "Excel per il controllo di gestione: prospetti e tabelle di base",
+      "Dialogare con il commercialista: cosa chiedere, cosa leggere",
+    ],
+    competenze_finali: [
+      "Distinguere costi fissi e variabili e calcolare il margine",
+      "Calcolare il punto di pareggio della propria attività",
+      "Costruire e monitorare un budget essenziale",
+      "Leggere gli scostamenti e intervenire in tempo",
+      "Tenere sotto controllo il flusso di cassa",
+    ],
+  },
+  // ── Percorsi fino a 40 ore ─────────────────────────────────────────────────
   {
     slug: "fatti-impresa",
     titolo: "Fatti Impresa",
-    durata: "140 ore",
+    durata: "40 ore",
     sede: "Tremezzina + Como",
     colore: "#C96A00",
-    corsi_inclusi: ["business-up", "digital-marketing-ai", "business-english"],
     descrizione:
-      "Un percorso intensivo per chi vuole trasformare un'idea in un'impresa. Dal business plan alla gestione quotidiana, dal marketing alla compliance fiscale: tutto quello che serve per partire con il piede giusto. Include Business UP!, Digital Marketing & AI e Business English.",
+      "Il percorso per chi ha un'idea e vuole capire se può diventare un lavoro. Quaranta ore intensive di autoimprenditorialità: i rudimenti di tutto ciò che serve per mettersi in proprio — business plan, forma giuridica, fisco, conti, marketing digitale e presentazione del progetto — con un'idea propria da sviluppare dalla prima all'ultima lezione.",
     contenuti: [
-      "Business plan e analisi di mercato",
-      "Forme giuridiche e aspetti fiscali e previdenziali",
-      "Marketing, branding e comunicazione d'impresa",
-      "Gestione finanziaria, budget e flussi di cassa",
-      "Aspetti legali, contrattuali e compliance",
-      "Vendita, negoziazione e gestione del cliente",
-      "Strumenti digitali per la gestione d'impresa",
-      "Presentazione del progetto e pitch",
+      "Dall'idea al modello di business: validare la propria intuizione",
+      "Analisi di mercato e clienti: capire a chi ci si rivolge",
+      "Business plan essenziale: le voci che contano davvero",
+      "Forme giuridiche, regimi fiscali e adempimenti per partire",
+      "Conti alla mano: costi, ricavi, prezzo e flussi di cassa",
+      "Marketing digitale e strumenti AI per chi parte da solo",
+      "Presenza online essenziale: profilo, contenuti, primi clienti",
+      "Vendere e negoziare: dal primo contatto all'accordo",
+      "Pitch finale: presentare il proprio progetto",
     ],
     competenze_finali: [
-      "Redigere un business plan completo e convincente",
-      "Scegliere la forma giuridica più adeguata al proprio progetto",
-      "Gestire la contabilità di base e i rapporti con commercialisti",
-      "Sviluppare e implementare strategie di marketing",
-      "Presentare il proprio progetto a investitori e partner",
+      "Trasformare un'idea in un modello di business sostenibile",
+      "Redigere un business plan essenziale e credibile",
+      "Orientarsi tra forme giuridiche, fisco e adempimenti di avvio",
+      "Costruire una presenza digitale e trovare i primi clienti",
+      "Presentare il proprio progetto a banche, enti e partner",
     ],
   },
   {
     slug: "business-up",
     titolo: "Business UP!",
-    durata: "50 ore",
+    durata: "40 ore",
     sede: "Tremezzina + Como",
     colore: "#1a2e5a",
     descrizione:
@@ -77,7 +165,7 @@ export const corsi = [
   {
     slug: "giardinaggio-base",
     titolo: "Giardinaggio Base",
-    durata: "50 ore",
+    durata: "40 ore",
     sede: "Solo Tremezzina",
     colore: "#4a7c3f",
     descrizione:
@@ -102,7 +190,7 @@ export const corsi = [
   {
     slug: "addetto-cucina",
     titolo: "Addetto di Cucina",
-    durata: "50 ore + HACCP",
+    durata: "40 ore + HACCP",
     sede: "Tremezzina",
     colore: "#8B1a1a",
     descrizione:
@@ -153,7 +241,7 @@ export const corsi = [
     slug: "inglese-base",
     titolo: "Inglese Base",
     livello: "A1/A2",
-    durata: "50 ore",
+    durata: "40 ore",
     sede: "Tremezzina + Como + Online",
     colore: "#1a5a4a",
     descrizione:
@@ -175,7 +263,7 @@ export const corsi = [
     slug: "inglese-intermedio",
     titolo: "Inglese Intermedio",
     livello: "B1/B2",
-    durata: "50 ore",
+    durata: "40 ore",
     sede: "Tremezzina + Como + Online",
     colore: "#1a6a5a",
     descrizione:
@@ -197,12 +285,11 @@ export const corsi = [
     slug: "business-english",
     titolo: "Business English",
     livello: "B2/C1",
-    durata: "50 ore",
+    durata: "40 ore",
     sede: "Tremezzina + Como + Online",
     colore: "#0a4a3a",
-    parte_di_pacchetto: "fatti-impresa",
     descrizione:
-      "Livello avanzato per contesti professionali. Linguaggio settoriale, colloqui di lavoro, clientela internazionale. Fa parte del pacchetto FATTI IMPRESA.",
+      "Livello avanzato per contesti professionali. Linguaggio settoriale, colloqui di lavoro, clientela internazionale.",
     contenuti: [
       "Inglese professionale avanzato e linguaggio settoriale",
       "Gestione di riunioni e presentazioni in inglese",
@@ -220,7 +307,7 @@ export const corsi = [
     slug: "tedesco-base",
     titolo: "Tedesco Base",
     livello: "A1/A2",
-    durata: "50 ore",
+    durata: "40 ore",
     sede: "Tremezzina + Online",
     colore: "#3d1a5a",
     descrizione:
@@ -242,7 +329,7 @@ export const corsi = [
     slug: "tedesco-intermedio",
     titolo: "Tedesco Intermedio",
     livello: "B1/B2",
-    durata: "50 ore",
+    durata: "40 ore",
     sede: "Tremezzina + Online",
     colore: "#4d2a6a",
     descrizione:
@@ -264,7 +351,7 @@ export const corsi = [
     slug: "francese-base",
     titolo: "Francese Base",
     livello: "A1/A2",
-    durata: "50 ore",
+    durata: "40 ore",
     sede: "Tremezzina + Online",
     colore: "#1a3a6a",
     descrizione:
@@ -286,7 +373,7 @@ export const corsi = [
     slug: "francese-intermedio",
     titolo: "Francese Intermedio",
     livello: "B1/B2",
-    durata: "50 ore",
+    durata: "40 ore",
     sede: "Tremezzina + Online",
     colore: "#1a3a6a",
     descrizione:
@@ -308,7 +395,7 @@ export const corsi = [
     slug: "spagnolo-base",
     titolo: "Spagnolo Base",
     livello: "A1/A2",
-    durata: "50 ore",
+    durata: "40 ore",
     sede: "Tremezzina + Online",
     colore: "#5a1a1a",
     descrizione:
@@ -330,7 +417,7 @@ export const corsi = [
     slug: "spagnolo-intermedio",
     titolo: "Spagnolo Intermedio",
     livello: "B1/B2",
-    durata: "50 ore",
+    durata: "40 ore",
     sede: "Tremezzina + Online",
     colore: "#6a2a1a",
     descrizione:
@@ -351,7 +438,7 @@ export const corsi = [
   {
     slug: "informatica-base",
     titolo: "Informatica Base",
-    durata: "50 ore",
+    durata: "40 ore",
     sede: "Tremezzina + Como",
     colore: "#1a4a7a",
     descrizione:
@@ -377,7 +464,7 @@ export const corsi = [
   {
     slug: "informatica-intermedio",
     titolo: "Informatica Intermedio",
-    durata: "50 ore",
+    durata: "40 ore",
     sede: "Tremezzina + Como",
     colore: "#0a3a6a",
     descrizione:
@@ -429,7 +516,7 @@ export const corsi = [
   {
     slug: "digital-marketing",
     titolo: "Digital Marketing",
-    durata: "50 ore",
+    durata: "40 ore",
     sede: "Tremezzina + Como",
     colore: "#1a6a3a",
     descrizione:

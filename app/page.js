@@ -1,6 +1,5 @@
 import Link from "next/link";
 import QuoteCarousel from "./components/QuoteCarousel";
-import CorsiLinkInterceptor from "./components/CorsiLinkInterceptor";
 import { supabase } from "@/app/lib/supabase";
 
 // ─── Data ────────────────────────────────────────────────────────────────────
@@ -17,9 +16,39 @@ const navItems = [
 
 const courses = [
   {
+    slug: "gestione-cliente",
+    title: "Gestione Cliente",
+    hours: "16h",
+    locations: "Tremezzina + Como",
+    gradient: "linear-gradient(135deg, #b45309 0%, #d97706 100%)",
+    abbr: "GC",
+    desc: "Accoglienza, ascolto, gestione del reclamo e cura della relazione: lavorare con il pubblico con metodo, non solo con buona volontà.",
+    cluster: 1,
+  },
+  {
+    slug: "ai-base-ai-act",
+    title: "AI Base e AI Act",
+    hours: "16h",
+    locations: "Tremezzina + Como",
+    gradient: "linear-gradient(135deg, #5b21b6 0%, #7c3aed 100%)",
+    abbr: "AI",
+    desc: "Capire l'intelligenza artificiale prima di usarla: il contesto, il Regolamento europeo AI Act e gli obblighi per chi la usa al lavoro.",
+    cluster: 1,
+  },
+  {
+    slug: "controllo-gestione-base",
+    title: "Controllo di Gestione Base",
+    hours: "16h",
+    locations: "Tremezzina + Como",
+    gradient: "linear-gradient(135deg, #0f766e 0%, #14b8a6 100%)",
+    abbr: "CG",
+    desc: "I numeri della tua attività: costi, margine, punto di pareggio, budget e flusso di cassa. Per smettere di decidere a sensazione.",
+    cluster: 1,
+  },
+  {
     slug: "business-up",
     title: "Business UP!",
-    hours: "50h",
+    hours: "40h",
     locations: "Tremezzina + Como",
     gradient: "linear-gradient(135deg, #0f766e 0%, #059669 100%)",
     abbr: "BU",
@@ -37,7 +66,7 @@ const courses = [
   {
     slug: "giardinaggio-base",
     title: "Giardinaggio Base",
-    hours: "50h",
+    hours: "40h",
     locations: "Solo Tremezzina",
     gradient: "linear-gradient(135deg, #15803d 0%, #65a30d 100%)",
     abbr: "GB",
@@ -46,7 +75,7 @@ const courses = [
   {
     slug: "addetto-cucina",
     title: "Addetto di Cucina",
-    hours: "50h + HACCP",
+    hours: "40h + HACCP",
     locations: "Tremezzina",
     gradient: "linear-gradient(135deg, #c2410c 0%, #d97706 100%)",
     abbr: "AC",
@@ -64,7 +93,7 @@ const courses = [
   {
     slug: "inglese-base",
     title: "Inglese Base",
-    hours: "50h",
+    hours: "40h",
     locations: "Tremezzina + Como + Online",
     gradient: "linear-gradient(135deg, #1d4ed8 0%, #0f766e 100%)",
     abbr: "EN",
@@ -73,7 +102,7 @@ const courses = [
   {
     slug: "inglese-intermedio",
     title: "Inglese Intermedio",
-    hours: "50h",
+    hours: "40h",
     locations: "Tremezzina + Como + Online",
     gradient: "linear-gradient(135deg, #1d4ed8 0%, #6366f1 100%)",
     abbr: "EN",
@@ -82,16 +111,16 @@ const courses = [
   {
     slug: "business-english",
     title: "Business English",
-    hours: "50h",
+    hours: "40h",
     locations: "Tremezzina + Como + Online",
     gradient: "linear-gradient(135deg, #0a4a3a 0%, #1a6a5a 100%)",
     abbr: "BE",
-    desc: "Livello B2/C1 — Inglese professionale avanzato. Parte del pacchetto Fatti Impresa.",
+    desc: "Livello B2/C1 — Inglese professionale avanzato per riunioni, trattative e clientela internazionale.",
   },
   {
     slug: "tedesco-base",
     title: "Tedesco Base",
-    hours: "50h",
+    hours: "40h",
     locations: "Tremezzina + Online",
     gradient: "linear-gradient(135deg, #3d1a5a 0%, #6d3a8a 100%)",
     abbr: "DE",
@@ -100,7 +129,7 @@ const courses = [
   {
     slug: "tedesco-intermedio",
     title: "Tedesco Intermedio",
-    hours: "50h",
+    hours: "40h",
     locations: "Tremezzina + Online",
     gradient: "linear-gradient(135deg, #4d2a6a 0%, #9f1239 100%)",
     abbr: "DE",
@@ -109,7 +138,7 @@ const courses = [
   {
     slug: "francese-base",
     title: "Francese Base",
-    hours: "50h",
+    hours: "40h",
     locations: "Tremezzina + Online",
     gradient: "linear-gradient(135deg, #1a3a6a 0%, #1a4a9a 100%)",
     abbr: "FR",
@@ -118,7 +147,7 @@ const courses = [
   {
     slug: "francese-intermedio",
     title: "Francese Intermedio",
-    hours: "50h",
+    hours: "40h",
     locations: "Tremezzina + Online",
     gradient: "linear-gradient(135deg, #1a3a6a 0%, #2a5aaa 100%)",
     abbr: "FR",
@@ -127,7 +156,7 @@ const courses = [
   {
     slug: "spagnolo-base",
     title: "Spagnolo Base",
-    hours: "50h",
+    hours: "40h",
     locations: "Tremezzina + Online",
     gradient: "linear-gradient(135deg, #5a1a1a 0%, #9a2a2a 100%)",
     abbr: "ES",
@@ -136,7 +165,7 @@ const courses = [
   {
     slug: "spagnolo-intermedio",
     title: "Spagnolo Intermedio",
-    hours: "50h",
+    hours: "40h",
     locations: "Tremezzina + Online",
     gradient: "linear-gradient(135deg, #6a2a1a 0%, #b03a2a 100%)",
     abbr: "ES",
@@ -145,7 +174,7 @@ const courses = [
   {
     slug: "informatica-base",
     title: "Informatica Base",
-    hours: "50h",
+    hours: "40h",
     locations: "Tremezzina + Como",
     gradient: "linear-gradient(135deg, #1a4a7a 0%, #2563eb 100%)",
     abbr: "IB",
@@ -154,7 +183,7 @@ const courses = [
   {
     slug: "informatica-intermedio",
     title: "Informatica Intermedio",
-    hours: "50h",
+    hours: "40h",
     locations: "Tremezzina + Como",
     gradient: "linear-gradient(135deg, #0a3a6a 0%, #1a4a9a 100%)",
     abbr: "II",
@@ -172,7 +201,7 @@ const courses = [
   {
     slug: "digital-marketing",
     title: "Digital Marketing",
-    hours: "50h",
+    hours: "40h",
     locations: "Tremezzina + Como",
     gradient: "linear-gradient(135deg, #1a6a3a 0%, #16a34a 100%)",
     abbr: "MK",
@@ -199,7 +228,7 @@ const reasons = [
       </svg>
     ),
     title: "Un investimento che vale.",
-    body: "La formazione è l'investimento più importante che puoi fare sulla tua carriera e sulla tua impresa. Alcuni percorsi sono finanziati da misure pubbliche — GOL, IFTS, voucher regionali per la formazione continua — altri sono a pagamento. In ogni caso, il ritorno è reale: competenze concrete, certificate e spendibili nel mercato del lavoro di oggi.",
+    body: "La formazione è l'investimento più importante che puoi fare sulla tua carriera e sulla tua impresa. Alcuni percorsi sono finanziati da misure pubbliche — la Dote Inserimento Lavorativo (DIL), gli IFTS, i voucher regionali per la formazione continua — altri sono a pagamento. In ogni caso, il ritorno è reale: competenze concrete, certificate e spendibili nel mercato del lavoro di oggi.",
   },
   {
     icon: (
@@ -264,8 +293,8 @@ const reasons = [
         />
       </svg>
     ),
-    title: "Cosa sono le Politiche Attive del Lavoro.",
-    body: "Sono strumenti pubblici — orientamento, accompagnamento alla ricerca di lavoro, formazione professionale — finanziati da Unione Europea, Stato e Regione per chi vuole rimettere in moto la propria carriera. Non assistenza, non sussidi: investimento. Su di te, sulle tue competenze, sul tuo futuro lavorativo.",
+    title: "Cos'è la Dote Inserimento Lavorativo (DIL).",
+    body: "È il nuovo strumento di Politiche Attive del Lavoro di Regione Lombardia: dal 1° luglio 2026 sostituisce il Programma GOL, che si è concluso. Finanziata dal Programma Regionale FSE+ 2021-2027 con 36 milioni di euro, la DIL è rivolta alle persone disoccupate residenti o domiciliate in Lombardia, senza limiti di età. Comprende orientamento specialistico, formazione mirata all'inserimento, incontro tra domanda e offerta, tirocini e accompagnamento al lavoro. Le persone sono suddivise in 4 cluster in base alla distanza dal mercato del lavoro, e da questo dipende il monte ore di formazione finanziabile: 16 ore per il Cluster 1, fino a un massimo di 40 ore per gli altri. La dote dura al massimo 6 mesi, si attiva una sola volta e non costa nulla alla persona. Chi ha già beneficiato di una dote GOL negli ultimi 12 mesi non può accedervi. Le doti si attivano fino al 31 dicembre 2026.",
   },
   {
     icon: (
@@ -807,29 +836,31 @@ function BiforcazioneSection() {
             </Link>
           </div>
 
-          {/* GOL — sospeso, in stand by */}
-          <div className="rounded-2xl p-8 flex flex-col relative overflow-hidden border" style={{ backgroundColor: '#f3f4f6', borderColor: '#e5e7eb' }}>
-            <div className="absolute top-4 right-4 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold" style={{ background: '#e5e7eb', color: '#6b7280' }}>
-              Temporaneamente sospeso
+          {/* DIL — Dote Inserimento Lavorativo */}
+          <div className="rounded-2xl p-8 text-white flex flex-col relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #1a3a7a 0%, #2c5aa8 100%)' }}>
+            <div className="absolute top-4 right-4 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold" style={{ background: 'rgba(255,255,255,0.2)', color: '#fff' }}>
+              Nuovo
             </div>
-            <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-5 shrink-0" style={{ backgroundColor: '#e5e7eb' }}>
-              <svg className="w-6 h-6" fill="none" stroke="#9ca3af" viewBox="0 0 24 24" aria-hidden="true">
+            <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-5 shrink-0" style={{ backgroundColor: 'rgba(255,255,255,0.15)' }}>
+              <svg className="w-6 h-6" fill="none" stroke="#fff" viewBox="0 0 24 24" aria-hidden="true">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
             </div>
-            <p className="text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: '#9ca3af' }}>Programma GOL</p>
-            <h3 className="font-display font-bold text-2xl mb-3" style={{ color: '#6b7280' }}>Percorsi per disoccupati</h3>
-            <p className="text-sm leading-relaxed mb-4 flex-1" style={{ color: '#9ca3af' }}>
-              Regione Lombardia sta rivedendo gli strumenti di Politiche Attive del Lavoro.
-              Il programma GOL è momentaneamente sospeso: le informazioni non sono da ritenersi aggiornate.
+            <p className="text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: '#bfdbfe' }}>DIL — Dote Inserimento Lavorativo</p>
+            <h3 className="font-display font-bold text-2xl mb-3">Sei disoccupato e vuoi rimetterti in gioco?</h3>
+            <p className="text-white/75 text-sm leading-relaxed mb-6 flex-1">
+              Dal 1° luglio 2026 la <strong className="text-white">Dote Inserimento Lavorativo</strong> sostituisce
+              il Programma GOL. Orientamento, formazione fino a 40 ore e accompagnamento al lavoro,
+              <strong className="text-white"> completamente gratuiti</strong>, per chi è disoccupato in Lombardia —
+              senza limiti di età.
             </p>
-            <a
+            <Link
               href="/servizi-lavoro"
-              className="inline-flex items-center gap-1.5 font-medium text-sm self-start transition-colors duration-200 hover:underline"
-              style={{ color: '#6b7280' }}
+              className="inline-flex items-center gap-2 font-semibold text-sm px-5 py-3 rounded-xl self-start transition-all duration-200 hover:brightness-110"
+              style={{ backgroundColor: 'rgba(255,255,255,0.2)', color: '#fff', border: '1px solid rgba(255,255,255,0.3)' }}
             >
-              Vai alla sezione →
-            </a>
+              Attiva la tua Dote →
+            </Link>
           </div>
 
         </div>
@@ -857,11 +888,16 @@ function CoursesSection() {
           </h2>
           <p className="font-sans text-gray-500 text-lg max-w-2xl mx-auto">
             Scegli quello che fa per te. Ogni corso è certificato e pensato per
-            il mercato del lavoro locale.
+            il mercato del lavoro locale. La durata segue i tetti della{" "}
+            <strong style={{ color: "#1a2e5a" }}>Dote Inserimento
+            Lavorativo</strong>: <strong style={{ color: "#1a2e5a" }}>16 ore</strong>{" "}
+            per i percorsi del Cluster 1, fino a{" "}
+            <strong style={{ color: "#1a2e5a" }}>40 ore</strong> per gli altri.
+            Se sei disoccupato in Lombardia, con la DIL sono gratuiti.
           </p>
         </div>
 
-        {/* ── Pacchetto completo: Fatti Impresa ───────────────────────── */}
+        {/* ── Percorso in evidenza: Fatti Impresa ─────────────────────── */}
         <div className="mb-8">
           <article
             className="rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300"
@@ -883,7 +919,7 @@ function CoursesSection() {
                   className="inline-block font-sans font-bold text-xs uppercase tracking-wider px-3 py-1.5 rounded-full mb-4"
                   style={{ backgroundColor: "rgba(0,0,0,0.25)", color: "white" }}
                 >
-                  PACCHETTO COMPLETO · 140h
+                  AUTOIMPRENDITORIALITÀ · 40h
                 </span>
 
                 <h3 className="font-display font-bold text-2xl sm:text-3xl text-white leading-tight mb-3">
@@ -891,17 +927,20 @@ function CoursesSection() {
                 </h3>
 
                 <p className="font-sans text-white/85 text-base leading-relaxed mb-4 max-w-2xl">
-                  Tre corsi in uno:{" "}
-                  <strong className="text-white">Business UP!</strong> +{" "}
-                  <strong className="text-white">Digital Marketing & AI</strong> +{" "}
-                  <strong className="text-white">Business English</strong>.
-                  Il percorso completo per chi vuole costruire o gestire un&apos;impresa.
+                  Hai un&apos;idea e vuoi capire se può diventare un lavoro?
+                  Quaranta ore intensive con i rudimenti di tutto quello che
+                  serve per mettersi in proprio:{" "}
+                  <strong className="text-white">business plan</strong>,{" "}
+                  <strong className="text-white">forma giuridica e fisco</strong>,{" "}
+                  <strong className="text-white">conti</strong>,{" "}
+                  <strong className="text-white">marketing digitale</strong> e
+                  presentazione del progetto — lavorando sulla tua idea.
                 </p>
 
                 <div className="flex flex-wrap gap-3 text-white/75 font-sans text-sm mb-6">
                   <span className="flex items-center gap-1.5">
                     <ClockIcon />
-                    140 ore totali
+                    40 ore
                   </span>
                   <span className="flex items-center gap-1.5">
                     <LocationIcon />
@@ -914,7 +953,7 @@ function CoursesSection() {
                   className="inline-flex items-center gap-2 font-sans font-semibold text-sm px-6 py-3 rounded-xl transition-all duration-200 hover:brightness-110 hover:scale-105"
                   style={{ backgroundColor: "white", color: "#C96A00" }}
                 >
-                  Scopri il pacchetto
+                  Scopri il percorso
                   <ArrowRight />
                 </Link>
               </div>
@@ -941,12 +980,22 @@ function CoursesSection() {
                 >
                   {course.abbr}
                 </span>
-                <span
-                  className="relative z-10 font-sans font-bold text-xs uppercase tracking-wider text-white px-3 py-1.5 rounded-full"
-                  style={{ backgroundColor: "rgba(0,0,0,0.25)" }}
-                >
-                  CERTIFICATO
-                </span>
+                <div className="relative z-10 flex flex-wrap gap-2">
+                  <span
+                    className="font-sans font-bold text-xs uppercase tracking-wider text-white px-3 py-1.5 rounded-full"
+                    style={{ backgroundColor: "rgba(0,0,0,0.25)" }}
+                  >
+                    CERTIFICATO
+                  </span>
+                  {course.cluster === 1 && (
+                    <span
+                      className="font-sans font-bold text-xs uppercase tracking-wider px-3 py-1.5 rounded-full"
+                      style={{ backgroundColor: "rgba(255,255,255,0.9)", color: "#1a2e5a" }}
+                    >
+                      DIL CLUSTER 1
+                    </span>
+                  )}
+                </div>
               </div>
 
               {/* Card body */}
@@ -1315,7 +1364,7 @@ function Footer() {
     { abbr: "AN", full: "ANPAL\nAgenzia Nazionale\nPolitiche Attive" },
     { abbr: "ML", full: "Ministero\ndel Lavoro" },
     { abbr: "RL", full: "Regione\nLombardia" },
-    { abbr: "GOL", full: "Garanzia di\nOccupabilità\ndei Lavoratori" },
+    { abbr: "DIL", full: "Dote Inserimento\nLavorativo" },
     { abbr: "MS", full: "Mestieri\nLombardia\nStarting Work" },
   ];
 
@@ -1509,7 +1558,6 @@ function Footer() {
 export default function HomePage() {
   return (
     <>
-      <CorsiLinkInterceptor />
       <main>
         <HeroSection />
         <FormazioneContinuaSection />

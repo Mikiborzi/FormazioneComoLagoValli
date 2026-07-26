@@ -2,7 +2,7 @@
 
 import { useState, useRef, useCallback, useEffect } from "react";
 import { supabase } from "@/app/lib/supabase";
-import { checkIdoneitaGol } from "@/app/lib/idoneitaGol";
+import { checkIdoneitaDil, inLombardia } from "@/app/lib/idoneitaDil";
 import { corsi } from "@/app/data/corsi";
 
 // ─── Costanti ────────────────────────────────────────────────────────────────
@@ -18,6 +18,12 @@ const STATUS_OPTIONS = [
   { value: "occupato", label: "Sono occupato/a con contratto di lavoro" },
   { value: "imprenditore", label: "Sono titolare d'impresa" },
 ];
+
+// Status che richiedono una verifica dello stato di disoccupazione per la DIL.
+const STATUS_STUDENTE = new Set([
+  "studente_universitario",
+  "studente_accademia",
+]);
 
 const SLUGS_LINGUE = new Set([
   "inglese-base", "inglese-intermedio", "business-english",
@@ -101,7 +107,7 @@ function inputStyle(hasError) {
   };
 }
 
-// ─── Flusso di qualificazione post-registrazione (solo idonei GOL) ───────────
+// ─── Flusso di qualificazione post-registrazione (solo idonei DIL) ───────────
 
 function QualificationFlow({ iscrizioneId }) {
   // step: 'd1' | 'd1_si' | 'cpi_no' | 'd2' | 'd2_si' | 'final_a' | 'final_b'
@@ -292,16 +298,17 @@ function QualificationFlow({ iscrizioneId }) {
             className="font-sans font-bold text-base mb-3"
             style={{ color: "#92400e" }}
           >
-            Per accedere al Programma GOL devi prima iscriverti al CPI
+            Per attivare la Dote Inserimento Lavorativo devi prima iscriverti al CPI
           </p>
           <p
             className="font-sans text-sm leading-relaxed mb-5"
             style={{ color: "#78350f" }}
           >
-            Per poter accedere al Programma GOL e beneficiare della gratuità
-            del corso, è necessario essere iscritti al Centro per l&apos;Impiego
-            di riferimento per il tuo comune. Passa allo sportello CPI più
-            vicino per completare l&apos;iscrizione — ti ci vorrà poco.
+            Per poter attivare la Dote Inserimento Lavorativo (DIL) e
+            beneficiare della gratuità del corso, è necessario essere iscritti
+            al Centro per l&apos;Impiego di riferimento per il tuo comune. Passa
+            allo sportello CPI più vicino per completare l&apos;iscrizione — ti
+            ci vorrà poco.
           </p>
           <div
             className="rounded-xl p-4 mb-5"
@@ -341,8 +348,14 @@ function QualificationFlow({ iscrizioneId }) {
             className="font-display font-bold text-xl sm:text-2xl mb-6"
             style={{ color: "#1a2e5a" }}
           >
-            Hai già attivo un Programma GOL?
+            Hai avuto una Dote GOL negli ultimi 12 mesi, o un percorso attivo
+            con un altro ente?
           </h4>
+          <p className="font-sans text-sm text-gray-500 leading-relaxed mb-5 -mt-3">
+            Chi ha beneficiato di una dote GOL negli ultimi 12 mesi non può
+            accedere alla DIL. Rispondi con sincerità: se è il tuo caso,
+            cerchiamo insieme un&apos;alternativa.
+          </p>
           <div className="flex gap-3">
             <button
               onClick={handleGolSi}
@@ -380,7 +393,7 @@ function QualificationFlow({ iscrizioneId }) {
             className="font-display font-bold text-xl mb-4"
             style={{ color: "#1a2e5a" }}
           >
-            Con quale ente hai attivato il programma?
+            Con quale ente hai svolto o stai svolgendo il percorso?
           </h4>
           <input
             type="text"
@@ -416,11 +429,12 @@ function QualificationFlow({ iscrizioneId }) {
             className="font-display font-bold text-lg mb-2"
             style={{ color: "#2d7a4f" }}
           >
-            Perfetto! Hai già tutto in ordine.
+            Grazie, ci pensiamo noi.
           </p>
           <p className="font-sans text-gray-600 text-sm leading-relaxed max-w-md mx-auto">
-            Ti contatteremo presto per coordinare il percorso con il tuo ente e
-            definire insieme i prossimi passi.
+            Ti contatteremo presto per verificare la tua posizione rispetto alla
+            Dote Inserimento Lavorativo e, se serve, individuare insieme il
+            percorso alternativo più adatto a te.
           </p>
         </div>
       )}
@@ -438,8 +452,9 @@ function QualificationFlow({ iscrizioneId }) {
             Ottimo!
           </p>
           <p className="font-sans text-gray-600 text-sm leading-relaxed max-w-md mx-auto">
-            Ti contatteremo per fissare un appuntamento e attivare insieme il
-            tuo percorso GOL — ci pensiamo noi a guidarti in ogni passaggio.
+            Ti contatteremo per fissare un appuntamento e attivare insieme la
+            tua Dote Inserimento Lavorativo — ci pensiamo noi a guidarti in
+            ogni passaggio.
           </p>
         </div>
       )}
@@ -468,6 +483,13 @@ export default function FormIscrizione({ corsoPreselezionato = null, onSuccess =
   const [dragIndex, setDragIndex] = useState(null);
   const [dragOverIndex, setDragOverIndex] = useState(null);
   const topRef = useRef(null);
+
+  // Requisito DIL: basta la residenza O il domicilio in Lombardia. Avvisa solo
+  // quando una provincia è stata indicata e nessuna delle due è lombarda.
+  const fuoriLombardia =
+    Boolean(formData.provincia_residenza.trim() || formData.provincia_domicilio.trim()) &&
+    !inLombardia(formData.provincia_residenza) &&
+    !inLombardia(formData.provincia_domicilio);
 
   // ─── Handlers ──────────────────────────────────────────────────────────────
 
@@ -576,6 +598,10 @@ export default function FormIscrizione({ corsoPreselezionato = null, onSuccess =
       e.data_nascita = "La data di nascita è obbligatoria";
     if (!formData.comune_residenza.trim())
       e.comune_residenza = "Il comune di residenza è obbligatorio";
+    // Requisito DIL: residenza o domicilio in Lombardia. Serve almeno una
+    // provincia per poterlo verificare.
+    if (!formData.provincia_residenza.trim())
+      e.provincia_residenza = "La provincia è obbligatoria (es. CO)";
     if (!formData.indirizzo.trim()) e.indirizzo = "L'indirizzo è obbligatorio";
     if (!formData.status) e.status = "Seleziona la tua situazione lavorativa";
     if (selectedCourses.length === 0)
@@ -610,7 +636,10 @@ export default function FormIscrizione({ corsoPreselezionato = null, onSuccess =
     setErrors({});
 
     try {
-      const { idoneo } = checkIdoneitaGol(formData.status);
+      const { idoneo } = checkIdoneitaDil(formData.status, {
+        provinciaResidenza: formData.provincia_residenza,
+        provinciaDomicilio: formData.provincia_domicilio,
+      });
 
       const { error: dbError } = await supabase
         .from("iscrizioni")
@@ -714,7 +743,7 @@ export default function FormIscrizione({ corsoPreselezionato = null, onSuccess =
           Grazie per esserti registrato
         </h3>
         <p className="font-sans text-gray-600 text-base leading-relaxed max-w-lg mx-auto">
-          I corsi GOL sono riservati a chi non ha un contratto di lavoro attivo, ma questo non significa che non possiamo aiutarti. Ti contatteremo per capire la tua situazione e proporti percorsi formativi alternativi pensati per te.
+          I corsi finanziati dalla Dote Inserimento Lavorativo sono riservati a chi non ha un contratto di lavoro attivo, ma questo non significa che non possiamo aiutarti. Ti contatteremo per capire la tua situazione e proporti percorsi formativi alternativi pensati per te — a partire dai voucher per la Formazione Continua, pensati proprio per chi lavora.
         </p>
       </div>
     );
@@ -866,14 +895,14 @@ export default function FormIscrizione({ corsoPreselezionato = null, onSuccess =
             />
           </FormField>
 
-          <FormField label="Provincia residenza">
+          <FormField label="Provincia residenza" required error={errors.provincia_residenza}>
             <input
               type="text"
               name="provincia_residenza"
               value={formData.provincia_residenza}
               onChange={handleChange}
               className={inputClass}
-              style={inputStyle(false)}
+              style={inputStyle(!!errors.provincia_residenza)}
               placeholder="CO"
               maxLength={2}
             />
@@ -954,6 +983,23 @@ export default function FormIscrizione({ corsoPreselezionato = null, onSuccess =
             />
           </FormField>
         </div>
+
+        {/* Requisito territoriale DIL: residenza O domicilio in Lombardia */}
+        {fuoriLombardia && (
+          <div
+            className="rounded-xl p-4 mt-5"
+            style={{ backgroundColor: "#fffbeb", border: "1px solid #fcd34d" }}
+          >
+            <p className="font-sans text-sm leading-relaxed" style={{ color: "#92400e" }}>
+              <strong>Attenzione:</strong> la Dote Inserimento Lavorativo è
+              riservata a chi è residente o domiciliato in Lombardia. Dalle
+              province indicate non risulti né residente né domiciliato in
+              regione. Se sei domiciliato in Lombardia, compila anche i campi
+              del domicilio. Puoi comunque inviare la richiesta: la
+              valuteremo insieme.
+            </p>
+          </div>
+        )}
       </section>
 
       {/* ── SEZIONE 2: Profilo ────────────────────────────────────────── */}
@@ -981,6 +1027,25 @@ export default function FormIscrizione({ corsoPreselezionato = null, onSuccess =
             </select>
           </FormField>
         </div>
+
+        {/* Gli studenti restano selezionabili, ma la DIL richiede lo stato di
+            disoccupazione: va verificato caso per caso in presa in carico. */}
+        {STATUS_STUDENTE.has(formData.status) && (
+          <div
+            className="rounded-xl p-4 mt-1 max-w-2xl"
+            style={{ backgroundColor: "#eff6ff", border: "1px solid #bfdbfe" }}
+          >
+            <p className="font-sans text-sm leading-relaxed" style={{ color: "#1e40af" }}>
+              <strong>Da verificare insieme.</strong> La Dote Inserimento
+              Lavorativo è rivolta alle persone <strong>disoccupate</strong>.
+              Essere studente non esclude di per sé l&apos;accesso — conta la
+              tua situazione rispetto al lavoro, in particolare se hai
+              rilasciato la dichiarazione di immediata disponibilità (DID) al
+              Centro per l&apos;Impiego. Invia pure la richiesta: verifichiamo
+              noi la tua posizione e ti diciamo se rientri.
+            </p>
+          </div>
+        )}
       </section>
 
       {/* ── SEZIONE 3: Interessi ──────────────────────────────────────── */}
@@ -1217,7 +1282,7 @@ export default function FormIscrizione({ corsoPreselezionato = null, onSuccess =
                 </a>{" "}
                 e acconsento al trattamento dei miei dati personali ai sensi
                 del GDPR (Reg. UE 2016/679) per la gestione della mia
-                iscrizione ai corsi GOL.{" "}
+                iscrizione ai corsi.{" "}
                 <span className="text-red-500">*</span>
               </span>
             </label>

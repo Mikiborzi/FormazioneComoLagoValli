@@ -2,74 +2,6 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { corsi, getCorsoBySlug } from "@/app/data/corsi";
 import FormIscrizioneConPrompt from "@/app/components/FormIscrizioneConPrompt";
-import CorsoGolPopup from "@/app/components/CorsoGolPopup";
-
-// ─── Componente: banner "fa parte di" ────────────────────────────────────────
-
-function PacchettoBanner({ pacchetttoSlug }) {
-  const pacchetto = getCorsoBySlug(pacchetttoSlug);
-  if (!pacchetto) return null;
-  return (
-    <div
-      className="rounded-xl p-4 flex items-start gap-3 mb-6"
-      style={{ backgroundColor: "#fff7ed", border: "1px solid #fed7aa" }}
-    >
-      <svg className="w-5 h-5 shrink-0 mt-0.5" fill="none" stroke="#C96A00" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-          d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-      </svg>
-      <div>
-        <p className="font-sans font-semibold text-sm" style={{ color: "#9a3412" }}>
-          Questo corso fa parte del pacchetto{" "}
-          <Link
-            href={`/corsi/${pacchetttoSlug}`}
-            className="underline underline-offset-2 hover:opacity-75 transition-opacity"
-          >
-            {pacchetto.titolo}
-          </Link>
-        </p>
-        <p className="font-sans text-xs mt-0.5" style={{ color: "#c2410c" }}>
-          Iscrivendoti al pacchetto completo accedi a questo e agli altri corsi inclusi.
-        </p>
-      </div>
-    </div>
-  );
-}
-
-// ─── Componente: card corso incluso ──────────────────────────────────────────
-
-function CorsoIncluso({ slug }) {
-  const corso = getCorsoBySlug(slug);
-  if (!corso) return null;
-  return (
-    <Link
-      href={`/corsi/${slug}`}
-      className="flex items-center gap-3 rounded-xl p-4 transition-all duration-200 hover:shadow-sm group"
-      style={{ backgroundColor: "#f9fafb", border: "1.5px solid #e5e7eb" }}
-    >
-      <div
-        className="w-10 h-10 rounded-lg shrink-0 flex items-center justify-center"
-        style={{ backgroundColor: corso.colore }}
-      >
-        <span className="font-display font-black text-white text-xs leading-none">
-          {corso.titolo.slice(0, 2).toUpperCase()}
-        </span>
-      </div>
-      <div className="flex-1 min-w-0">
-        <p className="font-sans font-semibold text-sm truncate" style={{ color: "#1a2e5a" }}>
-          {corso.titolo}
-        </p>
-        <p className="font-sans text-xs text-gray-400">{corso.durata}</p>
-      </div>
-      <svg
-        className="w-4 h-4 text-gray-400 group-hover:text-gray-600 shrink-0 transition-colors"
-        fill="none" stroke="currentColor" viewBox="0 0 24 24"
-      >
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-      </svg>
-    </Link>
-  );
-}
 
 // ─── Static params (pre-render tutte le pagine dei corsi) ────────────────────
 
@@ -122,7 +54,6 @@ export default async function CorsoPage({ params }) {
 
   return (
     <>
-      <CorsoGolPopup />
       {/* ── Header corso ────────────────────────────────────────────── */}
       <div style={{ backgroundColor: corso.colore }}>
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-12 lg:pt-10 lg:pb-16">
@@ -139,12 +70,22 @@ export default async function CorsoPage({ params }) {
           </Link>
 
           {/* Badge */}
-          <span
-            className="inline-block font-sans font-bold text-xs uppercase tracking-wider px-3 py-1.5 rounded-full mb-4"
-            style={{ backgroundColor: "rgba(0,0,0,0.2)", color: "white" }}
-          >
-            GRATUITO – Programma GOL
-          </span>
+          <div className="flex flex-wrap gap-2 mb-4">
+            <span
+              className="inline-block font-sans font-bold text-xs uppercase tracking-wider px-3 py-1.5 rounded-full"
+              style={{ backgroundColor: "rgba(0,0,0,0.2)", color: "white" }}
+            >
+              GRATUITO – Dote Inserimento Lavorativo
+            </span>
+            {corso.cluster && (
+              <span
+                className="inline-block font-sans font-bold text-xs uppercase tracking-wider px-3 py-1.5 rounded-full"
+                style={{ backgroundColor: "rgba(255,255,255,0.9)", color: "#1a2e5a" }}
+              >
+                DIL Cluster {corso.cluster}
+              </span>
+            )}
+          </div>
 
           {/* Titolo */}
           <h1
@@ -186,34 +127,6 @@ export default async function CorsoPage({ params }) {
 
           {/* Colonna sinistra: dettagli corso */}
           <div className="lg:col-span-1 flex flex-col gap-7">
-            {/* Banner "fa parte di pacchetto" */}
-            {corso.parte_di_pacchetto && (
-              <PacchettoBanner pacchetttoSlug={corso.parte_di_pacchetto} />
-            )}
-
-            {/* Corsi inclusi (solo per fatti-impresa) */}
-            {corso.corsi_inclusi?.length > 0 && (
-              <div
-                className="rounded-2xl p-6"
-                style={{ backgroundColor: "#fff7ed", border: "1px solid #fed7aa" }}
-              >
-                <h2
-                  className="font-display font-bold text-lg mb-1"
-                  style={{ color: "#9a3412" }}
-                >
-                  Corsi inclusi nel pacchetto
-                </h2>
-                <p className="font-sans text-xs text-orange-700 mb-4">
-                  Iscrivendoti a Fatti Impresa manifesti interesse per tutti e tre i percorsi.
-                </p>
-                <div className="flex flex-col gap-2">
-                  {corso.corsi_inclusi.map((s) => (
-                    <CorsoIncluso key={s} slug={s} />
-                  ))}
-                </div>
-              </div>
-            )}
-
             {/* Contenuti */}
             <div
               className="rounded-2xl p-6"
@@ -266,16 +179,21 @@ export default async function CorsoPage({ params }) {
               </ul>
             </div>
 
-            {/* Info GOL */}
+            {/* Info DIL */}
             <div
               className="rounded-2xl p-5"
               style={{ backgroundColor: "#eff6ff", border: "1px solid #bfdbfe" }}
             >
               <p className="font-sans text-xs text-blue-700 leading-relaxed">
                 <strong>Corso 100% gratuito</strong> finanziato da Regione
-                Lombardia e Unione Europea nell'ambito del Programma GOL
-                (Garanzia di Occupabilità dei Lavoratori). Per accedere
-                occorre essere in possesso dei requisiti di idoneità.
+                Lombardia e Unione Europea nell&apos;ambito della{" "}
+                <strong>Dote Inserimento Lavorativo (DIL)</strong>, la misura
+                che dal 1° luglio 2026 sostituisce il Programma GOL. Riservato
+                a persone disoccupate residenti o domiciliate in Lombardia,
+                senza limiti di età. Il monte ore finanziabile dipende dal
+                cluster assegnato in fase di presa in carico: 16 ore per il
+                Cluster 1, fino a 40 ore per gli altri. Si può attivare una
+                sola dote.
               </p>
             </div>
           </div>
@@ -291,25 +209,16 @@ export default async function CorsoPage({ params }) {
                   className="font-display font-bold text-2xl mb-1"
                   style={{ color: "#1a2e5a" }}
                 >
-                  {corso.corsi_inclusi?.length > 0
-                    ? "Iscriviti al pacchetto"
-                    : "Iscriviti al corso"}
+                  Iscriviti al corso
                 </h2>
                 <p className="font-sans text-sm text-gray-500">
-                  {corso.corsi_inclusi?.length > 0
-                    ? "Compila il form: registriamo il tuo interesse per tutti e tre i corsi del pacchetto. Ti contatteremo entro 24 ore."
-                    : "Compila il form e ti contatteremo entro 24 ore per i prossimi passi."}{" "}
-                  Il corso è{" "}
-                  <strong className="text-gray-700">completamente gratuito</strong>.
+                  Compila il form e ti contatteremo entro 24 ore per i prossimi
+                  passi. Il corso è{" "}
+                  <strong className="text-gray-700">completamente gratuito</strong>{" "}
+                  con la Dote Inserimento Lavorativo.
                 </p>
               </div>
-              <FormIscrizioneConPrompt
-                corsoPreselezionato={
-                  corso.corsi_inclusi?.length > 0
-                    ? corso.corsi_inclusi
-                    : corso.slug
-                }
-              />
+              <FormIscrizioneConPrompt corsoPreselezionato={corso.slug} />
             </div>
           </div>
         </div>

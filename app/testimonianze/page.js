@@ -9,7 +9,7 @@ export const dynamic = "force-dynamic";
 export const metadata = {
   title: "Testimonianze – Formazione Como Lago e Valli",
   description:
-    "Leggi le recensioni di chi ha già frequentato i nostri corsi GOL gratuiti e lascia la tua.",
+    "Leggi le recensioni di chi ha già frequentato i nostri corsi gratuiti e lascia la tua.",
 };
 
 function StarRating({ count }) {
@@ -76,7 +76,7 @@ export default async function TestimonanzePage() {
             Testimonianze
           </h1>
           <p className="font-sans text-base leading-relaxed max-w-2xl" style={{ color: "rgba(255,255,255,0.75)" }}>
-            Persone reali, percorsi reali. Ecco cosa dicono chi ha già frequentato i nostri corsi GOL
+            Persone reali, percorsi reali. Ecco cosa dicono chi ha già frequentato i nostri corsi
             gratuiti a Como, Tremezzina e online.
           </p>
         </div>
