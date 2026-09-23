@@ -637,7 +637,8 @@ export default function AiAcademyPage() {
                   <p className="font-sans text-sm leading-relaxed" style={{ color: CREAM }}>
                     L&apos;azienda anticipa il costo del corso e paga la fattura all&apos;ente formativo.
                     Regione Lombardia eroga la quota pubblica <strong>solo dopo la quietanza del pagamento</strong>,
-                    in fase di rendicontazione. Servono liquidità e capacità di anticipo.
+                    in fase di rendicontazione, nei termini previsti dal bando:{" "}
+                    <strong>entro 80 giorni dalla fine del corso e dall&apos;avvenuto pagamento</strong>.
                   </p>
                 </div>
               </div>
