@@ -55,6 +55,9 @@ export async function POST(request) {
   if (!dati.privacy_firmata) {
     return NextResponse.json({ error: 'Serve la conferma dell\'informativa privacy' }, { status: 400 })
   }
+  if (!body?.consenso_gdpr) {
+    return NextResponse.json({ error: 'Il consenso al trattamento dei dati del partecipante è obbligatorio' }, { status: 400 })
+  }
 
   const supabase = getSupabaseAdmin()
 

@@ -352,7 +352,9 @@ export default function FormIscrizioneImpresa() {
             <input type="checkbox" name="newsletter" checked={form.newsletter} onChange={handleChange}
               className="mt-1 w-4 h-4 rounded shrink-0" style={{ accentColor: "#8b0000" }} />
             <span className="font-sans text-sm text-gray-700 leading-relaxed">
-              Desidero ricevere aggiornamenti sui percorsi formativi e le opportunità di Formazione Impresa (opzionale).
+              Desidero ricevere comunicazioni su percorsi formativi, servizi di
+              orientamento professionale e altre iniziative di Formazione Impresa /
+              Starting Work (facoltativo).
             </span>
           </label>
         </div>

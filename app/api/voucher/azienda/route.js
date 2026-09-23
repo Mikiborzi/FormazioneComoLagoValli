@@ -31,6 +31,9 @@ export async function POST(request) {
   if (mancanti.length) {
     return NextResponse.json({ error: `Campi obbligatori mancanti: ${mancanti.join(', ')}` }, { status: 400 })
   }
+  if (!body?.consenso_gdpr) {
+    return NextResponse.json({ error: 'Il consenso al trattamento dei dati è obbligatorio' }, { status: 400 })
+  }
 
   const supabase = getSupabaseAdmin()
   const giaRegistrata = NextResponse.json(
@@ -65,6 +68,39 @@ export async function POST(request) {
     if (error.code === '23505') return giaRegistrata
     console.error('azienda/POST', error)
     return NextResponse.json({ error: 'Errore nel salvataggio dei dati azienda' }, { status: 500 })
+  }
+
+  if (body?.newsletter && data.referente_email) {
+    await supabase.from('newsletter').upsert(
+      { email: data.referente_email, nome: `${data.referente_nome || ''} ${data.referente_cognome || ''}`.trim(), attivo: true },
+      { onConflict: 'email' }
+    )
+  }
+
+  // Fa confluire il contatto nel CRM unificato (tab "CRM Contatti" in admin).
+  // Non deve mai far fallire la pratica già salvata sopra.
+  if (data.referente_email) {
+    try {
+      const { data: contatto } = await supabase
+        .from('contatti')
+        .upsert(
+          { email: data.referente_email, nome: data.referente_nome || null, cognome: data.referente_cognome || null, telefono: data.referente_telefono || null, azienda: data.ragione_sociale || null, partita_iva: data.piva_cf || null },
+          { onConflict: 'email', ignoreDuplicates: false }
+        )
+        .select('id')
+        .maybeSingle()
+      if (contatto?.id) {
+        await supabase.from('interazioni').insert({
+          contatto_id: contatto.id,
+          canale: 'voucher_attesa',
+          tipo: 'iscrizione',
+          oggetto: data.ragione_sociale || null,
+          dati: { piva_cf: data.piva_cf, numero_addetti: data.numero_addetti },
+        })
+      }
+    } catch (err) {
+      console.error('Log CRM voucher/azienda:', err)
+    }
   }
 
   return NextResponse.json({ azienda: data }, { status: 201 })

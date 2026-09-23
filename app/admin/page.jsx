@@ -2,14 +2,19 @@
 
 import { useState, useEffect, useMemo, Fragment } from 'react'
 import * as XLSX from 'xlsx'
+import EdizioniTab from './tabs/EdizioniTab'
+import CalendarioTab from './tabs/CalendarioTab'
+import ArchiviatiTab from './tabs/ArchiviatiTab'
+import FatturazioneTab from './tabs/FatturazioneTab'
 
-const STATI = ['nuovo', 'contattato', 'iscritto', 'in_attesa', 'non_idoneo']
+const STATI = ['nuovo', 'contattato', 'iscritto', 'in_attesa', 'non_idoneo', 'archiviato']
 const STATO_COLORS = {
   nuovo:      { bg: '#FEF3C7', text: '#92400E', label: 'Nuovo' },
   contattato: { bg: '#DBEAFE', text: '#1E40AF', label: 'Contattato' },
   iscritto:   { bg: '#D1FAE5', text: '#065F46', label: 'Iscritto' },
   in_attesa:  { bg: '#F3F4F6', text: '#374151', label: 'In attesa' },
   non_idoneo: { bg: '#FEE2E2', text: '#991B1B', label: 'Non idoneo' },
+  archiviato: { bg: '#E5E7EB', text: '#374151', label: 'Archiviato' },
 }
 const CORSI_LABELS = {
   'fatti-impresa': '⭐ Fatti Impresa',
@@ -115,17 +120,27 @@ export default function AdminPage() {
   const [impresaSubTab, setImpresaSubTab] = useState('iscrizioni')
   const [aggImpresa, setAggImpresa] = useState(null)
   const [selezionatoImpresa, setSelezionatoImpresa] = useState(null)
+  const [filtroStatoImpresa, setFiltroStatoImpresa] = useState('tutti')
 
   const [contatti, setContatti] = useState([])
   const [loadingContatti, setLoadingContatti] = useState(false)
   const [selezionatoContatto, setSelezionatoContatto] = useState(null)
   const [ricercaContatti, setRicercaContatti] = useState('')
+  const [filtroStatoRelazione, setFiltroStatoRelazione] = useState('tutti')
 
   const [voucherAziende, setVoucherAziende] = useState([])
   const [loadingVoucher, setLoadingVoucher] = useState(false)
   const [espansiVoucher, setEspansiVoucher] = useState(() => new Set())
   const [aggVoucher, setAggVoucher] = useState(null)
   const [ricercaVoucher, setRicercaVoucher] = useState('')
+  const [filtroStatoVoucher, setFiltroStatoVoucher] = useState('tutti')
+  const [edizioniDisponibili, setEdizioniDisponibili] = useState([])
+  const [voucherSubTab, setVoucherSubTab] = useState('elenco')
+
+  const [allegati, setAllegati] = useState([])
+  const [loadingAllegati, setLoadingAllegati] = useState(false)
+  const [uploadAllegato, setUploadAllegato] = useState(false)
+  const [msgAllegato, setMsgAllegato] = useState('')
 
   async function caricaIscrizioni(t) {
     setLoading(true)
@@ -160,6 +175,19 @@ export default function AdminPage() {
       if (selezionato?.id === id) setSelezionato(prev => ({ ...prev, stato: nuovoStato }))
       setAggiornamento(id)
       setTimeout(() => setAggiornamento(null), 2000)
+    }
+  }
+
+  async function eliminaIscrizione(i) {
+    if (!window.confirm(`Eliminare definitivamente ${i.nome} ${i.cognome}? L'operazione non è reversibile.`)) return
+    const res = await fetch('/api/admin/iscrizioni', {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+      body: JSON.stringify({ id: i.id }),
+    })
+    if (res.ok) {
+      setIscrizioni(prev => prev.filter(x => x.id !== i.id))
+      if (selezionato?.id === i.id) setSelezionato(null)
     }
   }
 
@@ -219,6 +247,52 @@ export default function AdminPage() {
     setLoadingContatti(false)
   }
 
+  async function caricaAllegati(t) {
+    setLoadingAllegati(true)
+    const res = await fetch('/api/admin/allegati-voucher', { headers: { Authorization: `Bearer ${t}` } })
+    if (res.ok) setAllegati(await res.json())
+    setLoadingAllegati(false)
+  }
+
+  async function toggleAllegatoAttivo(id, attivo) {
+    const res = await fetch('/api/admin/allegati-voucher', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+      body: JSON.stringify({ id, attivo }),
+    })
+    if (res.ok) caricaAllegati(token)
+  }
+
+  async function eliminaAllegato(id) {
+    if (!confirm('Eliminare questa versione dell\'allegato? Operazione non reversibile.')) return
+    const res = await fetch(`/api/admin/allegati-voucher?id=${id}`, {
+      method: 'DELETE',
+      headers: { Authorization: `Bearer ${token}` },
+    })
+    if (res.ok) caricaAllegati(token)
+  }
+
+  async function caricaNuovoAllegato(e) {
+    e.preventDefault()
+    setUploadAllegato(true)
+    setMsgAllegato('')
+    const formData = new FormData(e.target)
+    const res = await fetch('/api/admin/allegati-voucher', {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${token}` },
+      body: formData,
+    })
+    if (res.ok) {
+      setMsgAllegato('✅ Allegato caricato con successo.')
+      e.target.reset()
+      caricaAllegati(token)
+    } else {
+      const { error } = await res.json()
+      setMsgAllegato(`❌ Errore: ${error}`)
+    }
+    setUploadAllegato(false)
+  }
+
   async function aggiornaStatoInterazione(id, nuovoStato) {
     const res = await fetch('/api/admin/contatti', {
       method: 'PATCH',
@@ -247,14 +321,48 @@ export default function AdminPage() {
     })
   }
 
+  async function aggiornaCampoContatto(id, campo, valore) {
+    await fetch('/api/admin/contatti', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+      body: JSON.stringify({ target: 'contatto', id, [campo]: valore }),
+    })
+    setContatti(prev => prev.map(c => c.id === id ? { ...c, [campo]: valore } : c))
+    setSelezionatoContatto(prev => prev && prev.id === id ? { ...prev, [campo]: valore } : prev)
+  }
+
   async function caricaVoucher(t) {
     setLoadingVoucher(true)
-    const res = await fetch('/api/admin/voucher', { headers: { Authorization: `Bearer ${t}` } })
+    const [res, resEdizioni] = await Promise.all([
+      fetch('/api/admin/voucher', { headers: { Authorization: `Bearer ${t}` } }),
+      fetch('/api/admin/edizioni', { headers: { Authorization: `Bearer ${t}` } }),
+    ])
     if (res.ok) {
       const { aziende } = await res.json()
       setVoucherAziende(aziende || [])
     }
+    if (resEdizioni.ok) {
+      const { edizioni } = await resEdizioni.json()
+      setEdizioniDisponibili(edizioni || [])
+    }
     setLoadingVoucher(false)
+  }
+
+  // Assegna/rimuove un partecipante da un'edizione (colonna "Edizione" nel tab Voucher).
+  async function assegnaEdizionePartecipante(partecipanteId, aziendaId, edizioneId) {
+    const res = await fetch('/api/admin/partecipanti', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+      body: JSON.stringify({ id: partecipanteId, edizione_id: edizioneId || null }),
+    })
+    setVoucherAziende(prev => prev.map(a => a.id !== aziendaId ? a : {
+      ...a,
+      partecipanti: (a.partecipanti || []).map(p => p.id === partecipanteId ? { ...p, edizione_id: edizioneId || null } : p),
+    }))
+    if (res.ok) {
+      const dati = await res.json()
+      if (dati.avviso) window.alert(dati.avviso)
+    }
   }
 
   async function aggiornaStatoVoucher(id, nuovoStato) {
@@ -362,6 +470,9 @@ export default function AdminPage() {
 
   const iscrizioniFiltrate = useMemo(() => iscrizioni.filter(i => {
     if (filtroTipo !== 'tutti' && (i.tipo || 'formazione') !== filtroTipo) return false
+    // Gli archiviati restano fuori dalla vista di default: si vedono solo scegliendo
+    // esplicitamente "Archiviato" dal filtro stato, così la lista principale resta pulita.
+    if (filtroStato === 'tutti' && i.stato === 'archiviato') return false
     if (filtroStato !== 'tutti' && i.stato !== filtroStato) return false
     if (filtroGol === 'si' && !i.idoneo_gol) return false
     if (filtroGol === 'no' && i.idoneo_gol) return false
@@ -414,6 +525,7 @@ export default function AdminPage() {
         <div style={{ display:'flex', gap:'12px' }}>
           <button onClick={() => caricaIscrizioni(token)} style={{ background:'#1e293b', color:'#94a3b8', border:'1px solid #334155', borderRadius:'6px', padding:'6px 14px', cursor:'pointer', fontSize:'13px' }}>↻ Aggiorna</button>
           <button onClick={esportaCSV} style={{ background:'#f97316', color:'white', border:'none', borderRadius:'6px', padding:'6px 14px', cursor:'pointer', fontSize:'13px', fontWeight:'600' }}>↓ Esporta CSV</button>
+          <a href="/admin/documentazione" style={{ background:'#1e293b', color:'#94a3b8', border:'1px solid #334155', borderRadius:'6px', padding:'6px 14px', cursor:'pointer', fontSize:'13px', textDecoration:'none', display:'inline-flex', alignItems:'center' }}>📘 Documentazione</a>
           <button onClick={() => { sessionStorage.removeItem('admin_token'); setToken(null) }} style={{ background:'#374151', color:'#9ca3af', border:'none', borderRadius:'6px', padding:'6px 14px', cursor:'pointer', fontSize:'13px' }}>Esci</button>
         </div>
       </div>
@@ -426,6 +538,7 @@ export default function AdminPage() {
           { key:'ifts', label:'🏭 Percorsi IFTS' },
           { key:'impresa', label:'🔴 Formazione Impresa' },
           { key:'crm', label:'👥 CRM Contatti' },
+          { key:'allegati', label:'📎 Allegati Voucher' },
         ].map(tab => (
           <button key={tab.key} onClick={() => {
             setTabAttivo(tab.key)
@@ -433,6 +546,7 @@ export default function AdminPage() {
             if (tab.key==='ifts' && iftsCandidati.length===0) caricaIfts(token)
             if (tab.key==='impresa' && impresaIscrizioni.length===0 && impresaContatti.length===0) caricaImpresa(token)
             if (tab.key==='crm' && contatti.length===0) caricaContatti(token)
+            if (tab.key==='allegati' && allegati.length===0) caricaAllegati(token)
           }}
             style={{ padding:'12px 20px', border:'none', borderBottom: tabAttivo===tab.key ? `3px solid ${tab.key==='impresa'?'#8b0000':'#1a2e5a'}` : '3px solid transparent',
               background:'none', cursor:'pointer', fontSize:'14px', fontWeight: tabAttivo===tab.key ? '700' : '500',
@@ -644,7 +758,13 @@ export default function AdminPage() {
                   {STATI.map(s => <option key={s} value={s}>{STATO_COLORS[s]?.label||s}</option>)}
                 </select>
               </div>
-              <div style={{ marginTop:'16px', paddingTop:'16px', borderTop:'1px solid #f1f5f9', fontSize:'11px', color:'#cbd5e1', textAlign:'center' }}>
+              <div style={{ marginTop:'16px', paddingTop:'16px', borderTop:'1px solid #f1f5f9' }}>
+                <button onClick={() => eliminaIscrizione(selezionato)}
+                  style={{ width:'100%', padding:'8px', background:'#fff', color:'#991B1B', border:'1px solid #FCA5A5', borderRadius:'6px', fontSize:'13px', fontWeight:'600', cursor:'pointer' }}>
+                  🗑️ Elimina definitivamente
+                </button>
+              </div>
+              <div style={{ marginTop:'12px', fontSize:'11px', color:'#cbd5e1', textAlign:'center' }}>
                 Registrato il {selezionato.created_at ? new Date(selezionato.created_at).toLocaleString('it-IT') : '—'}
               </div>
             </div>
@@ -666,10 +786,11 @@ export default function AdminPage() {
             contattato: { bg:'#DBEAFE', text:'#1E40AF', label:'Contattato' },
             chiuso:     { bg:'#F3F4F6', text:'#374151', label:'Chiuso' },
           }
-          const lista = impresaSubTab === 'iscrizioni' ? impresaIscrizioni : impresaContatti
+          const listaCompleta = impresaSubTab === 'iscrizioni' ? impresaIscrizioni : impresaContatti
           const tipo  = impresaSubTab === 'iscrizioni' ? 'iscrizione' : 'contatto'
           const statiCorretti = impresaSubTab === 'iscrizioni' ? STATI_ISCR : STATI_CONT
           const colorsCorretti = impresaSubTab === 'iscrizioni' ? COLORS_ISCR : COLORS_CONT
+          const lista = listaCompleta.filter(r => filtroStatoImpresa === 'tutti' || r.stato === filtroStatoImpresa)
 
           return (
             <div>
@@ -679,13 +800,20 @@ export default function AdminPage() {
                   { key:'iscrizioni', label:`📋 Iscrizioni (${impresaIscrizioni.length})` },
                   { key:'contatti',   label:`📞 Contatti (${impresaContatti.length})` },
                 ].map(t => (
-                  <button key={t.key} onClick={() => { setImpresaSubTab(t.key); setSelezionatoImpresa(null) }}
+                  <button key={t.key} onClick={() => { setImpresaSubTab(t.key); setSelezionatoImpresa(null); setFiltroStatoImpresa('tutti') }}
                     style={{ padding:'8px 18px', border:'none', borderRadius:'8px', cursor:'pointer', fontSize:'14px', fontWeight:'600',
                       background: impresaSubTab===t.key ? '#8b0000' : '#e2e8f0',
                       color: impresaSubTab===t.key ? 'white' : '#64748b', transition:'all 0.15s' }}>
                     {t.label}
                   </button>
                 ))}
+                <select value={filtroStatoImpresa} onChange={e => setFiltroStatoImpresa(e.target.value)}
+                  style={{ padding:'8px 12px', border:'1px solid #e2e8f0', borderRadius:'6px', fontSize:'14px', outline:'none', cursor:'pointer' }}>
+                  <option value="tutti">Tutti gli stati</option>
+                  {statiCorretti.map(s => (
+                    <option key={s} value={s}>{colorsCorretti[s]?.label || s}</option>
+                  ))}
+                </select>
                 <button onClick={() => caricaImpresa(token)}
                   style={{ marginLeft:'auto', background:'#1e293b', color:'#94a3b8', border:'1px solid #334155', borderRadius:'6px', padding:'6px 14px', cursor:'pointer', fontSize:'13px' }}>
                   ↻ Aggiorna
@@ -699,7 +827,9 @@ export default function AdminPage() {
                   {/* Tabella */}
                   <div style={{ flex:1, background:'white', borderRadius:'10px', boxShadow:'0 1px 3px rgba(0,0,0,0.08)', overflow:'hidden', minWidth:0 }}>
                     {lista.length === 0 ? (
-                      <div style={{ padding:'60px', textAlign:'center', color:'#94a3b8' }}>Nessun record ancora</div>
+                      <div style={{ padding:'60px', textAlign:'center', color:'#94a3b8' }}>
+                        {listaCompleta.length === 0 ? 'Nessun record ancora' : 'Nessun record con questo stato'}
+                      </div>
                     ) : (
                       <div style={{ overflowX:'auto' }}>
                         <table style={{ width:'100%', borderCollapse:'collapse' }}>
@@ -852,6 +982,7 @@ export default function AdminPage() {
             servizi_lavoro:     { label: '💼 Servizi Lavoro',     bg: '#ede9fe', text: '#5b21b6' },
             ifts_candidato:     { label: '🏭 IFTS Candidato',     bg: '#d1fae5', text: '#065f46' },
             ifts_azienda:       { label: '🏢 IFTS Azienda',       bg: '#f3f4f6', text: '#374151' },
+            proponi_corso:      { label: '💡 Proponi Corso',      bg: '#e0e7ff', text: '#3730a3' },
           }
           const STATO_INT_COLORS = {
             nuovo:      { bg:'#FEF3C7', text:'#92400E' },
@@ -860,7 +991,14 @@ export default function AdminPage() {
             annullato:  { bg:'#FEE2E2', text:'#991B1B' },
             chiuso:     { bg:'#F3F4F6', text:'#374151' },
           }
+          const STATO_RELAZIONE_COLORS = {
+            lead:          { bg:'#FEF3C7', text:'#92400E', label:'Lead' },
+            in_trattativa: { bg:'#DBEAFE', text:'#1E40AF', label:'In trattativa' },
+            cliente:       { bg:'#D1FAE5', text:'#065F46', label:'Cliente' },
+            chiuso:        { bg:'#F3F4F6', text:'#374151', label:'Chiuso' },
+          }
           const filtrati = contatti.filter(c => {
+            if (filtroStatoRelazione !== 'tutti' && (c.stato_relazione || 'lead') !== filtroStatoRelazione) return false
             if (!ricercaContatti) return true
             const q = ricercaContatti.toLowerCase()
             return [c.nome, c.cognome, c.email, c.telefono, c.ragione_sociale, c.azienda]
@@ -872,6 +1010,11 @@ export default function AdminPage() {
                 <input type="text" placeholder="🔍 Cerca nome, email, azienda…" value={ricercaContatti}
                   onChange={e => setRicercaContatti(e.target.value)}
                   style={{ flex:'1', minWidth:'200px', padding:'8px 12px', border:'1px solid #e2e8f0', borderRadius:'6px', fontSize:'14px', outline:'none' }} />
+                <select value={filtroStatoRelazione} onChange={e => setFiltroStatoRelazione(e.target.value)}
+                  style={{ padding:'8px 12px', border:'1px solid #e2e8f0', borderRadius:'6px', fontSize:'14px', outline:'none', cursor:'pointer' }}>
+                  <option value="tutti">Tutti gli stati</option>
+                  {Object.entries(STATO_RELAZIONE_COLORS).map(([k,v]) => <option key={k} value={k}>{v.label}</option>)}
+                </select>
                 <span style={{ fontSize:'13px', color:'#64748b' }}>{filtrati.length} contatti</span>
                 <button onClick={() => caricaContatti(token)}
                   style={{ background:'#1e293b', color:'#94a3b8', border:'1px solid #334155', borderRadius:'6px', padding:'6px 14px', cursor:'pointer', fontSize:'13px' }}>
@@ -892,7 +1035,7 @@ export default function AdminPage() {
                         <table style={{ width:'100%', borderCollapse:'collapse' }}>
                           <thead>
                             <tr style={{ background:'#f8fafc', borderBottom:'2px solid #e2e8f0' }}>
-                              {['Nome','Email / Tel','Azienda','Canali','Interazioni','Prima data'].map(h => (
+                              {['Nome','Email / Tel','Azienda','Stato','Canali','Interazioni','Prima data'].map(h => (
                                 <th key={h} style={{ padding:'10px 14px', textAlign:'left', fontSize:'12px', fontWeight:'700', color:'#475569', textTransform:'uppercase', letterSpacing:'0.05em', whiteSpace:'nowrap' }}>{h}</th>
                               ))}
                             </tr>
@@ -915,6 +1058,21 @@ export default function AdminPage() {
                                   <td style={{ padding:'10px 14px', fontSize:'13px', color:'#64748b' }}>
                                     {c.ragione_sociale || c.azienda || '—'}
                                     {c.partita_iva && <div style={{ fontSize:'11px', color:'#94a3b8' }}>P.IVA {c.partita_iva}</div>}
+                                  </td>
+                                  <td style={{ padding:'10px 14px' }}>
+                                    {(() => {
+                                      const sr = STATO_RELAZIONE_COLORS[c.stato_relazione || 'lead']
+                                      return (
+                                        <span style={{ padding:'2px 10px', borderRadius:'99px', fontSize:'11px', fontWeight:'700', background: sr.bg, color: sr.text, whiteSpace:'nowrap' }}>
+                                          {sr.label}
+                                        </span>
+                                      )
+                                    })()}
+                                    {c.prossimo_contatto && (
+                                      <div style={{ fontSize:'10px', color:'#94a3b8', marginTop:'3px' }}>
+                                        📅 {new Date(c.prossimo_contatto).toLocaleDateString('it-IT', { day:'2-digit', month:'2-digit', year:'2-digit' })}
+                                      </div>
+                                    )}
                                   </td>
                                   <td style={{ padding:'10px 14px' }}>
                                     <div style={{ display:'flex', gap:'4px', flexWrap:'wrap' }}>
@@ -947,7 +1105,7 @@ export default function AdminPage() {
 
                   {/* Pannello dettaglio contatto */}
                   {selezionatoContatto && (
-                    <div style={{ width:'360px', flexShrink:0, background:'white', borderRadius:'10px', boxShadow:'0 1px 3px rgba(0,0,0,0.08)', padding:'20px', position:'sticky', top:'80px', maxHeight:'calc(100vh - 120px)', overflowY:'auto' }}>
+                    <div key={selezionatoContatto.id} style={{ width:'360px', flexShrink:0, background:'white', borderRadius:'10px', boxShadow:'0 1px 3px rgba(0,0,0,0.08)', padding:'20px', position:'sticky', top:'80px', maxHeight:'calc(100vh - 120px)', overflowY:'auto' }}>
                       <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start', marginBottom:'16px' }}>
                         <div>
                           <h3 style={{ margin:0, fontSize:'16px', fontWeight:'700', color:'#0f172a' }}>{selezionatoContatto.nome} {selezionatoContatto.cognome}</h3>
@@ -971,6 +1129,31 @@ export default function AdminPage() {
                             <div style={{ fontSize:'13px', color:'#0f172a' }}>{value}</div>
                           </div>
                         ) : null)}
+                      </div>
+
+                      {/* Gestione relazione */}
+                      <div style={{ background:'#eff6ff', borderRadius:'8px', padding:'12px', marginBottom:'16px', border:'1px solid #dbeafe' }}>
+                        <div style={{ fontSize:'11px', fontWeight:'700', color:'#1e3a8a', textTransform:'uppercase', letterSpacing:'0.05em', marginBottom:'10px' }}>Gestione relazione</div>
+                        <div style={{ marginBottom:'10px' }}>
+                          <label style={{ display:'block', fontSize:'10px', fontWeight:'700', color:'#64748b', textTransform:'uppercase', letterSpacing:'0.05em', marginBottom:'4px' }}>Stato</label>
+                          <select value={selezionatoContatto.stato_relazione || 'lead'}
+                            onChange={e => aggiornaCampoContatto(selezionatoContatto.id, 'stato_relazione', e.target.value)}
+                            style={{ width:'100%', padding:'6px 8px', borderRadius:'6px', border:'1px solid #e2e8f0', fontSize:'13px', cursor:'pointer', outline:'none' }}>
+                            {Object.entries(STATO_RELAZIONE_COLORS).map(([k,v]) => <option key={k} value={k}>{v.label}</option>)}
+                          </select>
+                        </div>
+                        <div style={{ marginBottom:'10px' }}>
+                          <label style={{ display:'block', fontSize:'10px', fontWeight:'700', color:'#64748b', textTransform:'uppercase', letterSpacing:'0.05em', marginBottom:'4px' }}>Prossimo contatto</label>
+                          <input type="date" defaultValue={selezionatoContatto.prossimo_contatto || ''}
+                            onChange={e => aggiornaCampoContatto(selezionatoContatto.id, 'prossimo_contatto', e.target.value)}
+                            style={{ width:'100%', padding:'6px 8px', borderRadius:'6px', border:'1px solid #e2e8f0', fontSize:'13px', outline:'none', boxSizing:'border-box' }} />
+                        </div>
+                        <div>
+                          <label style={{ display:'block', fontSize:'10px', fontWeight:'700', color:'#64748b', textTransform:'uppercase', letterSpacing:'0.05em', marginBottom:'4px' }}>Responsabile</label>
+                          <input type="text" defaultValue={selezionatoContatto.responsabile || ''} placeholder="Chi se ne occupa…"
+                            onBlur={e => aggiornaCampoContatto(selezionatoContatto.id, 'responsabile', e.target.value)}
+                            style={{ width:'100%', padding:'6px 8px', borderRadius:'6px', border:'1px solid #e2e8f0', fontSize:'13px', outline:'none', boxSizing:'border-box' }} />
+                        </div>
                       </div>
 
                       {/* Note sul contatto */}
@@ -1165,28 +1348,60 @@ export default function AdminPage() {
         )}
 
         {tabAttivo === 'voucher' && (() => {
-          const STATI_V = ['nuovo','contattato','iscritto','annullato']
+          const STATI_V = ['nuovo','contattato','iscritto','annullato','archiviato']
           const COLORS_V = {
             nuovo:      { bg:'#FEF3C7', text:'#92400E', label:'Nuovo' },
             contattato: { bg:'#DBEAFE', text:'#1E40AF', label:'Contattato' },
             iscritto:   { bg:'#D1FAE5', text:'#065F46', label:'Iscritto' },
             annullato:  { bg:'#FEE2E2', text:'#991B1B', label:'Annullato' },
+            archiviato: { bg:'#E5E7EB', text:'#374151', label:'Archiviato' },
           }
-          const filtrate = voucherAziende.filter(a => {
+          // Le aziende archiviate si vedono solo nel tab "Archiviati": qui il
+          // tab Voucher resta dedicato ai soggetti ancora in nota per l'iscrizione al corso.
+          const attive = voucherAziende.filter(a => a.stato !== 'archiviato')
+          const filtrate = attive.filter(a => {
+            if (filtroStatoVoucher !== 'tutti' && a.stato !== filtroStatoVoucher) return false
             if (!ricercaVoucher) return true
             const q = ricercaVoucher.toLowerCase()
             return [a.ragione_sociale, a.piva_cf, a.referente_nome, a.referente_cognome, a.referente_email]
               .join(' ').toLowerCase().includes(q)
           })
-          const totPart = voucherAziende.reduce((n, a) => n + (a.partecipanti?.length || 0), 0)
+          const totPart = attive.reduce((n, a) => n + (a.partecipanti?.length || 0), 0)
+
+          const SOTTOSEZIONI_V = [
+            { key:'elenco', label:'📋 Elenco' },
+            { key:'edizioni', label:'📚 Corsi & Edizioni' },
+            { key:'calendario', label:'📅 Calendario' },
+            { key:'fatturazione', label:'🧾 Fatturazione' },
+            { key:'archiviati', label:'🗄️ Archiviati' },
+          ]
+
           return (
             <div>
+              {/* Sotto-sezioni Voucher */}
+              <div style={{ display:'flex', gap:'6px', marginBottom:'20px', borderBottom:'1px solid #e2e8f0', paddingBottom:'2px' }}>
+                {SOTTOSEZIONI_V.map(s => (
+                  <button key={s.key} onClick={() => setVoucherSubTab(s.key)}
+                    style={{ padding:'8px 16px', border:'none', borderRadius:'6px 6px 0 0', cursor:'pointer', fontSize:'13px', fontWeight:'600',
+                      background: voucherSubTab===s.key ? '#1e3a8a' : 'transparent',
+                      color: voucherSubTab===s.key ? 'white' : '#64748b', transition:'all 0.15s' }}>
+                    {s.label}
+                  </button>
+                ))}
+              </div>
+
+              {voucherSubTab === 'edizioni' && <EdizioniTab token={token} />}
+              {voucherSubTab === 'calendario' && <CalendarioTab token={token} />}
+              {voucherSubTab === 'fatturazione' && <FatturazioneTab token={token} />}
+              {voucherSubTab === 'archiviati' && <ArchiviatiTab voucherAziende={voucherAziende} onCambiaStato={aggiornaStatoVoucher} />}
+
+              {voucherSubTab === 'elenco' && <>
               {/* Stats */}
               <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:'16px', marginBottom:'20px' }}>
                 {[
-                  { label:'Aziende preregistrate', value: voucherAziende.length, color:'#1e3a8a', emoji:'🏢' },
+                  { label:'Aziende preregistrate', value: attive.length, color:'#1e3a8a', emoji:'🏢' },
                   { label:'Partecipanti totali', value: totPart, color:'#0369a1', emoji:'👥' },
-                  { label:'Da contattare', value: voucherAziende.filter(a => (a.stato||'nuovo')==='nuovo').length, color:'#d97706', emoji:'🔔' },
+                  { label:'Da contattare', value: attive.filter(a => (a.stato||'nuovo')==='nuovo').length, color:'#d97706', emoji:'🔔' },
                 ].map((s,i) => (
                   <div key={i} style={{ background:'white', borderRadius:'10px', padding:'20px', boxShadow:'0 1px 3px rgba(0,0,0,0.08)', borderLeft:`4px solid ${s.color}` }}>
                     <div style={{ fontSize:'24px', marginBottom:'4px' }}>{s.emoji}</div>
@@ -1200,6 +1415,13 @@ export default function AdminPage() {
                 <input type="text" placeholder="🔍 Cerca ragione sociale, P.IVA, referente…" value={ricercaVoucher}
                   onChange={e => setRicercaVoucher(e.target.value)}
                   style={{ flex:'1', minWidth:'200px', padding:'8px 12px', border:'1px solid #e2e8f0', borderRadius:'6px', fontSize:'14px', outline:'none' }} />
+                <select value={filtroStatoVoucher} onChange={e => setFiltroStatoVoucher(e.target.value)}
+                  style={{ padding:'8px 12px', border:'1px solid #e2e8f0', borderRadius:'6px', fontSize:'14px', outline:'none', cursor:'pointer' }}>
+                  <option value="tutti">Tutti gli stati</option>
+                  {STATI_V.filter(s => s !== 'archiviato').map(s => (
+                    <option key={s} value={s}>{COLORS_V[s]?.label || s}</option>
+                  ))}
+                </select>
                 <span style={{ fontSize:'13px', color:'#64748b' }}>{filtrate.length} aziende · {totPart} partecipanti</span>
                 <button onClick={() => esportaVoucherXLSX(filtrate)} disabled={totPart === 0}
                   style={{ background: totPart===0 ? '#e2e8f0' : '#166534', color: totPart===0 ? '#94a3b8' : 'white', border:'none', borderRadius:'6px', padding:'6px 14px', cursor: totPart===0 ? 'not-allowed' : 'pointer', fontSize:'13px', fontWeight:'600' }}>
@@ -1317,8 +1539,8 @@ export default function AdminPage() {
                                           <table style={{ width:'100%', borderCollapse:'collapse' }}>
                                             <thead>
                                               <tr style={{ background:'#f1f5f9' }}>
-                                                {['#','Nome e cognome','Codice fiscale','Nascita','Sesso','Titolo studio','Rapporto','N. COB','Email','Telefono'].map((h, hi) => (
-                                                  <th key={hi} style={{ padding:'8px 12px', textAlign:'left', fontSize:'11px', fontWeight:'700', color:'#475569', whiteSpace:'nowrap' }}>{h}</th>
+                                                {['#','Nome e cognome','Edizione','Codice fiscale','Nascita','Sesso','Titolo studio','Rapporto','N. COB','Email','Telefono'].map((h, hi) => (
+                                                  <th key={hi} style={{ padding:'8px 12px', textAlign:'left', fontSize:'11px', fontWeight:'700', color: h==='Edizione' ? '#1E40AF' : '#475569', whiteSpace:'nowrap' }}>{h}</th>
                                                 ))}
                                               </tr>
                                             </thead>
@@ -1327,6 +1549,15 @@ export default function AdminPage() {
                                                 <tr key={p.id} style={{ borderTop:'1px solid #f1f5f9' }}>
                                                   <td style={{ padding:'8px 12px', fontSize:'12px', color:'#94a3b8' }}>{pi + 1}</td>
                                                   <td style={{ padding:'8px 12px', fontSize:'13px', color:'#0f172a', fontWeight:'600', whiteSpace:'nowrap' }}>{p.nome} {p.cognome}</td>
+                                                  <td style={{ padding:'8px 12px', background:'#eff6ff' }}>
+                                                    <select value={p.edizione_id || ''} onChange={e => assegnaEdizionePartecipante(p.id, a.id, e.target.value)}
+                                                      style={{ padding:'5px 8px', borderRadius:'6px', border:'1px solid #93c5fd', fontSize:'12px', fontWeight:'600', color:'#1E40AF', cursor:'pointer', maxWidth:'200px' }}>
+                                                      <option value="">— assegna edizione —</option>
+                                                      {edizioniDisponibili.map(ed => (
+                                                        <option key={ed.id} value={ed.id}>{ed.corsi?.nome} {ed.nome ? `— ${ed.nome}` : ''}</option>
+                                                      ))}
+                                                    </select>
+                                                  </td>
                                                   <td style={{ padding:'8px 12px', fontSize:'12px', color:'#475569', fontFamily:'monospace' }}>{p.codice_fiscale}</td>
                                                   <td style={{ padding:'8px 12px', fontSize:'12px', color:'#475569', whiteSpace:'nowrap' }}>{p.data_nascita || '—'}{p.luogo_nascita ? ` · ${p.luogo_nascita}` : ''}</td>
                                                   <td style={{ padding:'8px 12px', fontSize:'12px', color:'#475569' }}>{p.sesso || '—'}</td>
@@ -1351,6 +1582,119 @@ export default function AdminPage() {
                       </table>
                     </div>
                   )}
+                </div>
+              )}
+              </>}
+            </div>
+          )
+        })()}
+
+        {tabAttivo === 'allegati' && (() => {
+          const perCodice = allegati.reduce((acc, a) => {
+            (acc[a.codice] = acc[a.codice] || []).push(a)
+            return acc
+          }, {})
+          const codiciOrdinati = Object.keys(perCodice).sort()
+
+          return (
+            <div>
+              {/* Form di upload */}
+              <div style={{ background:'white', borderRadius:'10px', padding:'20px', marginBottom:'24px', boxShadow:'0 1px 3px rgba(0,0,0,0.08)' }}>
+                <h3 style={{ fontSize:'16px', fontWeight:'700', color:'#0f172a', margin:'0 0 16px' }}>📤 Carica nuovo allegato (o nuova versione)</h3>
+                <form onSubmit={caricaNuovoAllegato} style={{ display:'grid', gridTemplateColumns:'repeat(2,1fr)', gap:'12px' }}>
+                  <div>
+                    <label style={{ fontSize:'12px', fontWeight:'600', color:'#475569', display:'block', marginBottom:'4px' }}>Codice (come nel decreto) *</label>
+                    <input name="codice" required placeholder="es. A.1, A.2.a, A.3, A.5" style={{ width:'100%', padding:'8px 12px', border:'1px solid #e2e8f0', borderRadius:'6px', fontSize:'14px', outline:'none', boxSizing:'border-box' }} />
+                  </div>
+                  <div>
+                    <label style={{ fontSize:'12px', fontWeight:'600', color:'#475569', display:'block', marginBottom:'4px' }}>Titolo ufficiale *</label>
+                    <input name="titolo" required placeholder="es. Domanda di partecipazione (Allegato A.1)" style={{ width:'100%', padding:'8px 12px', border:'1px solid #e2e8f0', borderRadius:'6px', fontSize:'14px', outline:'none', boxSizing:'border-box' }} />
+                  </div>
+                  <div style={{ gridColumn:'span 2' }}>
+                    <label style={{ fontSize:'12px', fontWeight:'600', color:'#475569', display:'block', marginBottom:'4px' }}>Descrizione</label>
+                    <textarea name="descrizione" rows={2} placeholder="A cosa serve questo allegato, come va compilato..." style={{ width:'100%', padding:'8px 12px', border:'1px solid #e2e8f0', borderRadius:'6px', fontSize:'14px', outline:'none', boxSizing:'border-box', resize:'vertical' }} />
+                  </div>
+                  <div>
+                    <label style={{ fontSize:'12px', fontWeight:'600', color:'#475569', display:'block', marginBottom:'4px' }}>Verificato da</label>
+                    <input name="verificato_da" placeholder="es. Michele Borzatta" style={{ width:'100%', padding:'8px 12px', border:'1px solid #e2e8f0', borderRadius:'6px', fontSize:'14px', outline:'none', boxSizing:'border-box' }} />
+                  </div>
+                  <div>
+                    <label style={{ fontSize:'12px', fontWeight:'600', color:'#475569', display:'block', marginBottom:'4px' }}>Note interne</label>
+                    <input name="note" placeholder="promemoria non pubblici" style={{ width:'100%', padding:'8px 12px', border:'1px solid #e2e8f0', borderRadius:'6px', fontSize:'14px', outline:'none', boxSizing:'border-box' }} />
+                  </div>
+                  <div style={{ gridColumn:'span 2' }}>
+                    <label style={{ fontSize:'12px', fontWeight:'600', color:'#475569', display:'block', marginBottom:'4px' }}>File *</label>
+                    <input name="file" type="file" required accept=".pdf,.doc,.docx,.xlsx,.xls" style={{ width:'100%', padding:'8px 12px', border:'1px solid #e2e8f0', borderRadius:'6px', fontSize:'14px', boxSizing:'border-box' }} />
+                  </div>
+                  <div style={{ gridColumn:'span 2', display:'flex', alignItems:'center', gap:'12px' }}>
+                    <label style={{ display:'flex', alignItems:'center', gap:'8px', fontSize:'13px', color:'#475569' }}>
+                      <input type="checkbox" name="rendi_attivo" value="true" defaultChecked />
+                      Rendi questa la versione attiva (le precedenti verranno disattivate)
+                    </label>
+                  </div>
+                  <div style={{ gridColumn:'span 2' }}>
+                    <button type="submit" disabled={uploadAllegato} style={{ background:'#0f172a', color:'white', border:'none', borderRadius:'6px', padding:'10px 24px', fontSize:'14px', fontWeight:'600', cursor:'pointer', opacity: uploadAllegato ? 0.5 : 1 }}>
+                      {uploadAllegato ? 'Caricamento...' : 'Carica allegato'}
+                    </button>
+                    {msgAllegato && <span style={{ marginLeft:'12px', fontSize:'13px', color: msgAllegato.startsWith('✅') ? '#059669' : '#dc2626' }}>{msgAllegato}</span>}
+                  </div>
+                </form>
+              </div>
+
+              {/* Elenco per codice */}
+              {loadingAllegati ? (
+                <div style={{ padding:'60px', textAlign:'center', color:'#94a3b8' }}>Caricamento...</div>
+              ) : codiciOrdinati.length === 0 ? (
+                <div style={{ background:'white', borderRadius:'10px', padding:'60px', textAlign:'center', color:'#94a3b8', boxShadow:'0 1px 3px rgba(0,0,0,0.08)' }}>
+                  Nessun allegato caricato. Usa il form sopra per aggiungere il primo.
+                </div>
+              ) : (
+                <div style={{ display:'flex', flexDirection:'column', gap:'16px' }}>
+                  {codiciOrdinati.map(codice => (
+                    <div key={codice} style={{ background:'white', borderRadius:'10px', boxShadow:'0 1px 3px rgba(0,0,0,0.08)', overflow:'hidden' }}>
+                      <div style={{ background:'#f8fafc', padding:'12px 20px', borderBottom:'1px solid #e2e8f0', display:'flex', alignItems:'center', gap:'12px' }}>
+                        <span style={{ fontSize:'15px', fontWeight:'700', color:'#0f172a' }}>Allegato {codice}</span>
+                        <span style={{ fontSize:'12px', color:'#94a3b8' }}>· {perCodice[codice].length} versione{perCodice[codice].length===1?'':'i'}</span>
+                      </div>
+                      <table style={{ width:'100%', borderCollapse:'collapse', fontSize:'13px' }}>
+                        <thead>
+                          <tr style={{ background:'#fafafa', borderBottom:'1px solid #e2e8f0' }}>
+                            {['Titolo','Descrizione','Ver.','Verificato','File','Attivo','Azioni'].map(h => (
+                              <th key={h} style={{ padding:'8px 12px', textAlign:'left', fontSize:'11px', fontWeight:'700', color:'#475569', textTransform:'uppercase' }}>{h}</th>
+                            ))}
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {perCodice[codice].map(a => (
+                            <tr key={a.id} style={{ borderBottom:'1px solid #f1f5f9', background: a.attivo ? '#f0fdf4' : 'white' }}>
+                              <td style={{ padding:'10px 12px', fontWeight:'600', color:'#0f172a' }}>{a.titolo}</td>
+                              <td style={{ padding:'10px 12px', color:'#64748b', maxWidth:'240px' }}>{a.descrizione || '—'}</td>
+                              <td style={{ padding:'10px 12px', color:'#334155', fontWeight:'600' }}>v{a.versione}</td>
+                              <td style={{ padding:'10px 12px', color:'#64748b' }}>
+                                {a.data_verifica ? new Date(a.data_verifica).toLocaleDateString('it-IT') : '—'}
+                                {a.verificato_da && <div style={{ fontSize:'11px', color:'#94a3b8' }}>{a.verificato_da}</div>}
+                              </td>
+                              <td style={{ padding:'10px 12px' }}>
+                                <a href={a.file_url} target="_blank" rel="noopener noreferrer" style={{ color:'#1d4ed8', textDecoration:'none', fontWeight:'600' }}>
+                                  📄 {a.file_nome || 'download'}
+                                </a>
+                              </td>
+                              <td style={{ padding:'10px 12px' }}>
+                                <button onClick={() => toggleAllegatoAttivo(a.id, !a.attivo)}
+                                  style={{ padding:'4px 10px', borderRadius:'99px', fontSize:'11px', fontWeight:'700', border:'none', cursor:'pointer',
+                                    background: a.attivo ? '#d1fae5' : '#f3f4f6', color: a.attivo ? '#065f46' : '#6b7280' }}>
+                                  {a.attivo ? '✅ Attivo' : 'Non attivo'}
+                                </button>
+                              </td>
+                              <td style={{ padding:'10px 12px' }}>
+                                <button onClick={() => eliminaAllegato(a.id)} style={{ background:'none', border:'none', cursor:'pointer', color:'#dc2626', fontSize:'12px' }}>🗑️ Elimina</button>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  ))}
                 </div>
               )}
             </div>

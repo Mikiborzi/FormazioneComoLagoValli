@@ -8,9 +8,11 @@
 export const AVVISO = {
   riferimento: "Decreto n. 8809 del 1° luglio 2026",
   programma: "Programma Regionale Lombardia FSE+ 2021-2027 — Obiettivo ESO 4.4",
-  aperturaSportello: "13 luglio 2026",
+  aperturaSportello: "13 luglio 2026, ore 12:00",
+  chiusuraSportello: "31 marzo 2027, ore 17:00 (salvo esaurimento anticipato delle risorse)",
   portale: "Bandi e Servizi di Regione Lombardia",
   portaleUrl: "https://www.bandi.regione.lombardia.it/",
+  codiceCatalogo: "17257",
 };
 
 export const FASI = [
@@ -62,12 +64,17 @@ export const FASI = [
       "Le domande si presentano «a sportello», in ordine di arrivo, fino a esaurimento delle risorse.",
     azioni: [
       "Accedi al portale dalla data di apertura dello sportello e compila la domanda indicando il percorso scelto dal catalogo regionale e i nominativi dei destinatari.",
-      "Indica AI Academy come percorso: ti forniamo noi il riferimento esatto a catalogo, il codice e la scheda del corso.",
-      "Allega la documentazione richiesta dall'avviso e invia.",
+      "Indica AI Academy come percorso: è già a Catalogo 2026 con codice 17257, requisito soddisfatto in partenza.",
+      "Verifica che l'iscrizione dei partecipanti al corso su SIUF sia stata registrata: la facciamo noi, ma deve risultare completata prima dell'invio della domanda.",
+      "Allega la documentazione obbligatoria: modulo di Domanda (Allegato A.1), Dichiarazione de minimis (Allegato A.2.a) e, se presenti una delega, l'Incarico (Allegato A.3). La mancanza anche di un solo allegato rende la domanda inammissibile.",
+      "Prepara i documenti di ciascun destinatario: per i dipendenti il numero COB (o, se assunti prima del 1° marzo 2008, contratto più ultimo cedolino); per i soci-lavoratori di cooperative il libro soci più COB; per autonomi e liberi professionisti il certificato di P.IVA o l'iscrizione alla gestione separata INPS.",
+      "Firma e fai firmare ai destinatari l'informativa privacy (Allegato A.5) e indica il titolare effettivo dell'impresa.",
+      "Assolvi il bollo di 16 € tramite pagoPA e predisponi una contabilità separata per le transazioni legate al voucher.",
+      "Invia la domanda: puoi farlo da quando il corso risulta caricato a catalogo dall'ente formativo (Starting Work) e comunque non oltre 72 ore prima della data di inizio. Verifica con noi che il caricamento sia stato completato prima di procedere.",
       "Conserva la ricevuta di protocollo: è la prova della data di presentazione.",
     ],
     attenzione:
-      "Ordine cronologico significa che chi arriva prima ha la precedenza. L'impegno contabile viene assunto solo dopo la verifica di ammissibilità: la domanda inviata non è ancora un voucher concesso.",
+      "Ordine cronologico significa che chi arriva prima ha la precedenza, ed è la domanda a fare fede: la preregistrazione ti prepara il terreno ma non attiva il contributo. La domanda si può presentare solo a corso già caricato dall'ente formativo, e va comunque inviata con almeno 72 ore di anticipo sull'inizio del corso.",
   },
   {
     id: "esito",
@@ -75,12 +82,13 @@ export const FASI = [
     sintesi:
       "Regione verifica l'ammissibilità e comunica l'esito. Da lì decorrono i tempi del percorso.",
     azioni: [
+      "Regione istruisce la domanda entro 90 giorni, esclusi quelli di agosto, e comunica l'ammissione via PEC.",
       "Controlla periodicamente la casella PEC dell'impresa e l'area personale del portale: le comunicazioni arrivano lì.",
       "Se arriva una richiesta di integrazione, rispondi entro i termini indicati: i tempi sono stretti e perentori.",
-      "A esito positivo, conferma con noi le date dell'edizione e l'iscrizione dei partecipanti.",
+      "La data, la sede e i dettagli della specifica edizione ti saranno comunicati direttamente da Starting Work nel momento in cui l'edizione viene caricata su SIUF con tutti i partecipanti iscritti: non fissarti su una data anticipata, perché può variare fino a quel momento.",
     ],
     attenzione:
-      "Non avviare la formazione prima di aver verificato con noi che sia il momento giusto rispetto alla tua pratica: partire fuori tempo può compromettere il rimborso.",
+      "Il corso può partire anche prima di ricevere la comunicazione formale di ammissione da Regione Lombardia: se tutti i requisiti di ammissibilità indicati in questa guida sono rispettati, non c'è motivo per cui Regione neghi il voucher. Ciò che conta davvero è aver presentato la domanda a corso già caricato a catalogo e con almeno 72 ore di anticipo sull'avvio: rispettando questa condizione, il voucher è dovuto.",
   },
   {
     id: "frequenza",
@@ -88,7 +96,8 @@ export const FASI = [
     sintesi:
       "La frequenza è la condizione sostanziale del finanziamento, non una formalità.",
     azioni: [
-      "Assicurati che ogni partecipante frequenti almeno il 75% delle ore previste.",
+      "Il corso si svolge in aula a Como: 30 ore distribuite indicativamente su 7 incontri (mezze giornate), 2 a settimana, gruppo massimo di 10 persone. Per aziende che portano un proprio gruppo (8–15 persone) è possibile programmare un'edizione personalizzata: sempre 30 ore complessive, ma distribuite diversamente in base alle tue esigenze.",
+      "Assicurati che ogni partecipante frequenti almeno il 75% delle ore previste, calcolato solo sulle presenze effettive svolte in orario di lavoro.",
       "Firma i registri a ogni incontro: fanno fede in sede di controllo.",
       "Segnalaci subito le assenze prolungate: se un partecipante rischia di scendere sotto la soglia, meglio saperlo prima della fine.",
       "Completa la prova finale e ottieni la certificazione delle competenze.",
@@ -151,7 +160,15 @@ export const FAQ = [
   },
   {
     d: "Sono un libero professionista senza dipendenti: posso accedere?",
-    r: "Sì, purché tu abbia domicilio fiscale in Lombardia. Rientri nella fascia con la quota pubblica più alta, il 90%, quindi il tuo contributo è del 10% del costo del corso.",
+    r: "Sì, purché tu abbia domicilio fiscale in Lombardia. Rientri nella fascia con la quota pubblica più alta, il 90%, quindi il tuo contributo è del 10% del costo del corso. Come professionista hai anche un iter più snello rispetto alle imprese: sei esonerato dall'assicurazione contro i danni catastrofali, per la regolarità contributiva basta una dichiarazione della tua cassa previdenziale (o della gestione separata INPS) al posto del DURC, e non ti viene richiesta la prova di presenza tramite Libro Unico del Lavoro.",
+  },
+  {
+    d: "Ho già compilato il form di preregistrazione: ho già richiesto il voucher?",
+    r: "No. Il form raccoglie i dati di azienda e partecipanti e ti mette in fila, ma la richiesta formale del contributo è un atto separato: la domanda va presentata da te (o da chi ha i poteri di firma) sul portale Bandi e Servizi, con SPID, CIE o CNS, a partire dall'apertura dello sportello. Questa guida ti accompagna esattamente in quel passaggio.",
+  },
+  {
+    d: "Cos'è il codice a catalogo del corso, e devo occuparmene io?",
+    r: "È il codice con cui AI Academy è censito nel Catalogo 2026 di Formazione Continua di Regione Lombardia (17257): è il requisito che rende il corso finanziabile. Il requisito è già soddisfatto e il codice te lo indichiamo noi al momento della domanda.",
   },
   {
     d: "Che documentazione devo conservare per eventuali controlli?",
@@ -160,5 +177,13 @@ export const FAQ = [
   {
     d: "Le risorse possono finire?",
     r: "Sì. Lo sportello lavora in ordine cronologico di presentazione e resta aperto fino a esaurimento delle risorse stanziate. È il motivo per cui conviene avere profilazione e documenti pronti prima dell'apertura, non dopo.",
+  },
+  {
+    d: "Devo aspettare l'ok di Regione Lombardia prima di far partire il corso?",
+    r: "No. Il corso può partire anche prima di ricevere la comunicazione formale di ammissione: se hai verificato e rispetti tutti i requisiti indicati in questa guida, non c'è motivo per cui Regione neghi il voucher. La condizione che conta è un'altra: la domanda va presentata a corso già caricato a catalogo dall'ente formativo e con almeno 72 ore di anticipo sull'avvio. Rispettata questa condizione, il voucher è dovuto.",
+  },
+  {
+    d: "Quando saprò la data esatta della mia edizione?",
+    r: "Non fissiamo in anticipo una data, una sede o un identificativo di edizione, perché possono cambiare: te li comunichiamo direttamente noi di Starting Work nel momento in cui l'edizione viene caricata su SIUF con tutti i partecipanti iscritti. Non è qualcosa che devi cercare o richiedere tu: arriva da noi appena è pronta.",
   },
 ];

@@ -9,6 +9,10 @@ import { AVVISO, FASI, FAQ } from '@/app/data/guidaVoucher'
 // pratica registrata. I contenuti vivono qui, lato server: se fossero importati
 // dalla pagina client finirebbero nel bundle JS e sarebbero leggibili da
 // chiunque, rendendo la sezione riservata solo in apparenza.
+//
+// Un amministratore (stesso token dell'area /admin) può consultare la guida di
+// qualunque pratica con la sola P.IVA, senza conoscere l'email del referente:
+// serve per supporto e verifica, non richiede una seconda password dedicata.
 export async function POST(request) {
   let body
   try {
@@ -17,10 +21,13 @@ export async function POST(request) {
     return NextResponse.json({ error: 'Body non valido' }, { status: 400 })
   }
 
+  const auth = request.headers.get('Authorization') || ''
+  const isAdmin = auth.replace('Bearer ', '') === process.env.ADMIN_SESSION_TOKEN
+
   const piva = normalizzaPiva(body?.piva_cf)
   const email = String(body?.referente_email || '').trim().toLowerCase()
 
-  if (!piva || !email) {
+  if (!piva || (!isAdmin && !email)) {
     return NextResponse.json(
       { error: 'P.IVA ed email referente sono obbligatori' },
       { status: 400 }
@@ -29,11 +36,16 @@ export async function POST(request) {
 
   const supabase = getSupabaseAdmin()
 
-  const { data: azienda, error } = await supabase
+  let query = supabase
     .from('voucher_aziende')
     .select('id, ragione_sociale')
     .eq('piva_cf', piva)
-    .ilike('referente_email', email)
+
+  if (!isAdmin) {
+    query = query.ilike('referente_email', email)
+  }
+
+  const { data: azienda, error } = await query
     .order('created_at', { ascending: false })
     .limit(1)
     .maybeSingle()

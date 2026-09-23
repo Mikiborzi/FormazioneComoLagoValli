@@ -1,6 +1,5 @@
 import Link from "next/link";
 import QuoteCarousel from "./components/QuoteCarousel";
-import { supabase } from "@/app/lib/supabase";
 
 // ─── Data ────────────────────────────────────────────────────────────────────
 
@@ -11,6 +10,7 @@ const navItems = [
   { label: "Cerca Lavoro", href: "/servizi-lavoro" },
   { label: "Testimonianze", href: "/testimonianze" },
   { label: "Proponi un Corso", href: "/proponi-corso" },
+  { label: "Chi Siamo", href: "/#chi-siamo" },
   { label: "Contatti", href: "/#contatti" },
 ];
 
@@ -962,8 +962,10 @@ function CoursesSection() {
             <strong style={{ color: "#1a2e5a" }}>Dote Inserimento
             Lavorativo</strong>: <strong style={{ color: "#1a2e5a" }}>16 ore</strong>{" "}
             per i percorsi del Cluster 1, fino a{" "}
-            <strong style={{ color: "#1a2e5a" }}>40 ore</strong> per gli altri.
-            Se sei disoccupato in Lombardia, con la DIL sono gratuiti.
+            <strong style={{ color: "#1a2e5a" }}>40 ore</strong> per gli altri.{" "}
+            I corsi gratuiti sono disponibili per chi cerca lavoro in
+            Lombardia, finanziati da strumenti di politiche attive
+            regionali — oggi la Dote Inserimento Lavorativo.
           </p>
         </div>
 
@@ -1209,6 +1211,38 @@ function WhySection() {
   );
 }
 
+function ChiSiamoSection() {
+  return (
+    <section id="chi-siamo" className="py-10 lg:py-16 bg-white">
+      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <p
+          className="font-sans font-semibold text-sm uppercase tracking-widest mb-3"
+          style={{ color: "#2d7a4f" }}
+        >
+          Chi siamo
+        </p>
+        <h2
+          className="font-display font-bold text-3xl sm:text-4xl mb-6"
+          style={{ color: "#1a2e5a" }}
+        >
+          Due realtà, un&apos;unica offerta formativa.
+        </h2>
+        <p className="font-sans text-gray-500 text-base sm:text-lg leading-relaxed">
+          <strong style={{ color: "#1a2e5a" }}>Mestieri Lombardia Como</strong>{" "}
+          si occupa di Servizi al Lavoro e Politiche Attive sul territorio.{" "}
+          <strong style={{ color: "#1a2e5a" }}>Starting Work</strong> è un
+          ente specializzato e accreditato all&apos;erogazione di Percorsi di
+          Formazione. Le due società collaborano sinergicamente per offrire,
+          sul territorio di Como e del Centro Lago, un&apos;offerta formativa
+          innovativa e qualificata, programmata e proposta in coerenza con i
+          bisogni dei settori produttivi territoriali — condividendo le
+          stesse sedi, a Como e a Tremezzina.
+        </p>
+      </div>
+    </section>
+  );
+}
+
 function TestimonialsPreview() {
   return (
     <section id="testimonianze" className="py-10 lg:py-16 bg-white">
@@ -1285,23 +1319,7 @@ function TestimonialsPreview() {
   );
 }
 
-async function ProponCorsoSection() {
-  let categorie = [];
-
-  if (supabase) {
-    const { data } = await supabase
-      .from("categorie_formative")
-      .select("id, titolo, contatore")
-      .eq("attiva", true)
-      .order("ordine")
-      .limit(5);
-    if (data) categorie = data;
-  }
-
-  const topPercorsi = [...categorie]
-    .sort((a, b) => (b.contatore || 0) - (a.contatore || 0))
-    .slice(0, 3);
-
+function ProponCorsoSection() {
   return (
     <section id="proponi" className="py-10 lg:py-16" style={{ backgroundColor: "#f8fafc" }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -1331,72 +1349,6 @@ async function ProponCorsoSection() {
             <ArrowRight />
           </a>
         </div>
-
-        {categorie.length > 0 && (
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 mb-10">
-            {categorie.map((cat) => (
-              <div
-                key={cat.titolo}
-                className="bg-white rounded-2xl p-5 text-center shadow-sm hover:shadow-md transition-shadow duration-200"
-                style={{ border: "1px solid #e2e8f0" }}
-              >
-                <p
-                  className="font-sans font-semibold text-sm mb-2"
-                  style={{ color: "#1a2e5a" }}
-                >
-                  {cat.titolo}
-                </p>
-                <span
-                  className="inline-block font-sans font-bold text-xs px-3 py-1 rounded-full"
-                  style={{ backgroundColor: "rgba(45,122,79,0.1)", color: "#2d7a4f" }}
-                >
-                  {cat.contatore || 0} {cat.contatore === 1 ? "richiesta" : "richieste"}
-                </span>
-              </div>
-            ))}
-          </div>
-        )}
-
-        {topPercorsi.length > 0 && (
-          <div>
-            <p
-              className="font-sans font-semibold text-sm text-center uppercase tracking-widest mb-5"
-              style={{ color: "#92400e" }}
-            >
-              I percorsi più richiesti
-            </p>
-            <div className="flex flex-col sm:flex-row justify-center gap-4 max-w-3xl mx-auto">
-              {topPercorsi.map((cat, i) => (
-                <div
-                  key={cat.titolo}
-                  className="flex-1 bg-white rounded-2xl p-5 flex items-center gap-4 shadow-sm"
-                  style={{ border: "1px solid #fed7aa" }}
-                >
-                  <span
-                    className="w-8 h-8 rounded-full flex items-center justify-center font-display font-bold text-sm shrink-0 text-white"
-                    style={{ backgroundColor: "#c8941a" }}
-                  >
-                    {i + 1}
-                  </span>
-                  <div className="flex-1 min-w-0">
-                    <p
-                      className="font-sans font-semibold text-sm"
-                      style={{ color: "#1a2e5a" }}
-                    >
-                      {cat.titolo}
-                    </p>
-                    <span
-                      className="font-sans text-xs font-bold"
-                      style={{ color: "#c8941a" }}
-                    >
-                      {cat.contatore || 0} {cat.contatore === 1 ? "richiesta" : "richieste"}
-                    </span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
       </div>
     </section>
   );
@@ -1410,9 +1362,19 @@ function Footer() {
       href: "tel:+390318123796",
     },
     {
-      label: "Email",
+      label: "Email Mestieri Lombardia",
       value: "como@mestierilombardia.it",
       href: "mailto:como@mestierilombardia.it",
+    },
+    {
+      label: "Starting Work",
+      value: "+39 031 4490737",
+      href: "tel:+390314490737",
+    },
+    {
+      label: "Email Starting Work",
+      value: "info@startingwork.it",
+      href: "mailto:info@startingwork.it",
     },
   ];
 
@@ -1638,6 +1600,7 @@ export default function HomePage() {
         <QuoteCarousel />
         <WhySection />
         <TestimonialsPreview />
+        <ChiSiamoSection />
       </main>
       <Footer />
     </>

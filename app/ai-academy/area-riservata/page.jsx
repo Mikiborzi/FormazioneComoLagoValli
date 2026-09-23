@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 
 // I contenuti della guida NON sono importati qui: arrivano dall'API solo dopo
@@ -19,16 +19,48 @@ export default function AreaRiservataPage() {
   const [errore, setErrore] = useState(null);
   const [loading, setLoading] = useState(false);
   const [apertaFaq, setApertaFaq] = useState(null);
+  const [modalitaAdmin, setModalitaAdmin] = useState(false);
+  const [adminPassword, setAdminPassword] = useState("");
+  const [adminAutenticato, setAdminAutenticato] = useState(false);
+
+  // Se l'amministratore ha già una sessione aperta in /admin nella stessa
+  // scheda, riusiamo lo stesso token invece di richiedere di nuovo la password.
+  useEffect(() => {
+    if (sessionStorage.getItem("admin_token")) setAdminAutenticato(true);
+  }, []);
 
   async function accedi(e) {
     e.preventDefault();
     setErrore(null);
     setLoading(true);
     try {
+      let headers = { "Content-Type": "application/json" };
+      let body = JSON.stringify(credenziali);
+
+      if (modalitaAdmin) {
+        let token = sessionStorage.getItem("admin_token");
+        if (!token) {
+          const authRes = await fetch("/api/admin/auth", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ password: adminPassword }),
+          });
+          if (!authRes.ok) {
+            setErrore("Password amministratore non corretta.");
+            return;
+          }
+          ({ token } = await authRes.json());
+          sessionStorage.setItem("admin_token", token);
+          setAdminAutenticato(true);
+        }
+        headers.Authorization = `Bearer ${token}`;
+        body = JSON.stringify({ piva_cf: credenziali.piva_cf });
+      }
+
       const res = await fetch("/api/voucher/guida", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(credenziali),
+        headers,
+        body,
       });
       const dati = await res.json();
       if (!res.ok) {
@@ -75,7 +107,9 @@ export default function AreaRiservataPage() {
           >
             <div className="mb-5">
               <label className="block font-sans text-sm font-medium mb-2" style={{ color: CREAM }}>
-                P.IVA / Codice Fiscale dell&apos;impresa
+                {modalitaAdmin
+                  ? "P.IVA / Codice Fiscale della pratica da consultare"
+                  : "P.IVA / Codice Fiscale dell'impresa"}
               </label>
               <input
                 required
@@ -85,19 +119,42 @@ export default function AreaRiservataPage() {
                 style={{ backgroundColor: "rgba(0,0,0,0.35)", border: "1px solid rgba(236,232,225,0.2)", color: CREAM }}
               />
             </div>
-            <div className="mb-6">
-              <label className="block font-sans text-sm font-medium mb-2" style={{ color: CREAM }}>
-                Email del referente
-              </label>
-              <input
-                required
-                type="email"
-                value={credenziali.referente_email}
-                onChange={(e) => setCredenziali({ ...credenziali, referente_email: e.target.value })}
-                className="w-full rounded-xl px-4 py-3 font-sans text-base"
-                style={{ backgroundColor: "rgba(0,0,0,0.35)", border: "1px solid rgba(236,232,225,0.2)", color: CREAM }}
-              />
-            </div>
+            {modalitaAdmin ? (
+              adminAutenticato ? (
+                <p className="font-sans text-sm mb-6" style={{ color: "rgba(236,232,225,0.6)" }}>
+                  Sessione amministratore già attiva: inserisci solo la P.IVA della
+                  pratica da consultare.
+                </p>
+              ) : (
+                <div className="mb-6">
+                  <label className="block font-sans text-sm font-medium mb-2" style={{ color: CREAM }}>
+                    Password amministratore
+                  </label>
+                  <input
+                    required
+                    type="password"
+                    value={adminPassword}
+                    onChange={(e) => setAdminPassword(e.target.value)}
+                    className="w-full rounded-xl px-4 py-3 font-sans text-base"
+                    style={{ backgroundColor: "rgba(0,0,0,0.35)", border: "1px solid rgba(236,232,225,0.2)", color: CREAM }}
+                  />
+                </div>
+              )
+            ) : (
+              <div className="mb-6">
+                <label className="block font-sans text-sm font-medium mb-2" style={{ color: CREAM }}>
+                  Email del referente
+                </label>
+                <input
+                  required
+                  type="email"
+                  value={credenziali.referente_email}
+                  onChange={(e) => setCredenziali({ ...credenziali, referente_email: e.target.value })}
+                  className="w-full rounded-xl px-4 py-3 font-sans text-base"
+                  style={{ backgroundColor: "rgba(0,0,0,0.35)", border: "1px solid rgba(236,232,225,0.2)", color: CREAM }}
+                />
+              </div>
+            )}
 
             {errore && (
               <p
@@ -120,7 +177,19 @@ export default function AreaRiservataPage() {
                 border: "none",
               }}
             >
-              {loading ? "Verifica in corso…" : "Entra nell'area riservata"}
+              {loading ? "Verifica in corso…" : modalitaAdmin ? "Apri la pratica" : "Entra nell'area riservata"}
+            </button>
+
+            <button
+              type="button"
+              onClick={() => {
+                setModalitaAdmin((v) => !v);
+                setErrore(null);
+              }}
+              className="w-full font-sans text-xs mt-4"
+              style={{ background: "none", border: "none", cursor: "pointer", color: "rgba(236,232,225,0.4)" }}
+            >
+              {modalitaAdmin ? "← Accedi come azienda" : "Accedi come amministratore"}
             </button>
           </form>
 

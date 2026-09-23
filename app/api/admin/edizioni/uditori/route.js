@@ -14,41 +14,58 @@ function verificaToken(request) {
   return token === process.env.ADMIN_SESSION_TOKEN
 }
 
+// GET — elenco uditori, opzionalmente filtrato per edizione (?edizione_id=...)
 export async function GET(request) {
   if (!verificaToken(request)) {
     return NextResponse.json({ error: 'Non autorizzato' }, { status: 401 })
   }
+  const edizioneId = new URL(request.url).searchParams.get('edizione_id')
   const supabase = getSupabase()
-  const { data, error } = await supabase
-    .from('iscrizioni')
-    .select('*')
-    .order('created_at', { ascending: false })
+  let query = supabase.from('edizione_uditori').select('*').order('created_at', { ascending: true })
+  if (edizioneId) query = query.eq('edizione_id', edizioneId)
+  const { data, error } = await query
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })
-  return NextResponse.json(data)
+  return NextResponse.json({ uditori: data || [] })
 }
 
-export async function PATCH(request) {
+// POST — aggiunge un uditore a un'edizione. Body: { edizione_id, nome, cognome, email?, telefono?, note? }
+export async function POST(request) {
   if (!verificaToken(request)) {
     return NextResponse.json({ error: 'Non autorizzato' }, { status: 401 })
   }
-  const supabase = getSupabase()
   const body = await request.json()
-  const { id, ...fields } = body
-  if (!id) return NextResponse.json({ error: 'id mancante' }, { status: 400 })
-  const { error } = await supabase.from('iscrizioni').update(fields).eq('id', id)
+  if (!body?.edizione_id || !body?.nome || !body?.cognome) {
+    return NextResponse.json({ error: 'edizione_id, nome e cognome sono obbligatori' }, { status: 400 })
+  }
+
+  const supabase = getSupabase()
+  const { data, error } = await supabase
+    .from('edizione_uditori')
+    .insert({
+      edizione_id: body.edizione_id,
+      nome: body.nome,
+      cognome: body.cognome,
+      email: body.email || null,
+      telefono: body.telefono || null,
+      note: body.note || null,
+    })
+    .select()
+    .single()
+
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })
-  return NextResponse.json({ ok: true })
+  return NextResponse.json({ uditore: data })
 }
 
-// DELETE — elimina definitivamente un candidato. Body: { id }
+// DELETE — rimuove un uditore. Body: { id }
 export async function DELETE(request) {
   if (!verificaToken(request)) {
     return NextResponse.json({ error: 'Non autorizzato' }, { status: 401 })
   }
   const { id } = await request.json()
   if (!id) return NextResponse.json({ error: 'id mancante' }, { status: 400 })
+
   const supabase = getSupabase()
-  const { error } = await supabase.from('iscrizioni').delete().eq('id', id)
+  const { error } = await supabase.from('edizione_uditori').delete().eq('id', id)
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })
   return NextResponse.json({ ok: true })
 }

@@ -7,6 +7,7 @@ export default function IftsCandidatiPage() {
     nome: '', cognome: '', email: '', telefono: '',
     data_nascita: '', titolo_studio: '', anno_titolo: '',
     indirizzo_interesse: '', ha_azienda: false, nome_azienda: '', note: '',
+    consenso_gdpr: false, newsletter: false,
   })
   const [stato, setStato] = useState('idle') // idle | loading | ok | error
   const [errore, setErrore] = useState('')
@@ -19,6 +20,10 @@ export default function IftsCandidatiPage() {
     e.preventDefault()
     if (!form.nome || !form.cognome || !form.email || !form.indirizzo_interesse || !form.titolo_studio) {
       setErrore('Compila tutti i campi obbligatori.')
+      return
+    }
+    if (!form.consenso_gdpr) {
+      setErrore('Il consenso al trattamento dei dati è obbligatorio.')
       return
     }
     setStato('loading')
@@ -213,6 +218,34 @@ export default function IftsCandidatiPage() {
             />
           </div>
 
+          {/* Privacy e consensi */}
+          <div className="space-y-3">
+            <label className="flex items-start gap-3 cursor-pointer">
+              <input
+                type="checkbox" checked={form.consenso_gdpr}
+                onChange={e => set('consenso_gdpr', e.target.checked)}
+                className="mt-1 rounded" required
+              />
+              <span className="text-sm text-gray-700 leading-relaxed">
+                Ho letto e accetto il trattamento dei miei dati personali ai sensi dell&apos;art. 13 GDPR
+                per le finalità descritte nella{' '}
+                <Link href="/privacy-policy" target="_blank" className="underline">informativa sulla privacy</Link>,
+                necessario per essere ricontattato riguardo il percorso IFTS. *
+              </span>
+            </label>
+            <label className="flex items-start gap-3 cursor-pointer">
+              <input
+                type="checkbox" checked={form.newsletter}
+                onChange={e => set('newsletter', e.target.checked)}
+                className="mt-1 rounded"
+              />
+              <span className="text-sm text-gray-700 leading-relaxed">
+                Desidero ricevere comunicazioni su altri corsi, servizi di orientamento
+                professionale e iniziative formative (facoltativo).
+              </span>
+            </label>
+          </div>
+
           {errore && (
             <p className="text-sm text-red-600 bg-red-50 px-4 py-3 rounded-lg">{errore}</p>
           )}
@@ -224,11 +257,6 @@ export default function IftsCandidatiPage() {
           >
             {stato === 'loading' ? 'Invio in corso...' : 'Invia la candidatura'}
           </button>
-
-          <p className="text-xs text-gray-400 text-center">
-            I tuoi dati sono trattati nel rispetto della normativa GDPR.{' '}
-            <Link href="/privacy-policy" className="underline">Privacy policy</Link>
-          </p>
 
         </form>
       </div>

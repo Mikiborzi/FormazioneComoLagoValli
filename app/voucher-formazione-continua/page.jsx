@@ -28,6 +28,7 @@ const AZIENDA_VUOTA = {
   ragione_sociale: '', piva_cf: '', codice_ateco: '', sede_operativa: '', numero_addetti: '',
   referente_nome: '', referente_cognome: '', referente_email: '', referente_telefono: '',
   legale_rappresentante_nome: '', legale_rappresentante_cognome: '', legale_rappresentante_cf: '',
+  consenso_gdpr: false, newsletter: false,
 }
 
 const PARTECIPANTE_VUOTO = {
@@ -35,6 +36,7 @@ const PARTECIPANTE_VUOTO = {
   cittadinanza: '', titolo_studio: '', condizione_occupazionale: 'occupato', condizione_vulnerabilita: '',
   indirizzo: '', comune: '', provincia: '', cap: '', tipologia_rapporto: '', numero_cob: '',
   data_assunzione: '', orario_lavoro: '', partita_iva: '', email: '', telefono: '', privacy_firmata: false,
+  consenso_gdpr: false,
 }
 
 const field = 'w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500'
@@ -58,7 +60,10 @@ export default function VoucherFormazioneContinua() {
   // partModal: null | { mode: 'new'|'edit', data }
   const [partModal, setPartModal] = useState(null)
 
-  const handleAzienda = (e) => setAzienda({ ...azienda, [e.target.name]: e.target.value })
+  const handleAzienda = (e) => {
+    const { name, type, checked, value } = e.target
+    setAzienda({ ...azienda, [name]: type === 'checkbox' ? checked : value })
+  }
   const handlePart = (e) => {
     const val = e.target.type === 'checkbox' ? e.target.checked : e.target.value
     setPartModal((m) => ({ ...m, data: { ...m.data, [e.target.name]: val } }))
@@ -77,6 +82,10 @@ export default function VoucherFormazioneContinua() {
   // ── Nuova pratica: crea azienda ────────────────────────────────────────────
   const creaAzienda = async (e) => {
     e.preventDefault()
+    if (!azienda.consenso_gdpr) {
+      setErrore('Il consenso al trattamento dei dati è obbligatorio per procedere.')
+      return
+    }
     setLoading(true); setErrore(null)
     const { ok, status, json } = await postJSON('/api/voucher/azienda', azienda)
     setLoading(false)
@@ -134,6 +143,10 @@ export default function VoucherFormazioneContinua() {
 
   const salvaPart = async (e) => {
     e.preventDefault()
+    if (!partModal.data.consenso_gdpr) {
+      setErrore('Il consenso al trattamento dei dati del partecipante è obbligatorio.')
+      return
+    }
     setLoading(true); setErrore(null)
     if (partModal.mode === 'new') {
       const { ok, json } = await postJSON('/api/voucher/partecipante', {
@@ -261,6 +274,26 @@ export default function VoucherFormazioneContinua() {
         {view === 'nuova' && (
           <form onSubmit={creaAzienda} className="space-y-8">
             <AziendaFields azienda={azienda} onChange={handleAzienda} />
+            <div className={`${card} space-y-3`}>
+              <h3 className="text-sm font-bold text-gray-900 mb-1">Privacy e consensi</h3>
+              <label className="flex items-start gap-3 cursor-pointer">
+                <input name="consenso_gdpr" type="checkbox" checked={azienda.consenso_gdpr} onChange={handleAzienda} required className="mt-1" />
+                <span className="text-sm text-gray-700">
+                  Dichiaro di accettare, per conto dell&apos;azienda, il trattamento dei dati personali
+                  raccolti in questa pratica ai sensi dell&apos;art. 13 GDPR, secondo quanto descritto
+                  nella{' '}
+                  <Link href="/privacy-policy" target="_blank" className="underline text-blue-700">informativa sulla privacy</Link>,
+                  necessario per gestire la richiesta di voucher Formazione Continua. *
+                </span>
+              </label>
+              <label className="flex items-start gap-3 cursor-pointer">
+                <input name="newsletter" type="checkbox" checked={azienda.newsletter} onChange={handleAzienda} className="mt-1" />
+                <span className="text-sm text-gray-700">
+                  Desideriamo ricevere comunicazioni su altri corsi, servizi di orientamento
+                  professionale e iniziative formative di Starting Work (facoltativo).
+                </span>
+              </label>
+            </div>
             <div className="flex gap-3 items-center">
               <button type="button" onClick={() => { setErrore(null); setView('landing') }} className="text-blue-700 underline text-sm">← Indietro</button>
               <button type="submit" disabled={loading} className={`${btnPrimary} ml-auto`}>
@@ -593,6 +626,15 @@ function PartecipanteFields({ data, onChange }) {
           <div className="grid grid-cols-2 gap-4">
             <div><label className={labelCls}>Email personale *</label><input name="email" type="email" value={data.email} onChange={onChange} required className={field} /></div>
             <div><label className={labelCls}>Telefono cellulare *</label><input name="telefono" value={data.telefono} onChange={onChange} required className={field} /></div>
+          </div>
+          <div className="flex items-start gap-3">
+            <input name="consenso_gdpr" type="checkbox" checked={data.consenso_gdpr} onChange={onChange} required className="mt-1" />
+            <label className="text-sm text-gray-700">
+              Il partecipante acconsente al trattamento dei propri dati personali da parte di
+              Starting Work ai sensi dell&apos;art. 13 GDPR, secondo quanto descritto nella{' '}
+              <Link href="/privacy-policy" target="_blank" className="underline text-blue-700">informativa sulla privacy</Link>,
+              necessario per gestire questa pratica voucher. *
+            </label>
           </div>
           <div className="flex items-start gap-3">
             <input name="privacy_firmata" type="checkbox" checked={data.privacy_firmata} onChange={onChange} required className="mt-1" />

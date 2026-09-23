@@ -4,14 +4,15 @@ import { useState } from "react";
 
 const navItems = [
   { label: "Home", href: "/" },
+  { label: "Chi Siamo", href: "/#chi-siamo" },
   { label: "Come Funziona", href: "/#come-funziona" },
   { label: "I Corsi", href: "/#corsi" },
   { label: "AI Academy", href: "/ai-academy" },
   { label: "Percorsi IFTS", href: "/ifts" },
   { label: "Cerca Lavoro", href: "/servizi-lavoro" },
-  { label: "Testimonianze", href: "/testimonianze" },
   { label: "Proponi un Corso", href: "/proponi-corso" },
   { label: "Contatti", href: "/#contatti" },
+  { label: "Testimonianze", href: "/testimonianze" },
 ];
 
 export default function MobileNav() {

@@ -32,8 +32,13 @@ export async function PATCH(request) {
   const supabase = getSupabase()
 
   if (body.target === 'contatto') {
-    const { id, note } = body
-    const { error } = await supabase.from('contatti').update({ note }).eq('id', id)
+    const { id, note, stato_relazione, prossimo_contatto, responsabile } = body
+    const update = {}
+    if (note !== undefined) update.note = note
+    if (stato_relazione !== undefined) update.stato_relazione = stato_relazione
+    if (prossimo_contatto !== undefined) update.prossimo_contatto = prossimo_contatto || null
+    if (responsabile !== undefined) update.responsabile = responsabile
+    const { error } = await supabase.from('contatti').update(update).eq('id', id)
     if (error) return NextResponse.json({ error: error.message }, { status: 500 })
   } else if (body.target === 'interazione') {
     const { id, stato, note_operatore } = body

@@ -681,6 +681,33 @@ export default function FormIscrizione({ corsoPreselezionato = null, onSuccess =
         );
       }
 
+      // Fire-and-forget: fa confluire il contatto nel CRM unificato (tab "CRM Contatti"
+      // in admin). Non deve mai bloccare l'iscrizione già andata a buon fine sopra.
+      (async () => {
+        try {
+          const email = formData.email.trim().toLowerCase();
+          const { data: contatto } = await supabase
+            .from("contatti")
+            .upsert(
+              { email, nome: formData.nome.trim(), cognome: formData.cognome.trim(), telefono: formData.telefono.trim() },
+              { onConflict: "email", ignoreDuplicates: false }
+            )
+            .select("id")
+            .maybeSingle();
+          if (contatto?.id) {
+            await supabase.from("interazioni").insert({
+              contatto_id: contatto.id,
+              canale: "gol",
+              tipo: "iscrizione",
+              oggetto: selectedCourses.join(", ") || null,
+              dati: { corsi_interesse: selectedCourses, idoneo_gol: idoneo },
+            });
+          }
+        } catch (err) {
+          console.error("Log CRM iscrizione corso:", err);
+        }
+      })();
+
       // Fire-and-forget: incrementa contatore interesse per ogni corso selezionato
       (async () => {
         for (const slug of selectedCourses) {
@@ -1304,9 +1331,9 @@ export default function FormIscrizione({ corsoPreselezionato = null, onSuccess =
               style={{ accentColor: "#1a2e5a" }}
             />
             <span className="font-sans text-sm text-gray-700 leading-relaxed">
-              Desidero ricevere aggiornamenti sui nuovi corsi e le attività di
-              Mestieri Lombardia Como (opzionale, disiscrizione
-              sempre possibile).
+              Desidero ricevere comunicazioni su nuovi corsi, servizi di orientamento
+              professionale e altre iniziative formative di Mestieri Lombardia Como
+              (facoltativo, disiscrizione sempre possibile).
             </span>
           </label>
         </div>

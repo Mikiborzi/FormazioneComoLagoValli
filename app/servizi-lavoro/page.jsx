@@ -131,6 +131,32 @@ export default function ServiziLavoro() {
         )
       }
 
+      // Fire-and-forget: fa confluire il contatto nel CRM unificato (tab "CRM Contatti"
+      // in admin). Non deve mai bloccare l'iscrizione già andata a buon fine sopra.
+      ;(async () => {
+        try {
+          const { data: contatto } = await supabase
+            .from('contatti')
+            .upsert(
+              { email: payload.email, nome: payload.nome, cognome: payload.cognome, telefono: payload.telefono },
+              { onConflict: 'email', ignoreDuplicates: false }
+            )
+            .select('id')
+            .maybeSingle()
+          if (contatto?.id) {
+            await supabase.from('interazioni').insert({
+              contatto_id: contatto.id,
+              canale: 'servizi_lavoro',
+              tipo: 'iscrizione',
+              oggetto: 'Servizi Lavoro / DIL',
+              dati: { idoneo_gol: idoneoDil, interessato_formazione: form.interessato_formazione },
+            })
+          }
+        } catch (err) {
+          console.error('Log CRM servizi-lavoro:', err)
+        }
+      })()
+
       setStep('success')
     } catch (err) {
       console.error(err)
@@ -441,7 +467,9 @@ export default function ServiziLavoro() {
             <label style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', cursor: 'pointer', marginBottom: '16px' }}>
               <input type="checkbox" checked={form.newsletter} onChange={e => set('newsletter', e.target.checked)} style={{ width: '18px', height: '18px', marginTop: '2px', accentColor: '#1a2e5a' }} />
               <span style={{ fontSize: '13px', color: '#6b7280', lineHeight: '1.5' }}>
-                Acconsento a ricevere aggiornamenti su nuovi corsi e opportunità lavorative (facoltativo)
+                Acconsento a ricevere comunicazioni su nuovi corsi, opportunità
+                lavorative, servizi di orientamento professionale e altre iniziative
+                formative (facoltativo)
               </span>
             </label>
 

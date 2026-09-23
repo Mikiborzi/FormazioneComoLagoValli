@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Fraunces } from "next/font/google";
+import AllegatiVerificati from "./AllegatiVerificati";
 
 // Identità visiva di AI Academy, ripresa dal sito del corso: fondo quasi nero,
 // carta calda, accento terracotta, display serif Fraunces.
@@ -730,6 +731,8 @@ export default function AiAcademyPage() {
                   ))}
                 </dl>
               </div>
+
+              <AllegatiVerificati />
             </div>
 
             {/* Preregistrazione: è il punto di conversione della pagina */}

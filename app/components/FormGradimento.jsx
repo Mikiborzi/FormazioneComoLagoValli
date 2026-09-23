@@ -667,7 +667,7 @@ export default function FormGradimento() {
             <p style={{ fontSize: '0.72rem', color: '#9ca3af', textAlign: 'center', marginTop: '1rem', lineHeight: 1.6 }}>
               I tuoi dati sono trattati nel rispetto della normativa vigente (GDPR e Codice della Privacy italiano)
               secondo quanto indicato nella nostra{' '}
-              <a href="/privacy" style={{ color: '#9ca3af', textDecoration: 'underline' }}>Informativa sulla Privacy</a>.
+              <a href="/privacy-policy" style={{ color: '#9ca3af', textDecoration: 'underline' }}>Informativa sulla Privacy</a>.
             </p>
           </div>
         )}
