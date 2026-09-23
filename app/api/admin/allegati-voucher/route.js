@@ -60,14 +60,14 @@ export async function POST(request) {
   const path = `${codice.replace(/\./g, '_')}/v${prossimaVersione}_${Date.now()}.${estensione}`
   const buffer = Buffer.from(await file.arrayBuffer())
   const { error: uploadError } = await supabase.storage
-    .from('allegati-voucher')
+    .from('allegati_voucher')
     .upload(path, buffer, {
       contentType: file.type || 'application/octet-stream',
       upsert: false,
     })
   if (uploadError) return NextResponse.json({ error: uploadError.message }, { status: 500 })
 
-  const { data: urlData } = supabase.storage.from('allegati-voucher').getPublicUrl(path)
+  const { data: urlData } = supabase.storage.from('allegati_voucher').getPublicUrl(path)
 
   // Se la nuova versione va resa attiva, disattiva le precedenti dello stesso codice
   if (rendi_attivo) {
@@ -125,11 +125,11 @@ export async function DELETE(request) {
   // Recupera il file_url per estrarre il path e cancellarlo dallo storage
   const { data: record } = await supabase.from('allegati_voucher').select('file_url').eq('id', id).single()
   if (record?.file_url) {
-    const marker = '/allegati-voucher/'
+    const marker = '/allegati_voucher/'
     const idx = record.file_url.indexOf(marker)
     if (idx !== -1) {
       const path = record.file_url.substring(idx + marker.length)
-      await supabase.storage.from('allegati-voucher').remove([path])
+      await supabase.storage.from('allegati_voucher').remove([path])
     }
   }
 
