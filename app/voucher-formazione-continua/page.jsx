@@ -28,6 +28,9 @@ const AZIENDA_VUOTA = {
   ragione_sociale: '', piva_cf: '', codice_ateco: '', sede_operativa: '', numero_addetti: '',
   referente_nome: '', referente_cognome: '', referente_email: '', referente_telefono: '',
   legale_rappresentante_nome: '', legale_rappresentante_cognome: '', legale_rappresentante_cf: '',
+  pec: '', iban: '', ccnl: '',
+  polizza_catastrofale: '', polizza_compagnia: '', polizza_scadenza: '',
+  voucher_precedenti_azienda: '',
   consenso_gdpr: false, newsletter: false,
 }
 
@@ -542,6 +545,77 @@ function AziendaFields({ azienda, onChange, bare = false, pivaBloccata = false }
             <label className={labelCls}>Codice Fiscale *</label>
             <input name="legale_rappresentante_cf" value={azienda.legale_rappresentante_cf} onChange={onChange} required className={field} />
           </div>
+        </div>
+      </div>
+
+      <div className={bare ? '' : card}>
+        <h3 className="text-lg font-semibold text-gray-900 mb-1">Comunicazioni e pagamenti</h3>
+        <p className="text-sm text-gray-500 mb-4">La PEC è obbligatoria per ricevere le comunicazioni di Regione Lombardia. L&apos;IBAN serve per l&apos;accredito della quota pubblica.</p>
+        <div className="space-y-4">
+          <div>
+            <label className={labelCls}>PEC azienda</label>
+            <input name="pec" type="email" value={azienda.pec} onChange={onChange} placeholder="es. azienda@pec.it" className={field} />
+          </div>
+          <div>
+            <label className={labelCls}>IBAN azienda</label>
+            <input name="iban" value={azienda.iban} onChange={onChange} placeholder="IT00 X0000 00000 000000000000" className={field} />
+          </div>
+          <div>
+            <label className={labelCls}>CCNL applicato</label>
+            <input name="ccnl" value={azienda.ccnl} onChange={onChange} placeholder="es. Commercio, Metalmeccanica, Terziario, Turismo…" className={field} />
+          </div>
+        </div>
+      </div>
+
+      <div className={bare ? '' : card}>
+        <h3 className="text-lg font-semibold text-gray-900 mb-1">Polizza danni catastrofali</h3>
+        <p className="text-sm text-gray-500 mb-4">
+          Ai sensi della Legge 213/2023 (art. 1 commi 101-112), le imprese devono aver stipulato
+          una polizza contro rischi catastrofali per accedere a contributi pubblici. I liberi
+          professionisti sono esonerati.
+        </p>
+        <div className="space-y-4">
+          <div>
+            <label className={labelCls}>Stato della polizza</label>
+            <select name="polizza_catastrofale" value={azienda.polizza_catastrofale} onChange={onChange} className={field}>
+              <option value="">Seleziona…</option>
+              <option value="stipulata">Sì, polizza già stipulata</option>
+              <option value="in_corso">In fase di stipula</option>
+              <option value="da_stipulare">Non ancora stipulata</option>
+              <option value="esonerato">Esonerato (libero professionista / ditta individuale)</option>
+            </select>
+          </div>
+          {azienda.polizza_catastrofale === 'stipulata' && (
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className={labelCls}>Compagnia assicurativa</label>
+                <input name="polizza_compagnia" value={azienda.polizza_compagnia} onChange={onChange} placeholder="es. Generali, Allianz…" className={field} />
+              </div>
+              <div>
+                <label className={labelCls}>Scadenza polizza</label>
+                <input name="polizza_scadenza" type="date" value={azienda.polizza_scadenza} onChange={onChange} className={field} />
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+
+      <div className={bare ? '' : card}>
+        <h3 className="text-lg font-semibold text-gray-900 mb-1">Capienza voucher</h3>
+        <p className="text-sm text-gray-500 mb-4">
+          Il tetto è € 50.000 per impresa nell&apos;anno solare. Se hai già usato voucher
+          Formazione Continua quest&apos;anno, indica la capienza già consumata.
+        </p>
+        <div>
+          <label className={labelCls}>Voucher già utilizzati nell&apos;anno solare</label>
+          <textarea
+            name="voucher_precedenti_azienda"
+            value={azienda.voucher_precedenti_azienda}
+            onChange={onChange}
+            rows={2}
+            placeholder="es. 12.000 € già utilizzati (edizione precedente Formazione Continua) — oppure lascia vuoto se nessuno"
+            className={field}
+          />
         </div>
       </div>
     </div>

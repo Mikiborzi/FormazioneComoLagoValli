@@ -1378,6 +1378,18 @@ export default function AdminPage() {
 
           return (
             <div>
+              {/* Guida operativa alla preregistrazione */}
+              <div style={{ background:'#eff6ff', border:'1px solid #bfdbfe', borderRadius:'10px', padding:'14px 20px', marginBottom:'16px', display:'flex', alignItems:'center', justifyContent:'space-between', gap:'16px' }}>
+                <div>
+                  <p style={{ fontSize:'14px', fontWeight:'700', color:'#1e40af', margin:'0 0 2px' }}>📋 Guida alla preregistrazione voucher</p>
+                  <p style={{ fontSize:'12px', color:'#1e3a8a', margin:0 }}>Traccia operativa dei campi del modulo con spiegazioni per l&apos;operatore</p>
+                </div>
+                <a href="/admin/guida-preregistrazione" target="_blank" rel="noopener noreferrer"
+                  style={{ background:'#1d4ed8', color:'white', padding:'8px 16px', borderRadius:'6px', fontSize:'13px', fontWeight:'600', textDecoration:'none', whiteSpace:'nowrap' }}>
+                  Apri guida →
+                </a>
+              </div>
+
               {/* Sotto-sezioni Voucher */}
               <div style={{ display:'flex', gap:'6px', marginBottom:'20px', borderBottom:'1px solid #e2e8f0', paddingBottom:'2px' }}>
                 {SOTTOSEZIONI_V.map(s => (

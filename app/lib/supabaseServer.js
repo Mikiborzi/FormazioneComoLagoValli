@@ -58,6 +58,8 @@ export const CAMPI_AZIENDA = [
   'ragione_sociale', 'piva_cf', 'codice_ateco', 'sede_operativa', 'numero_addetti',
   'referente_nome', 'referente_cognome', 'referente_email', 'referente_telefono',
   'legale_rappresentante_nome', 'legale_rappresentante_cognome', 'legale_rappresentante_cf',
+  'pec', 'iban', 'ccnl', 'polizza_catastrofale', 'polizza_compagnia', 'polizza_scadenza',
+  'voucher_precedenti_azienda',
 ]
 
 // In modifica la P.IVA/CF non è toccabile: è l'identità della pratica e la
