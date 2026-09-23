@@ -33,6 +33,7 @@ const navSezioni = [
   { label: "Programma e Investimento", href: "#programma" },
   { label: "I coach", href: "#squadra" },
   { label: "Preregistrazione", href: "#preregistrazione" },
+  { label: "Finanziamento FSE+", href: "#finanziamento" },
   { label: "Area riservata", href: "/ai-academy/area-riservata" },
   { label: "Contatti", href: "#contatti" },
 ];
@@ -956,6 +957,58 @@ export default function AiAcademyPage() {
             >
               Ne ha parlato La Provincia di Como. Leggi l&apos;articolo →
             </a>
+          </div>
+        </div>
+      </section>
+
+      {/* ── Cofinanziamento FSE+ / Regione Lombardia ───────────────── */}
+      <section id="finanziamento" className="px-5 py-16 sm:py-24 scroll-mt-32" style={{ backgroundColor: "#f4f1ea" }}>
+        <div className="max-w-4xl mx-auto">
+          <Eyebrow>Un percorso finanziato dal Fondo Sociale Europeo</Eyebrow>
+          <h2
+            className="font-bold text-3xl sm:text-4xl leading-tight mb-6 mt-3"
+            style={{ fontFamily: "var(--font-fraunces), Georgia, serif", color: INK }}
+          >
+            Cofinanziato dall&apos;Unione europea e da Regione Lombardia.
+          </h2>
+          <div className="font-sans text-base sm:text-lg leading-relaxed space-y-4" style={{ color: "#44403c" }}>
+            <p>
+              AI Academy è realizzato da Starting Work nell&apos;ambito del{" "}
+              <strong>Programma Regionale FSE+ 2021-2027 di Regione Lombardia</strong>,
+              Priorità 4 «Occupazione» — Obiettivo Specifico ESO 4.4 «Adattamento di
+              lavoratori, imprese e imprenditori ai cambiamenti».
+            </p>
+            <p>
+              Il percorso è finanziabile tramite il <strong>Voucher Formazione Continua</strong> —
+              Avviso adottato con <strong>Decreto della Direzione Generale Istruzione,
+              Formazione e Lavoro n. 8809 del 1° luglio 2026</strong> — che permette a lavoratori
+              e imprese di finanziare percorsi di formazione professionale continua a valere
+              sulle risorse del Programma Regionale.
+            </p>
+            <p>
+              Il Fondo Sociale Europeo Plus (FSE+), istituito con{" "}
+              <strong>Regolamento (UE) 2021/1057</strong>, è il principale strumento
+              dell&apos;Unione europea per investire nelle persone: sostiene occupazione di
+              qualità, competenze, inclusione sociale e transizioni verso un&apos;economia più
+              equa e resiliente.
+            </p>
+            <p className="text-sm pt-2" style={{ color: "#78716c" }}>
+              AI Academy è iscritta al <strong>Catalogo Formazione Continua 2026</strong> di
+              Regione Lombardia con codice <strong>17257</strong>. Starting Work Impresa Sociale
+              S.r.l. è operatore accreditato ai servizi di formazione (sez. B) di Regione
+              Lombardia — Albo n. 1363 del 20 luglio 2023.
+            </p>
+          </div>
+
+          {/* Fascia loghi FSE+ */}
+          <div className="mt-10 pt-8 border-t" style={{ borderColor: "rgba(28,25,23,0.1)" }}>
+            <img
+              src="/loghi/testata-fse-loghi.png"
+              srcSet="/loghi/testata-fse-loghi.png 1x, /loghi/testata-fse-loghi@2x.png 2x"
+              alt="Loghi istituzionali: Unione europea (cofinanziato), Repubblica Italiana, Regione Lombardia, Programma Regionale FSE+ 2021-2027"
+              className="w-full h-auto max-w-3xl mx-auto block"
+              style={{ maxHeight: "80px", objectFit: "contain" }}
+            />
           </div>
         </div>
       </section>

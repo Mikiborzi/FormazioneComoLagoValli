@@ -413,6 +413,26 @@ export default function AreaRiservataPage() {
         </div>
       </div>
 
+      {/* Fascia loghi istituzionali */}
+      <div className="px-5 py-10" style={{ backgroundColor: "#f4f1ea", borderTop: "1px solid rgba(28,25,23,0.08)" }}>
+        <div className="max-w-4xl mx-auto">
+          <p className="font-sans text-xs uppercase tracking-widest text-center mb-4" style={{ color: "#78716c", letterSpacing: "0.15em" }}>
+            Percorso cofinanziato dall&apos;Unione europea
+          </p>
+          <img
+            src="/loghi/testata-fse-loghi.png"
+            srcSet="/loghi/testata-fse-loghi.png 1x, /loghi/testata-fse-loghi@2x.png 2x"
+            alt="Loghi istituzionali: Unione europea (cofinanziato), Repubblica Italiana, Regione Lombardia, Programma Regionale FSE+ 2021-2027"
+            className="w-full h-auto max-w-3xl mx-auto block"
+            style={{ maxHeight: "70px", objectFit: "contain" }}
+          />
+          <p className="font-sans text-xs text-center mt-4 leading-relaxed" style={{ color: "#78716c" }}>
+            Programma Regionale FSE+ 2021-2027 di Regione Lombardia · Obiettivo Specifico ESO 4.4 ·
+            Voucher Formazione Continua (Decreto n. 8809 del 1° luglio 2026) · Catalogo 2026 codice 17257
+          </p>
+        </div>
+      </div>
+
       {/* Chiusura */}
       <div className="px-5 py-12" style={{ backgroundColor: "#000" }}>
         <div className="max-w-3xl mx-auto flex flex-col sm:flex-row gap-4 justify-between items-start sm:items-center">
