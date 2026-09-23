@@ -869,6 +869,76 @@ function BiforcazioneSection() {
   )
 }
 
+function AiAcademyBanner() {
+  return (
+    <section className="px-4 py-14 lg:py-20" style={{ backgroundColor: "#0b0b0c" }}>
+      <div className="max-w-5xl mx-auto">
+        <div className="relative overflow-hidden rounded-2xl p-8 sm:p-11" style={{ border: "1px solid rgba(193,68,14,0.35)" }}>
+          <div
+            className="absolute pointer-events-none rounded-full"
+            aria-hidden="true"
+            style={{
+              width: "26rem",
+              height: "26rem",
+              top: "-10rem",
+              right: "-8rem",
+              background: "radial-gradient(circle, #c1440e 0%, rgba(193,68,14,0) 68%)",
+              opacity: 0.3,
+            }}
+          />
+          <div className="relative">
+            <p
+              className="font-sans text-xs font-semibold uppercase mb-4"
+              style={{ letterSpacing: "0.16em", color: "#d96a3f" }}
+            >
+              AI Academy · Starting Work · Como
+            </p>
+            <h2
+              className="font-display font-bold text-3xl sm:text-4xl lg:text-5xl leading-tight mb-5 max-w-2xl"
+              style={{ color: "#ece8e1" }}
+            >
+              Il campo da gioco è cambiato.
+            </h2>
+            <p
+              className="font-sans text-lg leading-relaxed mb-8 max-w-2xl"
+              style={{ color: "rgba(236,232,225,0.72)" }}
+            >
+              Un corso AI per imprenditori, dirigenti e professionisti che hanno
+              già attraversato altre rivoluzioni. Sette mezze giornate, massimo
+              dieci posti per edizione, rigorosamente in aula. Finanziabile con
+              i voucher Formazione Continua.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4">
+              <Link
+                href="/ai-academy"
+                className="inline-flex items-center justify-center gap-2 font-sans font-semibold rounded-full transition-all duration-200 hover:brightness-110"
+                style={{ backgroundColor: "#c1440e", color: "#fff", minHeight: "52px", padding: "0 1.9rem" }}
+              >
+                Scopri AI Academy
+                <ArrowRight />
+              </Link>
+              <Link
+                href="/voucher-formazione-continua"
+                className="inline-flex items-center justify-center gap-2 font-sans font-semibold rounded-full transition-all duration-200 hover:brightness-110"
+                style={{
+                  backgroundColor: "transparent",
+                  color: "#ece8e1",
+                  border: "1px solid rgba(236,232,225,0.35)",
+                  minHeight: "52px",
+                  padding: "0 1.9rem",
+                }}
+              >
+                Preregistrati e richiedi il voucher
+                <ArrowRight />
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function CoursesSection() {
   return (
     <section id="corsi" className="py-10 lg:py-16 bg-white">
@@ -1562,6 +1632,7 @@ export default function HomePage() {
         <HeroSection />
         <FormazioneContinuaSection />
         <BiforcazioneSection />
+        <AiAcademyBanner />
         <CoursesSection />
         <ProponCorsoSection />
         <QuoteCarousel />
