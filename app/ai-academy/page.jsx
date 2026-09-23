@@ -623,9 +623,25 @@ export default function AiAcademyPage() {
 
             {/* Come funziona il voucher */}
             <div className="mb-10">
-              <p className="font-sans text-sm font-semibold uppercase mb-5" style={{ letterSpacing: "0.1em", color: "rgba(236,232,225,0.5)" }}>
+              <p className="font-sans text-sm font-semibold uppercase mb-4" style={{ letterSpacing: "0.1em", color: "rgba(236,232,225,0.5)" }}>
                 Come funziona il voucher, passo per passo
               </p>
+
+              {/* Avviso: voucher a rimborso */}
+              <div className="mb-6 rounded-xl p-4 sm:p-5 flex items-start gap-3" style={{ backgroundColor: "rgba(217,106,63,0.12)", border: "1.5px solid rgba(217,106,63,0.55)" }}>
+                <span className="text-2xl leading-none shrink-0" aria-hidden="true">⚠️</span>
+                <div>
+                  <p className="font-sans font-bold text-sm sm:text-base mb-1" style={{ color: CLAY_LIGHT, letterSpacing: "0.02em" }}>
+                    Attenzione: il voucher è a rimborso.
+                  </p>
+                  <p className="font-sans text-sm leading-relaxed" style={{ color: CREAM }}>
+                    L&apos;azienda anticipa il costo del corso e paga la fattura all&apos;ente formativo.
+                    Regione Lombardia eroga la quota pubblica <strong>solo dopo la quietanza del pagamento</strong>,
+                    in fase di rendicontazione. Servono liquidità e capacità di anticipo.
+                  </p>
+                </div>
+              </div>
+
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
                 {[
                   { n: "1", t: "Manifesta l'interesse", d: "L'azienda si preregistra per il corso: raccogliamo insieme i dati necessari e verifichiamo la posizione dell'impresa e dei partecipanti." },
