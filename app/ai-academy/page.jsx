@@ -620,6 +620,118 @@ export default function AiAcademyPage() {
               </div>
             </div>
 
+            {/* Come funziona il voucher */}
+            <div className="mb-10">
+              <p className="font-sans text-sm font-semibold uppercase mb-5" style={{ letterSpacing: "0.1em", color: "rgba(236,232,225,0.5)" }}>
+                Come funziona il voucher, passo per passo
+              </p>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
+                {[
+                  { n: "1", t: "Manifesta l'interesse", d: "L'azienda si preregistra per il corso: raccogliamo insieme i dati necessari e verifichiamo la posizione dell'impresa e dei partecipanti." },
+                  { n: "2", t: "Verifica i requisiti", d: "Prima di richiedere il voucher controlla che azienda, partecipanti e capienza rientrino nella misura. Se tutto è in ordine si passa alla domanda." },
+                  { n: "3", t: "Richiedi il voucher", d: "L'azienda presenta la domanda a sportello sul portale Bandi e Servizi di Regione Lombardia, indicando AI Academy come percorso a catalogo." },
+                  { n: "4", t: "Frequenta il corso", d: "I partecipanti seguono il percorso in aula (almeno 75% delle ore). Le presenze si registrano a ogni incontro." },
+                  { n: "5", t: "Paga la fattura", d: "L'azienda salda la fattura emessa da Starting Work per il corso frequentato. Il pagamento va documentato con tracciabilità." },
+                  { n: "6", t: "Incassa il rimborso", d: "Con la fattura pagata e la quietanza, l'azienda rendiconta a Regione Lombardia: la quota pubblica del voucher viene erogata a rimborso." },
+                ].map((s) => (
+                  <div key={s.n} className="rounded-xl p-5" style={{ backgroundColor: "rgba(236,232,225,0.04)", border: "1px solid rgba(236,232,225,0.1)" }}>
+                    <div className="flex items-baseline gap-3 mb-2">
+                      <span className="font-bold text-2xl" style={{ color: CLAY_LIGHT, fontFamily: "var(--font-fraunces), Georgia, serif" }}>{s.n}</span>
+                      <p className="font-sans font-semibold text-sm" style={{ color: CREAM }}>{s.t}</p>
+                    </div>
+                    <p className="font-sans text-sm leading-relaxed" style={{ color: "rgba(236,232,225,0.65)" }}>{s.d}</p>
+                  </div>
+                ))}
+              </div>
+
+              <div className="rounded-2xl p-6 sm:p-7" style={{ backgroundColor: "rgba(95,174,125,0.08)", border: "1px solid rgba(95,174,125,0.25)" }}>
+                <div className="flex items-start gap-3 mb-3">
+                  <span className="text-xl leading-none shrink-0" style={{ color: "#5fae7d" }} aria-hidden="true">✓</span>
+                  <p className="font-sans font-semibold text-base" style={{ color: CREAM }}>
+                    Se al momento della richiesta ci sono ancora risorse disponibili e l'azienda ha verificato di rispettare tutti i requisiti, Regione Lombardia riconosce quanto previsto.
+                  </p>
+                </div>
+                <p className="font-sans text-sm leading-relaxed mb-4" style={{ color: "rgba(236,232,225,0.75)" }}>
+                  Il voucher non è un concorso: è una misura a sportello con criteri oggettivi.
+                  Rispettati i requisiti e presentata la domanda con capienza ancora disponibile,
+                  il contributo è dovuto.
+                </p>
+                <p className="font-sans text-sm font-semibold mb-3" style={{ color: CREAM }}>
+                  Requisiti da verificare prima della domanda
+                </p>
+                <ul className="flex flex-col gap-2">
+                  {[
+                    "Ogni partecipante ha un rapporto di lavoro ammissibile (dipendente indeterminato o determinato, socio-lavoratore di cooperativa, titolare o socio d'impresa, autonomo o professionista con domicilio fiscale in Lombardia).",
+                    "Nessun partecipante ha politiche attive incompatibili in corso.",
+                    "L'azienda non ha superato il tetto annuo di € 50.000 e nessun collaboratore ha superato € 2.000 nell'anno solare.",
+                    "L'impresa è profilata sul portale Bandi e Servizi con SPID/CIE/CNS del legale rappresentante o del delegato.",
+                    "La domanda viene presentata a corso già caricato a catalogo e con almeno 72 ore di anticipo sull'avvio.",
+                    "Documentazione pronta: Allegato A.1 (Domanda), A.2.a (De minimis), A.5 (Privacy) e, se applicabile, A.3 (Delega); bollo pagoPA da 16 €; documenti dei destinatari (COB, contratti, cedolini, iscrizioni INPS).",
+                  ].map((r) => (
+                    <li key={r} className="font-sans text-sm leading-snug flex gap-2.5" style={{ color: "rgba(236,232,225,0.75)" }}>
+                      <span style={{ color: "#5fae7d" }} aria-hidden="true">✓</span>
+                      {r}
+                    </li>
+                  ))}
+                </ul>
+                <p className="font-sans text-xs mt-5 leading-relaxed" style={{ color: "rgba(236,232,225,0.55)" }}>
+                  Ti accompagniamo passo passo: nella{" "}
+                  <Link href="/ai-academy/area-riservata" className="underline underline-offset-2 font-semibold" style={{ color: CLAY_LIGHT }}>
+                    guida in area riservata
+                  </Link>{" "}
+                  trovi la checklist operativa completa e i modelli da usare.
+                </p>
+              </div>
+
+              {/* Riferimenti normativi */}
+              <div className="mt-6 rounded-2xl p-6 sm:p-7" style={{ backgroundColor: "rgba(236,232,225,0.03)", border: "1px solid rgba(236,232,225,0.08)" }}>
+                <p className="font-sans text-sm font-semibold uppercase mb-4" style={{ letterSpacing: "0.1em", color: "rgba(236,232,225,0.5)" }}>
+                  Riferimenti normativi
+                </p>
+                <dl className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4 text-sm font-sans">
+                  {[
+                    {
+                      k: "Avviso pubblico",
+                      v: "Decreto Regione Lombardia n. 8809 del 1° luglio 2026 — Avviso Formazione Continua Fase VII.",
+                    },
+                    {
+                      k: "Programma di finanziamento",
+                      v: "Programma Regionale FSE+ 2021-2027 di Regione Lombardia — Priorità 4 «Occupazione», Obiettivo Specifico ESO 4.4.",
+                    },
+                    {
+                      k: "Fonte europea",
+                      v: "Regolamento (UE) 2021/1057 del Parlamento europeo e del Consiglio del 24 giugno 2021 (Fondo sociale europeo Plus — FSE+).",
+                    },
+                    {
+                      k: "Regime di aiuto",
+                      v: "Aiuti «de minimis» ex Regolamento (UE) 2023/2831 della Commissione del 13 dicembre 2023.",
+                    },
+                    {
+                      k: "Modalità di presentazione",
+                      v: "Procedura valutativa a sportello — art. 5, comma 3, del D.lgs. 31 marzo 1998, n. 123.",
+                    },
+                    {
+                      k: "Catalogo dell'offerta formativa",
+                      v: "Catalogo Formazione Continua 2026 di Regione Lombardia — AI Academy è iscritta con codice 17257.",
+                    },
+                    {
+                      k: "Portale per la domanda",
+                      v: "Bandi e Servizi di Regione Lombardia — bandi.regione.lombardia.it — accesso con SPID, CIE o CNS.",
+                    },
+                    {
+                      k: "Accreditamento dell'ente",
+                      v: "Starting Work — operatore accreditato ai servizi di formazione da Regione Lombardia (sezione B, Albo n. 1363 del 20 luglio 2023).",
+                    },
+                  ].map((r) => (
+                    <div key={r.k}>
+                      <dt className="font-semibold mb-1" style={{ color: CREAM }}>{r.k}</dt>
+                      <dd style={{ color: "rgba(236,232,225,0.65)" }}>{r.v}</dd>
+                    </div>
+                  ))}
+                </dl>
+              </div>
+            </div>
+
             {/* Preregistrazione: è il punto di conversione della pagina */}
             <div
               id="preregistrazione"
