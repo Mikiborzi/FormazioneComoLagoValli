@@ -194,9 +194,10 @@ export default function AreaRiservataPage() {
           </form>
 
           <p className="font-sans text-sm mt-7" style={{ color: "rgba(236,232,225,0.5)" }}>
-            Non ti sei ancora registrato?{" "}
-            <Link href="/voucher-formazione-continua" className="underline underline-offset-4" style={{ color: CLAY_LIGHT }}>
-              Vai alla preregistrazione
+            Non hai una pratica? Le risorse dei voucher Formazione Continua sono
+            esaurite: ti aggiorneremo in caso di rifinanziamento. Intanto{" "}
+            <Link href="/ai-academy" className="underline underline-offset-4" style={{ color: CLAY_LIGHT }}>
+              scopri le nostre proposte sull&apos;AI
             </Link>
             .
           </p>

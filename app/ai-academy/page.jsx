@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { Fraunces } from "next/font/google";
 import AllegatiVerificati from "./AllegatiVerificati";
+import AvvisoVoucherEsaurito from "@/app/components/AvvisoVoucherEsaurito";
+import InvitoSerataAi from "@/app/components/InvitoSerataAi";
 
 // Identità visiva di AI Academy, ripresa dal sito del corso: fondo quasi nero,
 // carta calda, accento terracotta, display serif Fraunces.
@@ -30,6 +32,7 @@ export const metadata = {
 // ─── Dati ────────────────────────────────────────────────────────────────────
 
 const navSezioni = [
+  { label: "Per le imprese", href: "/ai-academy/imprese" },
   { label: "Programma e Investimento", href: "#programma" },
   { label: "I coach", href: "#squadra" },
   { label: "Preregistrazione", href: "#preregistrazione" },
@@ -199,10 +202,10 @@ function Freccia() {
   );
 }
 
-function BottonePreregistrazione({ etichetta = "Preregistrati e richiedi il voucher" }) {
+function BottoneProposta({ etichetta = "Richiedi una proposta su misura" }) {
   return (
     <Link
-      href="/voucher-formazione-continua"
+      href="/formazione-impresa/contatto"
       className="inline-flex items-center justify-center gap-2 font-sans font-semibold rounded-full transition-all duration-200 hover:brightness-110"
       style={{
         backgroundColor: CLAY,
@@ -275,11 +278,11 @@ export default function AiAcademyPage() {
             ))}
           </nav>
           <Link
-            href="/voucher-formazione-continua"
+            href="/formazione-impresa/contatto"
             className="font-sans text-sm font-semibold rounded-full px-4 py-2 shrink-0 transition-all duration-200 hover:brightness-110"
             style={{ backgroundColor: CLAY, color: "#fff" }}
           >
-            Preregistrati
+            Richiedi info
           </Link>
         </div>
       </div>
@@ -356,7 +359,7 @@ export default function AiAcademyPage() {
               </strong>
             </p>
             <div className="flex flex-col sm:flex-row gap-3">
-              <BottonePreregistrazione />
+              <BottoneProposta />
               <BottoneGilberto variante="bordo" />
             </div>
           </div>
@@ -478,6 +481,14 @@ export default function AiAcademyPage() {
               </div>
             ))}
           </div>
+
+          <p className="font-sans text-base leading-relaxed mt-8 mb-6" style={{ color: "rgba(236,232,225,0.7)" }}>
+            Cerchi un percorso dedicato alla tua impresa?{" "}
+            <Link href="/ai-academy/imprese" className="underline underline-offset-4 font-semibold" style={{ color: CLAY_LIGHT }}>
+              Scopri AI Academy per le imprese →
+            </Link>
+          </p>
+          <InvitoSerataAi tema="scuro" />
         </div>
       </section>
 
@@ -558,6 +569,14 @@ export default function AiAcademyPage() {
           {/* Voucher */}
           <div className="mt-8">
             <Eyebrow chiaro>Voucher Formazione Continua — Regione Lombardia</Eyebrow>
+            <AvvisoVoucherEsaurito tema="scuro" conCta={false} className="mb-8" />
+            <details className="mb-10 group">
+              <summary
+                className="font-sans text-sm font-semibold cursor-pointer select-none mb-6"
+                style={{ color: CLAY_LIGHT }}
+              >
+                Come funziona il voucher (per chi ha già una pratica in corso)
+              </summary>
             <p className="font-sans text-base leading-relaxed mb-8" style={{ color: "rgba(236,232,225,0.68)" }}>
               Finanziato dal Programma Regionale Lombardia FSE+ 2021-2027
               (Obiettivo ESO 4.4), il voucher consente a lavoratori e imprese di
@@ -752,8 +771,10 @@ export default function AiAcademyPage() {
 
               <AllegatiVerificati />
             </div>
+            </details>
 
-            {/* Preregistrazione: è il punto di conversione della pagina */}
+            {/* Punto di conversione della pagina: con i voucher esauriti si
+                passa alla richiesta di una proposta su misura */}
             <div
               id="preregistrazione"
               className="rounded-2xl p-7 sm:p-9 scroll-mt-32"
@@ -763,28 +784,27 @@ export default function AiAcademyPage() {
                 className="font-bold text-2xl sm:text-3xl mb-4"
                 style={{ fontFamily: "var(--font-fraunces), Georgia, serif", color: "#fff" }}
               >
-                Prenota per essere tra i primi.
+                Costruiamo la proposta giusta per te.
               </h3>
               <p className="font-sans text-base leading-relaxed mb-7" style={{ color: "rgba(255,255,255,0.85)" }}>
-                Vuoi partecipare al corso e finanziarlo con il voucher
-                Formazione Continua? Compila la preregistrazione: registri
-                l&apos;azienda e i partecipanti, e ti seguiamo noi nella
-                richiesta del voucher a Regione Lombardia. I posti sono al
-                massimo dieci per edizione.
+                Vuoi portare l&apos;AI nel tuo lavoro o nella tua impresa? Lasciaci
+                i tuoi riferimenti: ti proponiamo un percorso studiato su misura
+                per te o per la tua squadra. I posti sono al massimo dieci per
+                edizione.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 items-start">
                 <Link
-                  href="/voucher-formazione-continua"
+                  href="/formazione-impresa/contatto"
                   className="inline-flex items-center justify-center gap-2 font-sans font-semibold rounded-full transition-all duration-200 hover:brightness-105"
                   style={{ backgroundColor: "#fff", color: CLAY, minHeight: "52px", padding: "0 1.9rem" }}
                 >
-                  Preregistrati
+                  Richiedi una proposta
                   <Freccia />
                 </Link>
                 <BottoneGilberto variante="bordo" />
               </div>
               <p className="font-sans text-sm mt-6" style={{ color: "rgba(255,255,255,0.8)" }}>
-                Ti sei già registrato?{" "}
+                Hai già una pratica voucher?{" "}
                 <Link
                   href="/ai-academy/area-riservata"
                   className="underline underline-offset-4 font-semibold"
@@ -792,7 +812,7 @@ export default function AiAcademyPage() {
                 >
                   Entra nell&apos;area riservata
                 </Link>{" "}
-                e trovi la guida passo passo per richiedere il voucher.
+                e trovi la guida passo passo.
               </p>
             </div>
           </div>
@@ -920,7 +940,7 @@ export default function AiAcademyPage() {
           </div>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <BottoneGilberto />
-            <BottonePreregistrazione etichetta="Preregistrati al corso" />
+            <BottoneProposta etichetta="Richiedi una proposta" />
           </div>
         </div>
       </section>
@@ -979,11 +999,13 @@ export default function AiAcademyPage() {
               lavoratori, imprese e imprenditori ai cambiamenti».
             </p>
             <p>
-              Il percorso è finanziabile tramite il <strong>Voucher Formazione Continua</strong> —
+              Il percorso è stato finanziabile tramite il <strong>Voucher Formazione Continua</strong> —
               Avviso adottato con <strong>Decreto della Direzione Generale Istruzione,
               Formazione e Lavoro n. 8809 del 1° luglio 2026</strong> — che permette a lavoratori
               e imprese di finanziare percorsi di formazione professionale continua a valere
-              sulle risorse del Programma Regionale.
+              sulle risorse del Programma Regionale. Le risorse dello sportello sono
+              attualmente esaurite: ti aggiorneremo in caso di rifinanziamento da parte
+              di Regione Lombardia.
             </p>
             <p>
               Il Fondo Sociale Europeo Plus (FSE+), istituito con{" "}
@@ -1025,7 +1047,7 @@ export default function AiAcademyPage() {
                 Starting Work
               </p>
               <p className="font-sans text-sm leading-relaxed" style={{ color: "rgba(255,255,255,0.45)" }}>
-                Piazzale Montesanto 4
+                Piazzale Monte Santo 4
                 <br />
                 22100 Como
               </p>

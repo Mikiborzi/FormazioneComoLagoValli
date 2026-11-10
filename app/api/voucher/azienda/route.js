@@ -16,7 +16,18 @@ const OBBLIGATORI = [
 
 // POST /api/voucher/azienda — crea una nuova pratica azienda.
 // Se la P.IVA è già registrata risponde 409 (l'azienda deve riprendere la pratica).
+// Sportello Voucher Formazione Continua chiuso per esaurimento risorse:
+// niente nuove pratiche. Le pratiche esistenti restano modificabili (PATCH).
+// Rimettere a false in caso di rifinanziamento da parte di Regione Lombardia.
+const NUOVE_PRATICHE_CHIUSE = true
+
 export async function POST(request) {
+  if (NUOVE_PRATICHE_CHIUSE) {
+    return NextResponse.json(
+      { error: 'Le risorse dei voucher Formazione Continua sono esaurite: non è più possibile registrare nuove pratiche.' },
+      { status: 410 }
+    )
+  }
   let body
   try {
     body = await request.json()

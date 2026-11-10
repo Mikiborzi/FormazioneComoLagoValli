@@ -64,9 +64,9 @@ export const metadata = {
     google: "GjLAX1NWAvDUR51ZzWsNQwJsZFAQBCoP0oNoz_TjxjY",
   },
   title:
-    "Formazione Como Lago e Valli – Formazione Continua · voucher Regione Lombardia",
+    "Formazione Como Lago e Valli – Formazione per persone e imprese · AI Academy",
   description:
-    "Corsi di formazione finanziati dai voucher di Regione Lombardia per la Formazione Continua (FSE+ 2021-2027). Per imprese, professionisti e lavoratori autonomi che vogliono formare i propri collaboratori. Ente accreditato: i nostri corsi sono nel catalogo regionale. Sportello domande dal 13 luglio 2026.",
+    "Corsi di formazione per persone e imprese: proposte su misura per l'uso professionale dell'intelligenza artificiale, Dote Inserimento Lavorativo (DIL) e percorsi IFTS. Ente accreditato da Regione Lombardia. Voucher Formazione Continua 2026: risorse esaurite.",
 };
 
 export default function RootLayout({ children }) {

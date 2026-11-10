@@ -6,6 +6,7 @@ import EdizioniTab from './tabs/EdizioniTab'
 import CalendarioTab from './tabs/CalendarioTab'
 import ArchiviatiTab from './tabs/ArchiviatiTab'
 import FatturazioneTab from './tabs/FatturazioneTab'
+import SerataAiTab from './tabs/SerataAiTab'
 
 const STATI = ['nuovo', 'contattato', 'iscritto', 'in_attesa', 'non_idoneo', 'archiviato']
 const STATO_COLORS = {
@@ -539,6 +540,7 @@ export default function AdminPage() {
           { key:'impresa', label:'🔴 Formazione Impresa' },
           { key:'crm', label:'👥 CRM Contatti' },
           { key:'allegati', label:'📎 Allegati Voucher' },
+          { key:'serata', label:'🎤 Serata AI Academy' },
         ].map(tab => (
           <button key={tab.key} onClick={() => {
             setTabAttivo(tab.key)
@@ -1712,6 +1714,8 @@ export default function AdminPage() {
             </div>
           )
         })()}
+
+        {tabAttivo === 'serata' && <SerataAiTab token={token} />}
 
       </div>
     </div>

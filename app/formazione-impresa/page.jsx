@@ -1,8 +1,10 @@
 import Link from 'next/link'
+import AvvisoVoucherEsaurito from '@/app/components/AvvisoVoucherEsaurito'
+import InvitoSerataAi from '@/app/components/InvitoSerataAi'
 
 export const metadata = {
   title: 'Formazione Impresa — L\'investimento migliore | Formazione Como Lago e Valli',
-  description: 'Percorsi di formazione continua per dipendenti, imprenditori, consulenti e professionisti. Finanziabili con i voucher di Regione Lombardia per la Formazione Continua — PR FSE+ 2021-2027.',
+  description: 'Percorsi di formazione continua per dipendenti, imprenditori, consulenti e professionisti. Proposte formative su misura per l\'uso professionale dell\'intelligenza artificiale. Voucher Formazione Continua di Regione Lombardia: risorse esaurite.',
 }
 
 const TARGET = [
@@ -13,7 +15,7 @@ const TARGET = [
       </svg>
     ),
     label: 'Dipendenti',
-    desc: 'Aggiorna le tue competenze, acquisisci nuovi strumenti e aumenta il tuo valore professionale. Con il voucher, il tuo datore di lavoro può finanziare la formazione fino al 90%.',
+    desc: 'Aggiorna le tue competenze, acquisisci nuovi strumenti e aumenta il tuo valore professionale. Percorsi pratici per portare l\'AI nel lavoro di ogni giorno.',
   },
   {
     icon: (
@@ -22,7 +24,7 @@ const TARGET = [
       </svg>
     ),
     label: 'Imprenditori',
-    desc: 'Guida la tua azienda attraverso le trasformazioni del presente con visione aggiornata, strumenti nuovi e una rete di confronto reale. Come titolare, puoi accedere direttamente al voucher.',
+    desc: 'Guida la tua azienda attraverso le trasformazioni del presente con visione aggiornata, strumenti nuovi e una rete di confronto reale. Percorsi su misura per ridisegnare l\'impresa intorno all\'AI.',
   },
   {
     icon: (
@@ -31,7 +33,7 @@ const TARGET = [
       </svg>
     ),
     label: 'Consulenti',
-    desc: 'Resta al passo con gli ultimi sviluppi nei tuoi ambiti di specializzazione. I liberi professionisti con domicilio fiscale in Lombardia possono richiedere il voucher in prima persona.',
+    desc: 'Resta al passo con gli ultimi sviluppi nei tuoi ambiti di specializzazione. Percorsi per integrare l\'AI nella consulenza e nei servizi ai clienti.',
   },
   {
     icon: (
@@ -40,7 +42,7 @@ const TARGET = [
       </svg>
     ),
     label: 'Professionisti',
-    desc: 'Approfondisci temi trasversali — dall\'intelligenza artificiale alla gestione strategica — che stanno ridefinendo ogni professione. I lavoratori autonomi accedono al voucher con partita IVA.',
+    desc: 'Approfondisci temi trasversali — dall\'intelligenza artificiale alla gestione strategica — che stanno ridefinendo ogni professione. Percorsi aperti anche ai lavoratori autonomi con partita IVA.',
   },
 ]
 
@@ -66,28 +68,10 @@ const SFIDE = [
 export default function FormazioneImpresaPage() {
   return (
     <main className="min-h-screen bg-gray-50">
-      <section className="py-10 px-4" style={{ backgroundColor: '#f0fdf4', borderBottom: '1px solid #bbf7d0' }}>
-        <div className="max-w-4xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
-          <div>
-            <p className="text-xs font-bold uppercase tracking-widest mb-1" style={{ color: '#15803d' }}>Decreto n. 8809 del 01/07/2026</p>
-            <h2 className="font-display font-bold text-2xl mb-2" style={{ color: '#052e16' }}>Forma i tuoi dipendenti.<br />Lo Stato paga fino al 90%.</h2>
-            <ul className="space-y-1 text-sm text-gray-700 mb-4">
-              <li className="flex gap-2"><span style={{ color: '#16a34a' }}>&#10003;</span><span>Fino a 2.000 euro per lavoratore per anno</span></li>
-              <li className="flex gap-2"><span style={{ color: '#16a34a' }}>&#10003;</span><span>Fino a 50.000 euro per azienda per anno</span></li>
-              <li className="flex gap-2"><span style={{ color: '#16a34a' }}>&#10003;</span><span>Sportello aperto dal 13 luglio 2026</span></li>
-              <li className="flex gap-2"><span style={{ color: '#16a34a' }}>&#10003;</span><span>Starting Work risponde ai vostri quesiti e vi supporta nella gestione della pratica</span></li>
-            </ul>
-            <a href="/voucher-formazione-continua" className="inline-flex items-center justify-center font-bold text-sm px-6 py-3 rounded-xl" style={{ backgroundColor: '#15803d', color: 'white' }}>Preregistra la tua azienda</a>
-          </div>
-          <div className="rounded-2xl p-6 shrink-0 w-full md:w-80" style={{ backgroundColor: 'white', border: '1px solid #bbf7d0' }}>
-            <p className="font-bold text-sm mb-4" style={{ color: '#052e16' }}>Come accedere</p>
-            <div className="space-y-3">
-              <div className="flex gap-3"><div className="w-6 h-6 rounded-full flex items-center justify-center shrink-0 font-black text-xs text-white" style={{ backgroundColor: '#15803d' }}>1</div><div><p className="font-semibold text-xs" style={{ color: '#052e16' }}>Preregistrati</p><p className="text-xs text-gray-500">Compila il form con i dati aziendali e dei partecipanti</p></div></div>
-              <div className="flex gap-3"><div className="w-6 h-6 rounded-full flex items-center justify-center shrink-0 font-black text-xs text-white" style={{ backgroundColor: '#15803d' }}>2</div><div><p className="font-semibold text-xs" style={{ color: '#052e16' }}>Iscrizione corso</p><p className="text-xs text-gray-500">Starting Work iscrive i partecipanti su SIUF</p></div></div>
-              <div className="flex gap-3"><div className="w-6 h-6 rounded-full flex items-center justify-center shrink-0 font-black text-xs text-white" style={{ backgroundColor: '#15803d' }}>3</div><div><p className="font-semibold text-xs" style={{ color: '#052e16' }}>Domanda voucher</p><p className="text-xs text-gray-500">Tu presenti su Bandi e Servizi dal 13 luglio 2026</p></div></div>
-              <div className="flex gap-3"><div className="w-6 h-6 rounded-full flex items-center justify-center shrink-0 font-black text-xs text-white" style={{ backgroundColor: '#15803d' }}>4</div><div><p className="font-semibold text-xs" style={{ color: '#052e16' }}>Rimborso</p><p className="text-xs text-gray-500">Regione rimborsa fino al 90% entro 80 giorni dal corso</p></div></div>
-            </div>
-          </div>
+      <section className="py-10 px-4" style={{ backgroundColor: '#fff7ed', borderBottom: '1px solid #fed7aa' }}>
+        <div className="max-w-4xl mx-auto">
+          <AvvisoVoucherEsaurito />
+          <InvitoSerataAi className="mt-6" />
         </div>
       </section>
 
@@ -117,11 +101,11 @@ export default function FormazioneImpresaPage() {
           </a>
           <div className="flex flex-col sm:flex-row justify-center gap-4 mt-6">
             <Link
-              href="/voucher-formazione-continua"
+              href="/ai-academy"
               className="inline-flex items-center justify-center gap-2 font-semibold text-base px-8 py-4 rounded-xl transition-all duration-200 hover:scale-105"
               style={{ backgroundColor: 'white', color: '#8b0000' }}
             >
-              ISCRIVITI ORA
+              SCOPRI LE PROPOSTE AI
             </Link>
             <Link
               href="/formazione-impresa/contatto"
@@ -263,28 +247,7 @@ export default function FormazioneImpresaPage() {
           </p>
 
           {/* Avviso stato */}
-          <div
-            className="rounded-2xl p-6 mb-12 flex gap-4"
-            style={{ backgroundColor: '#f0fdf4', border: '1px solid #86efac' }}
-          >
-            <span className="text-2xl shrink-0">✅</span>
-            <div>
-              <p className="font-semibold text-sm mb-2" style={{ color: '#166534' }}>
-                Quarta edizione — Avviso pubblicato · sportello dal 13 luglio 2026
-              </p>
-              <p className="text-sm leading-relaxed text-justify" style={{ color: '#14532d' }}>
-                L&apos;Avviso pubblico è stato approvato con Decreto n. 8809 del 1° luglio 2026,
-                in attuazione della DGR n. XII/6232 del 28 maggio 2026: dotazione di € 10 milioni e
-                domande &laquo;a sportello&raquo; sul portale Bandi e Servizi dal 13 luglio 2026, fino a
-                esaurimento risorse. Il nuovo Catalogo regionale è articolato per aree tematiche —
-                digitale, green, linguistico, tecnico e soft skill. Scrivici a{' '}
-                <a href="mailto:como@mestierilombardia.it" style={{ color: '#166534', fontWeight: 700 }}>
-                  como@mestierilombardia.it
-                </a>{' '}
-                o preregistra la tua azienda per essere seguito passo passo.
-              </p>
-            </div>
-          </div>
+          <AvvisoVoucherEsaurito className="mb-12" />
 
           {/* Come funziona */}
           <h3 className="font-display font-bold text-2xl mb-6" style={{ color: '#1a2e5a' }}>
@@ -502,29 +465,32 @@ export default function FormazioneImpresaPage() {
         </div>
       </section>
 
-      {/* Pre-registrazione voucher (CTA verso il form di preregistrazione) */}
+      {/* Voucher esauriti: CTA verso le proposte AI */}
       <section className="py-16 px-4" style={{ backgroundColor: '#fffbeb', borderTop: '2px solid #fcd34d' }}>
         <div className="max-w-4xl mx-auto text-center">
-          <div className="w-12 h-12 rounded-xl flex items-center justify-center shrink-0 text-2xl mx-auto mb-5" style={{ backgroundColor: '#fef3c7' }}>
-            🔔
-          </div>
           <p className="font-sans font-bold text-xs uppercase tracking-widest mb-1" style={{ color: '#92400e' }}>
-            Voucher Formazione Continua — Quarta Edizione
+            Voucher Formazione Continua — risorse esaurite
           </p>
           <h2 className="font-display font-bold text-3xl leading-tight mb-4" style={{ color: '#78350f' }}>
-            Vuoi usare il voucher per i tuoi corsi?
+            Vuoi portare l&apos;AI nel tuo lavoro?
           </h2>
           <p className="text-gray-700 text-base leading-relaxed mb-8 max-w-2xl mx-auto">
-            L&apos;Avviso della quarta edizione è stato pubblicato con Decreto n. 8809 del 1° luglio
-            2026: le domande aprono &laquo;a sportello&raquo; su Bandi e Servizi il 13 luglio 2026,
-            fino a esaurimento risorse. Preregistra la tua azienda e i tuoi collaboratori: ti seguiremo
-            passo per passo nella richiesta del voucher.
+            Le risorse dello sportello sono esaurite: se Regione Lombardia rifinanzierà la misura,
+            ti aggiorneremo qui. Intanto abbiamo studiato proposte formative su misura per persone
+            e imprese interessate all&apos;uso professionale dell&apos;intelligenza artificiale.
           </p>
-          <a href="/voucher-formazione-continua"
-            className="inline-flex items-center justify-center font-bold text-base px-8 py-4 rounded-xl transition"
-            style={{ backgroundColor: '#92400e', color: 'white' }}>
-            Preregistra la tua azienda →
-          </a>
+          <div className="flex flex-col sm:flex-row justify-center gap-4">
+            <Link href="/ai-academy"
+              className="inline-flex items-center justify-center font-bold text-base px-8 py-4 rounded-xl transition"
+              style={{ backgroundColor: '#92400e', color: 'white' }}>
+              Scopri le proposte AI →
+            </Link>
+            <Link href="/formazione-impresa/contatto"
+              className="inline-flex items-center justify-center font-bold text-base px-8 py-4 rounded-xl transition"
+              style={{ backgroundColor: 'white', color: '#92400e', border: '2px solid #92400e' }}>
+              Richiedi una proposta su misura
+            </Link>
+          </div>
         </div>
       </section>
 

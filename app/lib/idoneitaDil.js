@@ -7,9 +7,9 @@ const STATUS_IDONEI = [
 
 const MESSAGGI_NON_IDONEO = {
   occupato:
-    "La Dote Inserimento Lavorativo è riservata a chi non ha un contratto di lavoro attivo. Poiché risulti occupato, non puoi accedere a questi percorsi finanziati. Tuttavia raccogliamo il tuo interesse: se lavori, i voucher per la Formazione Continua di Regione Lombardia sono pensati proprio per te — contattaci per scoprirli.",
+    "La Dote Inserimento Lavorativo è riservata a chi non ha un contratto di lavoro attivo. Poiché risulti occupato, non puoi accedere a questi percorsi finanziati. Tuttavia raccogliamo il tuo interesse: se lavori, abbiamo proposte formative su misura per l'uso professionale dell'intelligenza artificiale — contattaci per scoprirle.",
   imprenditore:
-    "La Dote Inserimento Lavorativo è riservata a chi non svolge attività d'impresa. Raccogliamo comunque il tuo interesse: come imprenditore puoi accedere ai voucher per la Formazione Continua di Regione Lombardia — contattaci per valutare i percorsi disponibili.",
+    "La Dote Inserimento Lavorativo è riservata a chi non svolge attività d'impresa. Raccogliamo comunque il tuo interesse: per gli imprenditori abbiamo proposte formative su misura per l'uso professionale dell'intelligenza artificiale — contattaci per valutare i percorsi disponibili.",
 };
 
 const MESSAGGIO_FUORI_LOMBARDIA =

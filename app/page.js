@@ -1,5 +1,7 @@
 import Link from "next/link";
 import QuoteCarousel from "./components/QuoteCarousel";
+import AvvisoVoucherEsaurito from "./components/AvvisoVoucherEsaurito";
+import InvitoSerataAi from "./components/InvitoSerataAi";
 
 // ─── Data ────────────────────────────────────────────────────────────────────
 
@@ -334,7 +336,7 @@ const reasons = [
       </svg>
     ),
     title: "Cos'è la Formazione Continua di Regione Lombardia.",
-    body: "È una misura del Programma Regionale FSE+ 2021-2027 che finanzia la formazione di lavoratori dipendenti, autonomi, liberi professionisti e imprenditori lombardi attraverso voucher individuali. Il voucher copre dal 50% al 90% del costo del corso — in funzione della dimensione aziendale — fino a un massimo di € 2.000 per lavoratore per anno solare. I corsi devono essere selezionati da un catalogo regionale di percorsi accreditati, organizzati per aree tematiche: digitale, green, linguistico, tecnico e soft skill. L'avviso attuativo della quarta edizione è stato pubblicato con Decreto n. 8809 del 1° luglio 2026: le domande si presentano «a sportello» sul portale Bandi e Servizi dal 13 luglio 2026, fino a esaurimento risorse.",
+    body: "È una misura del Programma Regionale FSE+ 2021-2027 che finanzia la formazione di lavoratori dipendenti, autonomi, liberi professionisti e imprenditori lombardi attraverso voucher individuali. Il voucher copre dal 50% al 90% del costo del corso — in funzione della dimensione aziendale — fino a un massimo di € 2.000 per lavoratore per anno solare. I corsi devono essere selezionati da un catalogo regionale di percorsi accreditati, organizzati per aree tematiche: digitale, green, linguistico, tecnico e soft skill. L'avviso attuativo della quarta edizione è stato pubblicato con Decreto n. 8809 del 1° luglio 2026: le domande si sono presentate «a sportello» sul portale Bandi e Servizi dal 13 luglio 2026. Le risorse sono ora esaurite: ti aggiorneremo se Regione Lombardia rifinanzierà la misura.",
   },
 ];
 
@@ -550,7 +552,7 @@ function HeroSection() {
               style={{ backgroundColor: "rgba(45,122,79,0.2)", color: "#7dd3a8" }}
             >
               <span className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: "#7dd3a8" }} />
-              Voucher Formazione Continua 2026 — domande dal 13 luglio
+              Voucher Formazione Continua 2026 — risorse esaurite
             </div>
           </div>
 
@@ -559,19 +561,19 @@ function HeroSection() {
             className="font-display font-bold leading-tight mb-5 text-4xl sm:text-5xl lg:text-6xl"
             style={{ color: "#ffffff" }}
           >
-            La formazione dei tuoi dipendenti, finanziata.
+            L&apos;intelligenza artificiale, al lavoro.<br />Per persone e imprese.
           </h1>
 
           <p
             className="font-sans text-lg sm:text-xl leading-relaxed mb-8 max-w-2xl"
             style={{ color: "rgba(255,255,255,0.78)" }}
           >
-            Voucher fino a <strong className="text-white">€2.000 per lavoratore</strong>. Domande dal <strong className="text-white">13 luglio 2026</strong>. Come <strong className="text-white">ente accreditato</strong>, i nostri corsi sono nel Catalogo regionale: l&apos;azienda richiede il voucher, noi eroghiamo la formazione.
+            Le risorse dei <strong className="text-white">Voucher Formazione Continua 2026</strong> di Regione Lombardia sono esaurite: ti aggiorneremo in caso di rifinanziamento. Nel frattempo, scopri le proposte formative che abbiamo studiato su misura per chi vuole <strong className="text-white">usare l&apos;AI nel proprio lavoro</strong>.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4">
             <Link
-              href="/voucher-formazione-continua"
+              href="/ai-academy"
               className="inline-flex items-center justify-center gap-2 font-sans font-semibold text-white rounded-xl transition-all duration-200 hover:brightness-110 hover:scale-105 shadow-lg text-base"
               style={{
                 backgroundColor: "#c8941a",
@@ -579,7 +581,7 @@ function HeroSection() {
                 padding: "0 2rem",
               }}
             >
-              Scopri i voucher Formazione Continua
+              Scopri le proposte AI
               <ArrowRight />
             </Link>
             <a
@@ -624,7 +626,7 @@ function FormazioneContinuaSection() {
             className="font-sans font-semibold text-sm uppercase tracking-widest mb-3"
             style={{ color: "#2d7a4f" }}
           >
-            Voucher Regione Lombardia · 4ª edizione
+            Voucher Regione Lombardia · 4ª edizione · risorse esaurite
           </p>
           <h2
             className="font-display font-bold text-3xl sm:text-4xl lg:text-5xl mb-4"
@@ -640,6 +642,8 @@ function FormazioneContinuaSection() {
             regionale</strong>: l&apos;azienda seleziona il percorso e richiede il
             voucher, noi eroghiamo la formazione.
           </p>
+          <AvvisoVoucherEsaurito className="max-w-3xl mx-auto mt-8" />
+          <InvitoSerataAi className="max-w-3xl mx-auto mt-6" />
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
@@ -764,11 +768,11 @@ function FormazioneContinuaSection() {
             ))}
           </div>
           <Link
-            href="/voucher-formazione-continua"
+            href="/ai-academy"
             className="inline-flex items-center gap-2 font-sans font-semibold text-white rounded-xl transition-all duration-200 hover:brightness-110 hover:scale-105 shadow-lg text-base"
             style={{ backgroundColor: "#c8941a", minHeight: "52px", padding: "0 2rem" }}
           >
-            Scopri i voucher Formazione Continua
+            Scopri le proposte formative sull&apos;AI
             <ArrowRight />
           </Link>
         </div>
@@ -802,7 +806,7 @@ function BiforcazioneSection() {
             <h3 className="font-display font-bold text-2xl mb-3">L&apos;investimento migliore</h3>
             <p className="text-white/75 text-sm leading-relaxed mb-6 flex-1">
               Percorsi formativi per dipendenti, imprenditori, consulenti e professionisti, ideati e proposti da Starting Work.
-              I percorsi possono essere <strong className="text-white">finanziati con i voucher di Regione Lombardia per la Formazione Continua</strong>.
+              I voucher di Regione Lombardia per la Formazione Continua sono al momento <strong className="text-white">esauriti</strong>: ti aggiorneremo in caso di rifinanziamento.
             </p>
             <Link
               href="/formazione-impresa"
@@ -905,8 +909,8 @@ function AiAcademyBanner() {
             >
               Un corso AI per imprenditori, dirigenti e professionisti che hanno
               già attraversato altre rivoluzioni. Sette mezze giornate, massimo
-              dieci posti per edizione, rigorosamente in aula. Finanziabile con
-              i voucher Formazione Continua.
+              dieci posti per edizione, rigorosamente in aula. Una proposta
+              studiata su misura per chi vuole usare l&apos;AI nel proprio lavoro.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
               <Link
@@ -918,7 +922,7 @@ function AiAcademyBanner() {
                 <ArrowRight />
               </Link>
               <Link
-                href="/voucher-formazione-continua"
+                href="/formazione-impresa/contatto"
                 className="inline-flex items-center justify-center gap-2 font-sans font-semibold rounded-full transition-all duration-200 hover:brightness-110"
                 style={{
                   backgroundColor: "transparent",
@@ -928,7 +932,7 @@ function AiAcademyBanner() {
                   padding: "0 1.9rem",
                 }}
               >
-                Preregistrati e richiedi il voucher
+                Richiedi una proposta su misura
                 <ArrowRight />
               </Link>
             </div>

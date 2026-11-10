@@ -20,13 +20,13 @@ export default function SiteHeader() {
       <div className="w-full" style={{ backgroundColor: "#2d7a4f" }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <Link
-            href="/voucher-formazione-continua"
+            href="/ai-academy/imprese#serata"
             className="flex items-center justify-center gap-2 py-2 text-center text-white font-sans text-xs sm:text-sm leading-tight transition-all duration-200 hover:brightness-110"
           >
-            <span aria-hidden="true">🎓</span>
+            <span aria-hidden="true">📢</span>
             <span>
-              <strong className="font-semibold">Voucher Formazione Continua 2026</strong>
-              {" · "}domande dal 13 luglio 2026{" · "}fino a esaurimento risorse
+              <strong className="font-semibold">AI Academy per le imprese: serata di presentazione gratuita</strong>
+              {" · "}venerdì 27 novembre, ore 18:00, Starting Work Como{" · "}prenota il tuo posto
             </span>
             <span aria-hidden="true" className="hidden sm:inline">→</span>
           </Link>

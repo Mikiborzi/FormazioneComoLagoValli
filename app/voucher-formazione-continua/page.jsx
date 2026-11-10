@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { buildRiepilogoDocumento } from '@/app/lib/voucherRiepilogo'
+import AvvisoVoucherEsaurito from '@/app/components/AvvisoVoucherEsaurito'
 
 const TIPOLOGIE_RAPPORTO = [
   'Dipendente tempo indeterminato',
@@ -114,7 +115,7 @@ export default function VoucherFormazioneContinua() {
     setLoading(false)
     if (!ok) {
       setErrore(status === 404
-        ? 'Nessuna pratica trovata con questa P.IVA ed email referente. Verifica i dati o avvia una nuova pratica.'
+        ? 'Nessuna pratica trovata con questa P.IVA ed email referente. Verifica i dati inseriti.'
         : (json.error || 'Errore nel recupero della pratica.'))
       return
     }
@@ -221,9 +222,7 @@ export default function VoucherFormazioneContinua() {
       </div>
 
       <div className="max-w-3xl mx-auto mt-6 px-4">
-        <div className="bg-amber-50 border border-amber-300 rounded-lg p-4 text-sm text-amber-900">
-          <strong>⚠️ Attenzione — destinatari esclusi dalla misura:</strong> contratti intermittenti o di somministrazione, tirocinanti, apprendisti con periodo formativo in corso, titolari di sole cariche societarie (es. AD non soci/dipendenti), collaboratori di imprese familiari, chi ha già in corso altre politiche attive (es. Dote Unica Lavoro V Fase). Verificare prima di procedere.
-        </div>
+        <AvvisoVoucherEsaurito />
       </div>
 
       <div className="max-w-3xl mx-auto px-4 py-8">
@@ -232,12 +231,12 @@ export default function VoucherFormazioneContinua() {
         {/* LANDING */}
         {view === 'landing' && (
           <div className="grid sm:grid-cols-2 gap-4">
-            <button onClick={() => { setErrore(null); setAzienda(AZIENDA_VUOTA); setView('nuova') }}
-              className={`${card} text-left hover:border-blue-400 transition`}>
-              <div className="text-3xl mb-2">🆕</div>
-              <h2 className="text-lg font-bold text-gray-900 mb-1">Nuova pratica</h2>
-              <p className="text-sm text-gray-500">Registra la tua azienda e i primi partecipanti.</p>
-            </button>
+            {/* Nuove pratiche chiuse: risorse dello sportello esaurite */}
+            <div className={`${card} text-left opacity-60`} aria-disabled="true">
+              <div className="text-3xl mb-2">🚫</div>
+              <h2 className="text-lg font-bold text-gray-900 mb-1">Nuove pratiche chiuse</h2>
+              <p className="text-sm text-gray-500">Le risorse sono esaurite: non è più possibile registrare nuove aziende.</p>
+            </div>
             <button onClick={() => { setErrore(null); setView('ripresa') }}
               className={`${card} text-left hover:border-blue-400 transition`}>
               <div className="text-3xl mb-2">📂</div>
