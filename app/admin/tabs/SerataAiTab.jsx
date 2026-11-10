@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import * as XLSX from 'xlsx'
 import { INTERESSI_SERATA, SERATA_AI } from '@/app/lib/serataAi'
 
 const STATI = {
@@ -86,13 +87,29 @@ export default function SerataAiTab({ token }) {
     .reduce((somma, r) => somma + (r.num_persone || 0), 0)
   const consensiMarketing = filtrate.filter((r) => r.consenso_marketing).length
 
-  function esportaCsv() {
-    const intestazioni = ['Data iscrizione', 'Evento', 'Nome', 'Cognome', 'Email', 'Telefono', 'Azienda', 'Ruolo', 'Persone', 'Interessi', 'Messaggio', 'Consenso marketing', 'Stato', 'Note']
-    const righe = filtrate.map((r) => [
+  // Stesse colonne per CSV ed Excel, sulle iscrizioni filtrate a video.
+  const INTESTAZIONI = ['Data iscrizione', 'Evento', 'Nome', 'Cognome', 'Email', 'Telefono', 'Azienda', 'Ruolo', 'Persone', 'Interessi', 'Messaggio', 'Consenso marketing', 'Stato', 'Note']
+  function righeExport() {
+    return filtrate.map((r) => [
       formattaData(r.created_at), r.evento, r.nome, r.cognome, r.email, r.telefono, r.azienda, r.ruolo, r.num_persone,
       (r.interessi || '').split(',').filter(Boolean).map((k) => ETICHETTA_INTERESSE[k] || k).join(' | '),
-      r.messaggio, r.consenso_marketing ? 'Sì' : 'No', r.stato, r.note_operatore,
+      r.messaggio, r.consenso_marketing ? 'Sì' : 'No', STATI[r.stato]?.label || r.stato, r.note_operatore,
     ])
+  }
+
+  // Vero file .xlsx, come l'export della scheda Voucher.
+  function esportaExcel() {
+    const ws = XLSX.utils.aoa_to_sheet([INTESTAZIONI, ...righeExport().map((riga) => riga.map((v) => v ?? ''))])
+    ws['!cols'] = [16, 22, 14, 16, 28, 16, 24, 20, 8, 40, 40, 12, 12, 30].map((wch) => ({ wch }))
+    ws['!autofilter'] = { ref: ws['!ref'] }
+    const wb = XLSX.utils.book_new()
+    XLSX.utils.book_append_sheet(wb, ws, 'Iscritti serata')
+    XLSX.writeFile(wb, `iscritti-serata-ai-${new Date().toISOString().slice(0, 10)}.xlsx`)
+  }
+
+  function esportaCsv() {
+    const intestazioni = INTESTAZIONI
+    const righe = righeExport()
     const csv = [intestazioni, ...righe].map((riga) => riga.map(csvCella).join(';')).join('\n')
     const blob = new Blob(['﻿' + csv], { type: 'text/csv;charset=utf-8' })
     const url = URL.createObjectURL(blob)
@@ -124,6 +141,7 @@ export default function SerataAiTab({ token }) {
           {Object.entries(STATI).map(([k, s]) => <option key={k} value={k}>{s.label}</option>)}
         </select>
         <button onClick={carica} style={{ background: '#f1f5f9', color: '#334155', border: '1px solid #e2e8f0', borderRadius: '6px', padding: '8px 14px', cursor: 'pointer', fontSize: '13px' }}>↻ Aggiorna</button>
+        <button onClick={esportaExcel} disabled={filtrate.length === 0} style={{ background: '#1d6f42', color: 'white', border: 'none', borderRadius: '6px', padding: '8px 14px', cursor: 'pointer', fontSize: '13px', fontWeight: '600' }}>↓ Excel (.xlsx)</button>
         <button onClick={esportaCsv} disabled={filtrate.length === 0} style={{ background: '#c1440e', color: 'white', border: 'none', borderRadius: '6px', padding: '8px 14px', cursor: 'pointer', fontSize: '13px', fontWeight: '600' }}>↓ Esporta CSV</button>
       </div>
 
