@@ -1,5 +1,7 @@
-import { Playfair_Display, DM_Sans } from "next/font/google";
+import { Playfair_Display, DM_Sans, Inter } from "next/font/google";
 import "./globals.css";
+// Stile della serata AI Academy (classi aia-*): barra in testata, inviti, pagina serata.
+import "./aia-stile.css";
 import SiteHeader from "./components/SiteHeader";
 import HydrationBeacon from "./components/HydrationBeacon";
 
@@ -59,6 +61,13 @@ const dmSans = DM_Sans({
   display: "swap",
 });
 
+// Font della serata AI Academy (usato dalle classi aia-*).
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+  display: "swap",
+});
+
 export const metadata = {
   verification: {
     google: "GjLAX1NWAvDUR51ZzWsNQwJsZFAQBCoP0oNoz_TjxjY",
@@ -73,7 +82,7 @@ export default function RootLayout({ children }) {
   return (
     <html
       lang="it"
-      className={`${playfairDisplay.variable} ${dmSans.variable} h-full antialiased`}
+      className={`${playfairDisplay.variable} ${dmSans.variable} ${inter.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col font-sans">
         <noscript>

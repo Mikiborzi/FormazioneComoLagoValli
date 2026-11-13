@@ -488,7 +488,7 @@ export default function AiAcademyPage() {
               Scopri AI Academy per le imprese →
             </Link>
           </p>
-          <InvitoSerataAi tema="scuro" />
+          <InvitoSerataAi />
         </div>
       </section>
 

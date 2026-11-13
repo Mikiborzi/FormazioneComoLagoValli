@@ -1,0 +1,347 @@
+/* =====================================================================================
+   AI Academy — kit di stile della pagina della serata del 26 novembre 2026
+   Valori ricavati dalla nostra pagina pubblicata della serata.
+   Tutto ha il prefisso "aia-": si può incollare in qualunque sito senza toccare il resto.
+   Font: Inter da Google Fonts (vedi LEGGIMI.md). Sui dispositivi Apple si usa Helvetica Neue,
+   come sulla nostra pagina: la pila dei font è la stessa.
+   ===================================================================================== */
+
+:root {
+  /* Colori */
+  --aia-blu: #0433b9;            /* il blu delle slide: sfondo del primo schermo */
+  --aia-notte: #07188d;          /* blu profondo: sezioni scure, pulsante del modulo */
+  --aia-inchiostro: #0b1240;     /* titoli su fondo chiaro, testo dei pulsanti gialli */
+  --aia-testo: #2b3166;          /* testo corrente su fondo chiaro */
+  --aia-testo-tenue: #4a5080;    /* ruoli, note, etichette */
+  --aia-fondo-chiaro: #f6f5fb;   /* fondo delle sezioni chiare */
+  --aia-bianco: #ffffff;
+  --aia-giallo: #fbe853;         /* pulsante principale */
+  --aia-giallo-caldo: #f5c944;   /* inizio della sfumatura gialla (riquadro "promessa") */
+
+  /* Lo spettro delle slide (barra sotto i titoli) e un colore per ogni docente, presi lungo lo spettro */
+  --aia-spettro: linear-gradient(90deg, #43287b 0%, #93338a 16%, #d64586 30%, #d8596c 40%, #d5462e 54%, #e07a55 72%, #f5c944 90%, #fbe853 100%);
+  --aia-sfumatura-gialla: linear-gradient(135deg, #f5c944, #fbe853);
+  --aia-viola: #6c2d83;
+  --aia-magenta: #c13a7e;
+  --aia-rosso: #c9452b;
+  --aia-arancio: #e07a55;
+  --aia-oro: #f5c944;
+
+  /* Font */
+  --aia-font: "Helvetica Neue", Inter, Arial, sans-serif;
+
+  /* Raggi e ombre */
+  --aia-raggio-pillola: 9999px;
+  --aia-raggio-scheda: 2rem;      /* 32 px */
+  --aia-raggio-riquadro: 2.5rem;  /* 40 px */
+  --aia-ombra-pulsante: 0 6px 24px rgba(2, 10, 61, 0.35);
+
+  /* Larghezza del contenuto e margini laterali */
+  --aia-larghezza: 72rem;         /* 1152 px */
+  --aia-margine: 1.25rem;         /* 20 px su telefono, 40 px da 640 px in su */
+}
+
+/* ---------- Contenitori ------------------------------------------------------------- */
+
+.aia-sezione {
+  box-sizing: border-box;
+  padding: 5rem var(--aia-margine);
+  font-family: var(--aia-font);
+  color: var(--aia-testo);
+  background: var(--aia-fondo-chiaro);
+  -webkit-font-smoothing: antialiased;
+}
+.aia-sezione *,
+.aia-sezione *::before,
+.aia-sezione *::after {
+  box-sizing: border-box;
+}
+.aia-contenitore {
+  max-width: var(--aia-larghezza);
+  margin: 0 auto;
+}
+
+/* Sfondo del primo schermo: blu con la nebulosa che sale dal basso a sinistra.
+   Il percorso dell'immagine va adattato a dove la caricate (vedi LEGGIMI.md). */
+.aia-sfondo {
+  position: relative;
+  overflow: hidden;
+  color: var(--aia-bianco);
+  background-color: var(--aia-blu);
+  background-image: url("immagini/sfondo-nebulosa.jpg");
+  background-size: cover;
+  background-position: 0% 100%;
+  background-repeat: no-repeat;
+}
+.aia-sfondo.aia-apertura {
+  padding-top: 1.5rem;
+  padding-bottom: 3.5rem;
+}
+/* Sezione scura senza nebulosa */
+.aia-sfondo-notte {
+  color: var(--aia-bianco);
+  background: var(--aia-notte);
+}
+
+/* ---------- Testi --------------------------------------------------------------------- */
+
+.aia-logo {
+  display: block;
+  height: 2.25rem; /* 36 px; 48 px su schermi grandi */
+  width: auto;
+}
+
+/* Riga piccola in maiuscolo sopra il titolo (data, luogo, ingresso) */
+.aia-occhiello {
+  margin: 1.5rem 0 0;
+  font-size: 0.8rem;
+  font-weight: 500;
+  line-height: 1.625;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+/* Titolo grande del primo schermo (H1) */
+.aia-titolo {
+  margin: 1rem 0 0;
+  max-width: 64rem;
+  font-family: var(--aia-font);
+  font-size: 2.6rem;
+  font-weight: 700;
+  line-height: 0.98;
+  letter-spacing: -0.035em;
+  text-wrap: balance;
+}
+
+/* Titolo di sezione (H2). Bianco su fondo scuro; con aia-su-chiaro diventa blu inchiostro. */
+.aia-titolo-sezione {
+  margin: 0;
+  font-family: var(--aia-font);
+  font-size: 2.4rem;
+  font-weight: 700;
+  line-height: 1.02;
+  letter-spacing: -0.03em;
+  text-wrap: balance;
+}
+.aia-su-chiaro {
+  color: var(--aia-inchiostro);
+}
+
+/* Sottotitolo del primo schermo */
+.aia-sottotitolo {
+  margin: 1.5rem 0 0;
+  max-width: 48rem;
+  font-size: 1.25rem;
+  font-weight: 300;
+  line-height: 1.375;
+}
+/* Riga sotto il sottotitolo (un filo più piccola e trasparente) */
+.aia-sottotitolo-2 {
+  margin: 0.5rem 0 0;
+  max-width: 48rem;
+  font-size: 1.125rem;
+  font-weight: 300;
+  line-height: 1.375;
+  opacity: 0.9;
+}
+
+/* Testo corrente delle sezioni: grande e leggero; il grassetto è pieno */
+.aia-testo {
+  margin: 0 0 1.5rem;
+  font-size: 1.25rem;
+  font-weight: 300;
+  line-height: 1.625;
+  text-wrap: pretty;
+}
+.aia-testo strong {
+  font-weight: 700;
+}
+.aia-su-chiaro .aia-testo strong,
+.aia-testo.aia-su-chiaro strong {
+  color: var(--aia-inchiostro);
+}
+
+/* Nota piccola sotto il pulsante */
+.aia-nota {
+  margin: 1.25rem 0 0;
+  max-width: 36rem;
+  font-size: 1rem;
+  font-weight: 300;
+  line-height: 1.625;
+  opacity: 0.9;
+}
+
+/* Barra a spettro sotto i titoli */
+.aia-barra {
+  height: 0.625rem;
+  max-width: 36rem;
+  margin-top: 1.5rem;
+  border-radius: var(--aia-raggio-pillola);
+  background: var(--aia-spettro);
+}
+
+/* ---------- Pulsanti e badge ------------------------------------------------------------ */
+
+.aia-azioni {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1.25rem;
+  margin-top: 1.75rem;
+}
+
+/* Pulsante principale a pillola: giallo con testo blu inchiostro */
+.aia-pulsante {
+  display: inline-block;
+  padding: 1rem 2rem;
+  border: 0;
+  border-radius: var(--aia-raggio-pillola);
+  background: var(--aia-giallo);
+  color: var(--aia-inchiostro);
+  font-family: var(--aia-font);
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.75rem;
+  text-align: center;
+  text-decoration: none;
+  box-shadow: var(--aia-ombra-pulsante);
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+.aia-pulsante:hover,
+.aia-pulsante:focus-visible {
+  background: var(--aia-bianco);
+  color: var(--aia-inchiostro);
+}
+.aia-pulsante:active {
+  transform: scale(0.98);
+}
+/* Variante blu (pulsante del modulo su fondo bianco) */
+.aia-pulsante--blu {
+  background: var(--aia-notte);
+  color: var(--aia-bianco);
+  box-shadow: none;
+}
+.aia-pulsante--blu:hover,
+.aia-pulsante--blu:focus-visible {
+  background: var(--aia-blu);
+  color: var(--aia-bianco);
+}
+
+/* Badge "Dress code": contorno bianco, testo in grassetto */
+.aia-badge {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  border-radius: 1rem;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.8);
+  font-size: 0.875rem;
+  font-weight: 700;
+  line-height: 1.25rem;
+}
+
+/* ---------- Schede docente ------------------------------------------------------------- */
+
+.aia-schede {
+  display: grid;
+  gap: 1.25rem;
+  margin: 3rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+/* Il colore del docente si passa così: style="--aia-colore: var(--aia-magenta)" */
+.aia-scheda {
+  --aia-colore: var(--aia-viola);
+  display: flex;
+  flex-direction: column;
+  padding: 1.75rem;
+  border-radius: var(--aia-raggio-scheda);
+  background: var(--aia-bianco);
+  color: var(--aia-testo);
+}
+.aia-scheda__testa {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+/* Cerchio con le iniziali, oppure con la foto dentro (<img>) */
+.aia-scheda__foto {
+  position: relative;
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 5rem;
+  height: 5rem;
+  overflow: hidden;
+  border-radius: 50%;
+  background: var(--aia-colore);
+  color: var(--aia-bianco);
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+.aia-scheda__foto img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.aia-scheda__nome {
+  margin: 0;
+  color: var(--aia-inchiostro);
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.25;
+}
+.aia-scheda__ruolo {
+  margin: 0.25rem 0 0;
+  color: var(--aia-testo-tenue);
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.375;
+}
+.aia-scheda__bio {
+  flex: 1;
+  margin: 1.5rem 0 0;
+  font-size: 1.125rem;
+  line-height: 1.625;
+}
+.aia-scheda__citazione {
+  margin: 1.75rem 0 0;
+  padding: 0 0 0 1.25rem;
+  border-left: 4px solid var(--aia-colore);
+  color: var(--aia-inchiostro);
+  font-size: 1.25rem;
+  font-weight: 500;
+  line-height: 1.375;
+}
+
+/* ---------- Schermi più larghi ---------------------------------------------------------- */
+
+@media (min-width: 400px) {
+  .aia-titolo { font-size: 2.9rem; }
+}
+@media (min-width: 640px) {
+  :root { --aia-margine: 2.5rem; }
+  .aia-sezione { padding-top: 8rem; padding-bottom: 8rem; }
+  .aia-sfondo.aia-apertura { padding-top: 2rem; padding-bottom: 6rem; }
+  .aia-logo { height: 3rem; }
+  .aia-occhiello { margin-top: 3.5rem; font-size: 1rem; }
+  .aia-titolo { margin-top: 1.75rem; font-size: 4.5rem; }
+  .aia-titolo-sezione { font-size: 3.75rem; }
+  .aia-sottotitolo { margin-top: 2.25rem; font-size: 1.875rem; }
+  .aia-sottotitolo-2 { margin-top: 0.75rem; font-size: 1.5rem; }
+  .aia-testo { font-size: 1.5rem; }
+  .aia-nota { font-size: 1.125rem; }
+  .aia-barra { height: 0.75rem; margin-top: 2.25rem; }
+  .aia-azioni { flex-direction: row; align-items: center; margin-top: 2.5rem; }
+  .aia-pulsante { padding: 1.25rem 2.5rem; }
+  .aia-badge { border-radius: var(--aia-raggio-pillola); font-size: 1rem; line-height: 1.5rem; }
+  .aia-scheda { padding: 2.25rem; }
+  .aia-scheda__nome { font-size: 1.5rem; }
+}
+@media (min-width: 768px) {
+  .aia-schede { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (min-width: 1024px) {
+  .aia-titolo { font-size: 6.4rem; }
+  .aia-titolo-sezione { font-size: 4.5rem; }
+}

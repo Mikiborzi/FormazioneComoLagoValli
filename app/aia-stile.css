@@ -1,0 +1,692 @@
+/* =====================================================================================
+   AI Academy — stile della serata "AI Academy Open" (kit di stile in stile-riferimento/).
+   Usato da: pagina /ai-academy/serata, riquadro InvitoSerataAi, barra in testata,
+   fascia serata di /ai-academy/imprese, modulo FormSerataAi.
+   Tutto ha il prefisso "aia-": non tocca il resto del sito.
+   Nota: queste regole non stanno in un @layer, quindi vincono sulle utility Tailwind
+   con le stesse proprietà. Sugli elementi con classi aia- usare Tailwind solo per
+   proprietà che queste regole non impostano (es. margini esterni del riquadro invito).
+   Compatibilità Safari 14/15: niente :focus-visible in liste di selettori (farebbe
+   cadere l'intera regola), niente inset/aspect-ratio.
+   ===================================================================================== */
+
+:root {
+  /* Colori */
+  --aia-blu: #0433b9;
+  --aia-notte: #07188d;
+  --aia-inchiostro: #0b1240;
+  --aia-testo: #2b3166;
+  --aia-testo-tenue: #4a5080;
+  --aia-fondo-chiaro: #f6f5fb;
+  --aia-bianco: #ffffff;
+  --aia-giallo: #fbe853;
+  --aia-giallo-caldo: #f5c944;
+
+  --aia-spettro: linear-gradient(90deg, #43287b 0%, #93338a 16%, #d64586 30%, #d8596c 40%, #d5462e 54%, #e07a55 72%, #f5c944 90%, #fbe853 100%);
+  --aia-sfumatura-gialla: linear-gradient(135deg, #f5c944, #fbe853);
+  --aia-viola: #6c2d83;
+  --aia-magenta: #c13a7e;
+  --aia-rosso: #c9452b;
+  --aia-arancio: #e07a55;
+  --aia-oro: #f5c944;
+
+  /* Font: Helvetica Neue sui dispositivi Apple, altrimenti Inter (next/font in layout.js) */
+  --aia-font: "Helvetica Neue", var(--font-inter), Inter, Arial, sans-serif;
+
+  --aia-raggio-pillola: 9999px;
+  --aia-raggio-scheda: 2rem;
+  --aia-raggio-riquadro: 2.5rem;
+  --aia-ombra-pulsante: 0 6px 24px rgba(2, 10, 61, 0.35);
+
+  --aia-larghezza: 72rem;
+  --aia-margine: 1.25rem;
+}
+
+/* ---------- Contenitori ------------------------------------------------------------- */
+
+.aia-pagina {
+  font-family: var(--aia-font);
+  background: var(--aia-fondo-chiaro);
+  -webkit-font-smoothing: antialiased;
+}
+
+.aia-sezione {
+  box-sizing: border-box;
+  padding: 5rem var(--aia-margine);
+  font-family: var(--aia-font);
+  color: var(--aia-testo);
+  background: var(--aia-fondo-chiaro);
+  -webkit-font-smoothing: antialiased;
+}
+.aia-sezione *,
+.aia-sezione *::before,
+.aia-sezione *::after {
+  box-sizing: border-box;
+}
+.aia-contenitore {
+  max-width: var(--aia-larghezza);
+  margin: 0 auto;
+}
+
+.aia-sfondo {
+  position: relative;
+  overflow: hidden;
+  color: var(--aia-bianco);
+  background-color: var(--aia-blu);
+  background-image: url("/aia/sfondo-nebulosa.jpg");
+  background-size: cover;
+  background-position: 0% 100%;
+  background-repeat: no-repeat;
+}
+.aia-sfondo.aia-apertura {
+  padding-top: 1.5rem;
+  padding-bottom: 3.5rem;
+}
+.aia-sfondo-notte {
+  color: var(--aia-bianco);
+  background: var(--aia-notte);
+}
+/* Fascia blu pieno, senza nebulosa */
+.aia-sfondo-blu {
+  color: var(--aia-bianco);
+  background: var(--aia-blu);
+}
+
+/* Filo a spettro sottile tra il primo schermo e la prima sezione chiara */
+.aia-filo {
+  height: 4px;
+  background: var(--aia-spettro);
+}
+/* Fascia a spettro con gli angoli bassi arrotondati, sopra una sezione blu profondo */
+.aia-onda {
+  background: var(--aia-notte);
+}
+.aia-onda > div {
+  height: 2.5rem;
+  border-radius: 0 0 2.5rem 2.5rem;
+  background: var(--aia-spettro);
+}
+
+/* Due colonne su schermi grandi: titolo a sinistra, testo a destra */
+.aia-due-colonne {
+  display: grid;
+  gap: 2rem;
+}
+
+/* ---------- Testi --------------------------------------------------------------------- */
+
+.aia-logo {
+  display: block;
+  height: 2.25rem;
+  width: auto;
+}
+
+.aia-occhiello {
+  margin: 1.5rem 0 0;
+  font-size: 0.8rem;
+  font-weight: 500;
+  line-height: 1.625;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+.aia-titolo {
+  margin: 1rem 0 0;
+  max-width: 64rem;
+  font-family: var(--aia-font);
+  font-size: 2.6rem;
+  font-weight: 700;
+  line-height: 0.98;
+  letter-spacing: -0.035em;
+  text-wrap: balance;
+}
+
+.aia-titolo-sezione {
+  margin: 0;
+  font-family: var(--aia-font);
+  font-size: 2.4rem;
+  font-weight: 700;
+  line-height: 1.02;
+  letter-spacing: -0.03em;
+  text-wrap: balance;
+}
+.aia-su-chiaro {
+  color: var(--aia-inchiostro);
+}
+
+.aia-sottotitolo {
+  margin: 1.5rem 0 0;
+  max-width: 48rem;
+  font-size: 1.25rem;
+  font-weight: 300;
+  line-height: 1.375;
+}
+.aia-sottotitolo-2 {
+  margin: 0.5rem 0 0;
+  max-width: 48rem;
+  font-size: 1.125rem;
+  font-weight: 300;
+  line-height: 1.375;
+  opacity: 0.9;
+}
+
+.aia-testo {
+  margin: 0 0 1.5rem;
+  font-size: 1.25rem;
+  font-weight: 300;
+  line-height: 1.625;
+  text-wrap: pretty;
+}
+.aia-testo:last-child {
+  margin-bottom: 0;
+}
+.aia-testo strong {
+  font-weight: 700;
+}
+.aia-su-chiaro .aia-testo strong,
+.aia-testo.aia-su-chiaro strong {
+  color: var(--aia-inchiostro);
+}
+.aia-testo a {
+  color: var(--aia-blu);
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.aia-nota {
+  margin: 1.25rem 0 0;
+  max-width: 36rem;
+  font-size: 1rem;
+  font-weight: 300;
+  line-height: 1.625;
+  opacity: 0.9;
+}
+
+.aia-barra {
+  height: 0.625rem;
+  max-width: 36rem;
+  margin-top: 1.5rem;
+  border-radius: var(--aia-raggio-pillola);
+  background: var(--aia-spettro);
+}
+.aia-barra--corta {
+  max-width: 20rem;
+}
+
+/* ---------- Pulsanti e badge ------------------------------------------------------------ */
+
+.aia-azioni {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-top: 1.75rem;
+}
+.aia-azioni > * + * {
+  margin-top: 1.25rem; /* al posto di gap: Safari 14.0 non supporta gap nei flex */
+}
+
+.aia-pulsante {
+  display: inline-block;
+  padding: 1rem 2rem;
+  border: 0;
+  border-radius: var(--aia-raggio-pillola);
+  background: var(--aia-giallo);
+  color: var(--aia-inchiostro);
+  font-family: var(--aia-font);
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.75rem;
+  text-align: center;
+  text-decoration: none;
+  box-shadow: var(--aia-ombra-pulsante);
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+.aia-pulsante:hover {
+  background: var(--aia-bianco);
+  color: var(--aia-inchiostro);
+}
+.aia-pulsante:focus-visible {
+  background: var(--aia-bianco);
+  color: var(--aia-inchiostro);
+}
+.aia-pulsante:active {
+  transform: scale(0.98);
+}
+.aia-pulsante:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+.aia-pulsante--blu {
+  background: var(--aia-notte);
+  color: var(--aia-bianco);
+  box-shadow: none;
+}
+.aia-pulsante--blu:hover {
+  background: var(--aia-blu);
+  color: var(--aia-bianco);
+}
+.aia-pulsante--blu:focus-visible {
+  background: var(--aia-blu);
+  color: var(--aia-bianco);
+}
+.aia-pulsante--piccolo {
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  line-height: 1.5rem;
+}
+
+.aia-badge {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  border-radius: 1rem;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.8);
+  font-size: 0.875rem;
+  font-weight: 700;
+  line-height: 1.25rem;
+}
+
+/* ---------- Programma a orari ------------------------------------------------------------ */
+
+.aia-programma {
+  margin: 3rem 0 0;
+  padding: 0;
+  list-style: none;
+  max-width: 48rem;
+}
+.aia-programma li {
+  position: relative;
+  display: flex;
+  padding-bottom: 2.25rem;
+}
+.aia-programma li:last-child {
+  padding-bottom: 0;
+}
+.aia-programma__ora {
+  flex: none;
+  width: 4.25rem;
+  font-size: 1.125rem;
+  font-weight: 700;
+  line-height: 1.75rem;
+}
+.aia-programma__corpo {
+  position: relative;
+  padding-left: 2rem;
+}
+/* pallino colorato */
+.aia-programma__corpo::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.5rem;
+  width: 0.875rem;
+  height: 0.875rem;
+  border-radius: 50%;
+  background: var(--aia-colore, var(--aia-viola));
+}
+/* linea verticale fino al pallino successivo */
+.aia-programma li:not(:last-child) .aia-programma__corpo::after {
+  content: "";
+  position: absolute;
+  left: 0.375rem;
+  top: 1.5rem;
+  bottom: -2.25rem;
+  width: 2px;
+  background: rgba(255, 255, 255, 0.25);
+}
+.aia-programma__titolo {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.75rem;
+}
+.aia-programma__testo {
+  margin: 0.5rem 0 0;
+  font-size: 1rem;
+  font-weight: 300;
+  line-height: 1.75;
+  opacity: 0.85;
+}
+
+/* ---------- Riquadri numerati ("Due cose") --------------------------------------------- */
+
+.aia-punti {
+  display: grid;
+  gap: 1.25rem;
+  margin: 3rem 0 0;
+  padding: 0;
+  list-style: none;
+  max-width: 48rem;
+}
+.aia-punto {
+  padding: 2rem 2.25rem;
+  border-radius: var(--aia-raggio-scheda);
+  background: var(--aia-bianco);
+  font-size: 1.125rem;
+  line-height: 1.6;
+}
+.aia-punto strong {
+  color: var(--aia-inchiostro);
+  font-weight: 700;
+}
+.aia-punto__numero {
+  display: block;
+  margin-bottom: 0.75rem;
+  color: var(--aia-colore, var(--aia-viola));
+  font-size: 2.75rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+/* ---------- Riquadro giallo ("Non è una televendita.") ---------------------------------- */
+
+.aia-promessa {
+  padding: 2.5rem 1.75rem;
+  border-radius: var(--aia-raggio-riquadro);
+  background: var(--aia-sfumatura-gialla);
+  color: var(--aia-inchiostro);
+}
+.aia-promessa .aia-testo {
+  max-width: 46rem;
+  margin-top: 1rem;
+  color: var(--aia-inchiostro);
+}
+
+/* ---------- Schede docente ------------------------------------------------------------- */
+
+.aia-schede {
+  display: grid;
+  gap: 1.25rem;
+  margin: 3rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+.aia-scheda {
+  --aia-colore: var(--aia-viola);
+  display: flex;
+  flex-direction: column;
+  padding: 1.75rem;
+  border-radius: var(--aia-raggio-scheda);
+  background: var(--aia-bianco);
+  color: var(--aia-testo);
+}
+.aia-scheda__testa {
+  display: flex;
+  align-items: center;
+}
+.aia-scheda__foto {
+  position: relative;
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 5rem;
+  height: 5rem;
+  margin-right: 1.25rem;
+  overflow: hidden;
+  border-radius: 50%;
+  background: var(--aia-colore);
+  color: var(--aia-bianco);
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+.aia-scheda__nome {
+  margin: 0;
+  color: var(--aia-inchiostro);
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.25;
+}
+.aia-scheda__ruolo {
+  margin: 0.25rem 0 0;
+  color: var(--aia-testo-tenue);
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.375;
+}
+.aia-scheda__bio {
+  flex: 1;
+  margin: 1.5rem 0 0;
+  font-size: 1.125rem;
+  line-height: 1.625;
+}
+.aia-scheda__citazione {
+  margin: 1.75rem 0 0;
+  padding: 0 0 0 1.25rem;
+  border-left: 4px solid var(--aia-colore);
+  color: var(--aia-inchiostro);
+  font-size: 1.25rem;
+  font-weight: 500;
+  line-height: 1.375;
+}
+
+/* ---------- Modulo di prenotazione (riquadro bianco) ------------------------------------- */
+
+.aia-riquadro-modulo {
+  padding: 1.75rem 1.25rem;
+  border-radius: var(--aia-raggio-riquadro);
+  background: var(--aia-bianco);
+  color: var(--aia-testo);
+}
+.aia-modulo {
+  font-family: var(--aia-font);
+}
+.aia-modulo__griglia {
+  display: grid;
+  gap: 1.25rem;
+}
+.aia-modulo__campo {
+  display: flex;
+  flex-direction: column;
+}
+.aia-modulo__etichetta {
+  margin-bottom: 0.5rem;
+  color: var(--aia-inchiostro);
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+.aia-modulo__etichetta span {
+  color: var(--aia-testo-tenue);
+  font-weight: 400;
+}
+.aia-modulo__input {
+  width: 100%;
+  padding: 0.85rem 1rem;
+  border: 2px solid #d4d4dc;
+  border-radius: 0.75rem;
+  background: var(--aia-bianco);
+  color: var(--aia-inchiostro);
+  font-family: var(--aia-font);
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.15s ease;
+}
+.aia-modulo__input:focus {
+  border-color: var(--aia-blu);
+}
+.aia-modulo__input--errore {
+  border-color: #d5462e;
+}
+.aia-modulo__aiuto {
+  margin: 0.6rem 0 0;
+  color: var(--aia-testo-tenue);
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+.aia-modulo__errore {
+  margin: 0.4rem 0 0;
+  color: #b3261e;
+  font-size: 0.875rem;
+}
+.aia-modulo__consenso {
+  display: flex;
+  align-items: flex-start;
+  color: var(--aia-testo);
+  font-size: 0.95rem;
+  line-height: 1.5;
+  cursor: pointer;
+}
+.aia-modulo__consenso input {
+  flex: none;
+  width: 1.4rem;
+  height: 1.4rem;
+  margin: 0 0.85rem 0 0;
+  accent-color: var(--aia-notte);
+}
+.aia-modulo__consenso a {
+  color: var(--aia-blu);
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.aia-modulo__consenso span span {
+  color: var(--aia-testo-tenue);
+}
+.aia-modulo__avviso {
+  padding: 0.85rem 1rem;
+  border: 1px solid rgba(213, 70, 46, 0.45);
+  border-radius: 0.75rem;
+  background: rgba(213, 70, 46, 0.08);
+  color: #8a2a17;
+  font-size: 0.95rem;
+}
+.aia-modulo__esito {
+  padding: 0.5rem 0;
+}
+.aia-modulo__esito-titolo {
+  margin: 0 0 0.75rem;
+  color: var(--aia-inchiostro);
+  font-size: 1.75rem;
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+/* ---------- Riquadro di invito (home, formazione impresa, AI Academy) -------------------- */
+
+.aia-invito {
+  display: block;
+  padding: 1.75rem 1.5rem;
+  overflow: hidden;
+  border-radius: var(--aia-raggio-scheda);
+  background-color: var(--aia-blu);
+  background-image: url("/aia/sfondo-nebulosa.jpg");
+  background-size: cover;
+  background-position: 0% 100%;
+  color: var(--aia-bianco);
+  font-family: var(--aia-font);
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+}
+.aia-invito .aia-logo {
+  height: 1.75rem;
+}
+.aia-invito .aia-occhiello {
+  margin-top: 1rem;
+  font-size: 0.72rem;
+}
+.aia-invito__titolo {
+  margin: 0.6rem 0 0;
+  font-size: 1.75rem;
+  font-weight: 700;
+  line-height: 1.02;
+  letter-spacing: -0.03em;
+  text-wrap: balance;
+}
+.aia-invito .aia-barra {
+  height: 0.5rem;
+  max-width: 16rem;
+  margin-top: 1rem;
+}
+.aia-invito__testo {
+  margin: 1rem 0 0;
+  font-size: 1.05rem;
+  font-weight: 300;
+  line-height: 1.45;
+}
+.aia-invito .aia-azioni {
+  margin-top: 1.25rem;
+}
+
+/* ---------- Footer della pagina serata --------------------------------------------------- */
+
+.aia-footer {
+  padding: 3rem var(--aia-margine);
+  background: #000;
+  color: rgba(255, 255, 255, 0.65);
+  font-family: var(--aia-font);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+.aia-footer a {
+  color: rgba(255, 255, 255, 0.75);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.aia-footer__nome {
+  margin: 0 0 0.5rem;
+  color: var(--aia-bianco);
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+.aia-footer__piccolo {
+  margin-top: 1rem;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.78rem;
+}
+
+/* ---------- Schermi più larghi ---------------------------------------------------------- */
+
+@media (min-width: 400px) {
+  .aia-titolo { font-size: 2.9rem; }
+}
+@media (min-width: 640px) {
+  :root { --aia-margine: 2.5rem; }
+  .aia-sezione { padding-top: 8rem; padding-bottom: 8rem; }
+  .aia-sfondo.aia-apertura { padding-top: 2rem; padding-bottom: 6rem; }
+  .aia-logo { height: 3rem; }
+  .aia-occhiello { margin-top: 3.5rem; font-size: 1rem; }
+  .aia-titolo { margin-top: 1.75rem; font-size: 4.5rem; }
+  .aia-titolo-sezione { font-size: 3.75rem; }
+  .aia-sottotitolo { margin-top: 2.25rem; font-size: 1.875rem; }
+  .aia-sottotitolo-2 { margin-top: 0.75rem; font-size: 1.5rem; }
+  .aia-testo { font-size: 1.5rem; }
+  .aia-nota { font-size: 1.125rem; }
+  .aia-barra { height: 0.75rem; margin-top: 2.25rem; }
+  .aia-azioni { flex-direction: row; align-items: center; margin-top: 2.5rem; }
+  .aia-azioni > * + * { margin-top: 0; margin-left: 1.25rem; }
+  .aia-pulsante { padding: 1.25rem 2.5rem; }
+  .aia-pulsante--piccolo { padding: 0.85rem 1.75rem; }
+  .aia-badge { border-radius: var(--aia-raggio-pillola); font-size: 1rem; line-height: 1.5rem; }
+  .aia-scheda { padding: 2.25rem; }
+  .aia-scheda__nome { font-size: 1.5rem; }
+  .aia-programma__ora { width: 6rem; font-size: 1.375rem; }
+  .aia-programma__titolo { font-size: 1.5rem; }
+  .aia-programma__testo { font-size: 1.125rem; }
+  .aia-punti { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .aia-promessa { padding: 3.5rem; }
+  .aia-riquadro-modulo { padding: 2.5rem; }
+  .aia-modulo__griglia--2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .aia-onda > div { height: 4rem; border-radius: 0 0 4rem 4rem; }
+  .aia-invito { padding: 2.25rem 2.5rem; }
+  .aia-invito .aia-occhiello { margin-top: 1.25rem; font-size: 0.8rem; }
+  .aia-invito__titolo { font-size: 2.4rem; }
+  .aia-invito__testo { font-size: 1.2rem; }
+  .aia-invito .aia-azioni { margin-top: 1.5rem; }
+  /* nei riquadri stretti pulsante e badge restano uno sotto l'altro */
+  .aia-invito .aia-azioni { flex-direction: column; align-items: flex-start; }
+  .aia-invito .aia-azioni > * + * { margin-left: 0; margin-top: 1rem; }
+}
+.aia-invito .aia-pulsante { white-space: nowrap; }
+@media (min-width: 768px) {
+  .aia-schede { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (min-width: 1024px) {
+  .aia-titolo { font-size: 6.4rem; }
+  .aia-titolo-sezione { font-size: 4.5rem; }
+  .aia-due-colonne { grid-template-columns: 5fr 7fr; gap: 4rem; align-items: start; }
+  .aia-due-colonne--centro { align-items: center; }
+  .aia-due-colonne--modulo { grid-template-columns: 5fr 7fr; }
+  .aia-due-colonne .aia-titolo-sezione { font-size: 4rem; }
+}

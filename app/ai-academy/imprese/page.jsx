@@ -1,11 +1,13 @@
 import Link from "next/link";
 import { Fraunces } from "next/font/google";
-import FormSerataAi from "@/app/components/FormSerataAi";
-import { SERATA_AI } from "@/app/lib/serataAi";
+import InvitoSerataAi from "@/app/components/InvitoSerataAi";
+import { PAGINA_SERATA, SERATA_AI, TESTI_SERATA } from "@/app/lib/serataAi";
 
 // AI Academy per le imprese: percorsi modulari su misura, laboratori di
 // Starting Work, esempio "Concretamente AI" e serata di presentazione.
-// Stessa identità visiva della pagina /ai-academy.
+// Stessa identità visiva della pagina /ai-academy; le parti sulla serata usano
+// lo stile del kit AI Academy (classi aia-*) e portano a /ai-academy/serata,
+// dove c'è il modulo di prenotazione.
 const fraunces = Fraunces({
   subsets: ["latin"],
   display: "swap",
@@ -22,7 +24,7 @@ const SERIF = "var(--font-fraunces), Georgia, serif";
 export const metadata = {
   title: "AI Academy per le imprese — Formazione AI su misura · Como",
   description:
-    "Percorsi di formazione sull'intelligenza artificiale costruiti sui processi della tua azienda: modulari, in aula, nei laboratori di Starting Work a Como. Serata di presentazione gratuita venerdì 27 novembre alle 18:00.",
+    "Percorsi di formazione sull'intelligenza artificiale costruiti sui processi della tua azienda: modulari, in aula, nei laboratori di Starting Work a Como. Serata di presentazione gratuita giovedì 26 novembre alle 18:00.",
 };
 
 // ─── Dati ────────────────────────────────────────────────────────────────────
@@ -32,7 +34,7 @@ const navSezioni = [
   { label: "I moduli", href: "#moduli" },
   { label: "Un esempio", href: "#esempio" },
   { label: "Laboratori", href: "#laboratori" },
-  { label: "Serata 27/11", href: "#serata" },
+  { label: "Serata 26/11", href: "#serata" },
 ];
 
 const flessibilita = [
@@ -118,21 +120,6 @@ const risultati = [
   "ha una mappa chiara di dove l'AI può entrare nell'organizzazione, e da dove cominciare",
 ];
 
-const programmaSerata = [
-  {
-    titolo: "I percorsi",
-    corpo: "Come costruiamo la formazione sull'AI per un'impresa: moduli, durate, formule.",
-  },
-  {
-    titolo: "I laboratori",
-    corpo: "Visita alle aule attrezzate di Starting Work, dove si prova l'AI con le mani.",
-  },
-  {
-    titolo: "Le vostre domande",
-    corpo: "Confronto con i docenti sulle esigenze concrete della vostra azienda.",
-  },
-];
-
 // ─── Componenti ──────────────────────────────────────────────────────────────
 
 function Eyebrow({ children, chiaro = false }) {
@@ -203,13 +190,13 @@ export default function AiAcademyImpresePage() {
               </a>
             ))}
           </nav>
-          <a
-            href="#serata"
-            className="font-sans text-sm font-semibold rounded-full px-4 py-2 shrink-0 transition-all duration-200 hover:brightness-110"
-            style={{ backgroundColor: CLAY, color: "#fff" }}
+          <Link
+            href={`${PAGINA_SERATA}#prenota`}
+            className="text-sm font-bold rounded-full px-4 py-2 shrink-0 transition-all duration-200 hover:brightness-110"
+            style={{ backgroundColor: "var(--aia-giallo)", color: "var(--aia-inchiostro)", fontFamily: "var(--aia-font)" }}
           >
             Prenota la serata
-          </a>
+          </Link>
         </div>
       </div>
 
@@ -261,26 +248,7 @@ export default function AiAcademyImpresePage() {
           </div>
 
           {/* Serata in evidenza */}
-          <div
-            className="rounded-2xl p-6 sm:p-8 max-w-2xl"
-            style={{ backgroundColor: "rgba(236,232,225,0.05)", border: "1.5px solid rgba(217,106,63,0.55)" }}
-          >
-            <p className="font-sans text-xs font-semibold uppercase mb-2" style={{ letterSpacing: "0.14em", color: CLAY_LIGHT }}>
-              Serata di presentazione · gratuita e aperta a tutti
-            </p>
-            <p className="font-bold text-2xl sm:text-3xl mb-3" style={{ fontFamily: SERIF, color: CREAM }}>
-              {SERATA_AI.giorno}, ore {SERATA_AI.ora}
-            </p>
-            <p className="font-sans text-base leading-relaxed mb-6" style={{ color: "rgba(236,232,225,0.75)" }}>
-              Da {SERATA_AI.luogo}, {SERATA_AI.indirizzo}. Ti presentiamo le
-              opportunità formative di AI Academy e ti facciamo vedere i nostri
-              laboratori.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-3">
-              <Bottone href="#serata">Prenota il tuo posto</Bottone>
-              <Bottone href="/formazione-impresa/contatto" variante="bordo">Richiedi una proposta</Bottone>
-            </div>
-          </div>
+          <InvitoSerataAi className="max-w-3xl" />
         </div>
       </section>
 
@@ -493,56 +461,26 @@ export default function AiAcademyImpresePage() {
         </div>
       </section>
 
-      {/* ── Serata di presentazione + iscrizione ────────────────────── */}
-      <section
-        id="serata"
-        className="px-5 py-16 sm:py-24 scroll-mt-32"
-        style={{ backgroundColor: "#141210", borderTop: `3px solid ${CLAY}` }}
-      >
-        <div className="max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-5 gap-12">
-          <div className="lg:col-span-2">
-            <Eyebrow chiaro>Serata di presentazione · ingresso gratuito</Eyebrow>
-            <h2 className="font-bold text-3xl sm:text-4xl leading-tight mb-6" style={{ fontFamily: SERIF, color: CREAM }}>
-              Vieni a conoscerci e a vedere i laboratori.
-            </h2>
-            <div className="rounded-2xl p-6 mb-8" style={{ backgroundColor: "rgba(236,232,225,0.05)", border: "1px solid rgba(236,232,225,0.12)" }}>
-              <p className="font-sans text-lg font-semibold mb-1" style={{ color: CREAM }}>
-                {SERATA_AI.giorno}
-              </p>
-              <p className="font-sans text-lg font-semibold mb-3" style={{ color: CLAY_LIGHT }}>
-                ore {SERATA_AI.ora}
-              </p>
-              <p className="font-sans text-base leading-relaxed" style={{ color: "rgba(236,232,225,0.7)" }}>
-                {SERATA_AI.luogo}
-                <br />
-                {SERATA_AI.indirizzo}
-              </p>
-            </div>
-            <p className="font-sans text-base leading-relaxed mb-6" style={{ color: "rgba(236,232,225,0.7)" }}>
-              Aperta a chiunque sia interessato: imprenditori, professionisti,
-              dipendenti, curiosi. Porta pure un collega.
-            </p>
-            <ul className="flex flex-col gap-4">
-              {programmaSerata.map((p) => (
-                <li key={p.titolo} className="pl-4" style={{ borderLeft: `2px solid ${CLAY}` }}>
-                  <p className="font-sans text-base font-semibold" style={{ color: CREAM }}>{p.titolo}</p>
-                  <p className="font-sans text-sm leading-relaxed" style={{ color: "rgba(236,232,225,0.6)" }}>{p.corpo}</p>
-                </li>
-              ))}
-            </ul>
+      {/* ── Serata AI Academy Open: invito alla pagina con il modulo ── */}
+      <section id="serata" className="aia-sezione aia-sfondo scroll-mt-32">
+        <div className="aia-contenitore">
+          <p className="aia-occhiello" style={{ marginTop: 0 }}>{TESTI_SERATA.occhiello}</p>
+          <h2 className="aia-titolo-sezione" style={{ marginTop: "1.5rem" }}>{TESTI_SERATA.titolo}</h2>
+          <div className="aia-barra" aria-hidden="true" />
+          <p className="aia-sottotitolo">{TESTI_SERATA.sottotitolo}</p>
+          <p className="aia-sottotitolo-2">
+            Da {SERATA_AI.luogo}, {SERATA_AI.indirizzo}: novanta minuti con i docenti, la visita ai
+            laboratori e poi l&apos;aperitivo.
+          </p>
+          <div className="aia-azioni">
+            <Link className="aia-pulsante" href={`${PAGINA_SERATA}#prenota`}>{TESTI_SERATA.pulsante}</Link>
+            <span className="aia-badge">{TESTI_SERATA.dressCode}</span>
           </div>
-
-          <div className="lg:col-span-3">
-            <div className="rounded-2xl p-6 sm:p-8" style={{ backgroundColor: INK, border: "1px solid rgba(236,232,225,0.12)" }}>
-              <h3 className="font-bold text-2xl mb-2" style={{ fontFamily: SERIF, color: CREAM }}>
-                Prenota il tuo posto
-              </h3>
-              <p className="font-sans text-sm mb-7" style={{ color: "rgba(236,232,225,0.55)" }}>
-                Bastano un minuto e pochi dati: ci servono per organizzare la serata.
-              </p>
-              <FormSerataAi />
-            </div>
-          </div>
+          <p className="aia-nota">
+            <Link href={PAGINA_SERATA} style={{ color: "inherit", textDecoration: "underline", textUnderlineOffset: "4px" }}>
+              Il programma della serata e i docenti
+            </Link>
+          </p>
         </div>
       </section>
 

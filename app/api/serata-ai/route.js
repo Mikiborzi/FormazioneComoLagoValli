@@ -90,6 +90,9 @@ export async function POST(request) {
   if (!riga.nome || !riga.cognome || !riga.email || !EMAIL_REGEX.test(riga.email)) {
     return NextResponse.json({ error: 'Nome, cognome ed email valida sono obbligatori.' }, { status: 400 })
   }
+  if (!riga.azienda) {
+    return NextResponse.json({ error: "Indica l'azienda per cui lavori o la tua professione." }, { status: 400 })
+  }
   if (!riga.consenso_privacy) {
     return NextResponse.json({ error: 'Il consenso al trattamento dei dati è obbligatorio.' }, { status: 400 })
   }

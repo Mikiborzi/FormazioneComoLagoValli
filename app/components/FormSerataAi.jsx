@@ -1,14 +1,14 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { SERATA_AI, INTERESSI_SERATA } from "@/app/lib/serataAi";
+import { SERATA_AI } from "@/app/lib/serataAi";
 
-// Modulo di iscrizione alla serata di presentazione AI Academy.
-// Pensato per fondo scuro (palette AI Academy). Invia a /api/serata-ai.
+// Modulo di iscrizione alla serata AI Academy Open (pagina /ai-academy/serata).
+// Stile del kit AI Academy (classi aia-modulo in app/aia-stile.css): va messo
+// dentro un riquadro bianco (aia-riquadro-modulo). Invia a /api/serata-ai.
+// I temi di interesse (colonna `interessi`) non si chiedono più: la pagina di
+// riferimento non li ha; il tab admin mostra ancora quelli delle prime iscrizioni.
 
-const CREAM = "#ece8e1";
-const CLAY = "#c1440e";
-const CLAY_LIGHT = "#d96a3f";
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const INITIAL = {
@@ -19,35 +19,27 @@ const INITIAL = {
   azienda: "",
   ruolo: "",
   num_persone: "1",
-  interessi: [],
   messaggio: "",
   consenso_privacy: false,
   consenso_marketing: false,
   sito_web: "", // trappola anti-bot
 };
 
-const inputClass =
-  "w-full rounded-xl px-4 py-3 font-sans text-base outline-none transition-colors";
-
-function inputStyle(errore) {
-  return {
-    backgroundColor: "rgba(236,232,225,0.06)",
-    border: `1px solid ${errore ? "#f87171" : "rgba(236,232,225,0.2)"}`,
-    color: CREAM,
-  };
-}
-
-function Campo({ id, label, obbligatorio, errore, children }) {
+function Campo({ id, label, facoltativo, errore, children }) {
   return (
-    <div className="flex flex-col gap-1.5">
-      <label htmlFor={id} className="font-sans text-sm font-medium" style={{ color: "rgba(236,232,225,0.8)" }}>
+    <div className="aia-modulo__campo">
+      <label htmlFor={id} className="aia-modulo__etichetta">
         {label}
-        {obbligatorio && <span style={{ color: CLAY_LIGHT }}> *</span>}
+        {facoltativo && <span> (facoltativo)</span>}
       </label>
       {children}
-      {errore && <p className="font-sans text-xs" style={{ color: "#fca5a5" }}>{errore}</p>}
+      {errore && <p className="aia-modulo__errore">{errore}</p>}
     </div>
   );
+}
+
+function classeInput(errore) {
+  return errore ? "aia-modulo__input aia-modulo__input--errore" : "aia-modulo__input";
 }
 
 export default function FormSerataAi() {
@@ -93,20 +85,12 @@ export default function FormSerataAi() {
     if (errori[name]) setErrori((er) => ({ ...er, [name]: undefined }));
   }
 
-  function toggleInteresse(key) {
-    setForm((f) => ({
-      ...f,
-      interessi: f.interessi.includes(key)
-        ? f.interessi.filter((k) => k !== key)
-        : [...f.interessi, key],
-    }));
-  }
-
   function valida() {
     const e = {};
     if (!form.nome.trim()) e.nome = "Inserisci il nome";
     if (!form.cognome.trim()) e.cognome = "Inserisci il cognome";
     if (!EMAIL_REGEX.test(form.email.trim())) e.email = "Inserisci un'email valida";
+    if (!form.azienda.trim()) e.azienda = "Indica l'azienda per cui lavori o la tua professione";
     if (!form.consenso_privacy) e.consenso_privacy = "Il consenso è necessario per registrare l'iscrizione";
     return e;
   }
@@ -166,81 +150,56 @@ export default function FormSerataAi() {
       },
     }[esito];
     return (
-      <div
-        role="status"
-        className="rounded-2xl p-7 sm:p-9"
-        style={{ backgroundColor: "rgba(193,68,14,0.12)", border: `1px solid rgba(217,106,63,0.5)` }}
-      >
-        <p
-          className="font-bold text-2xl mb-3"
-          style={{ fontFamily: "var(--font-fraunces), Georgia, serif", color: CREAM }}
-        >
-          {testi.titolo}
-        </p>
-        <p className="font-sans text-base leading-relaxed" style={{ color: "rgba(236,232,225,0.75)" }}>
-          {testi.corpo}
-        </p>
+      <div role="status" className="aia-modulo aia-modulo__esito">
+        <div className="aia-barra aia-barra--corta" aria-hidden="true" style={{ marginTop: 0, marginBottom: "1.5rem" }} />
+        <p className="aia-modulo__esito-titolo">{testi.titolo}</p>
+        <p className="aia-modulo__aiuto" style={{ fontSize: "1.05rem" }}>{testi.corpo}</p>
       </div>
     );
   }
 
   return (
-    <form onSubmit={invia} noValidate className="flex flex-col gap-5">
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-        <Campo id="serata-nome" label="Nome" obbligatorio errore={errori.nome}>
+    <form onSubmit={invia} noValidate className="aia-modulo aia-modulo__griglia">
+      <div className="aia-modulo__griglia aia-modulo__griglia--2">
+        <Campo id="serata-nome" label="Nome" errore={errori.nome}>
           <input id="serata-nome" name="nome" value={form.nome} onChange={aggiorna} autoComplete="given-name"
-            className={inputClass} style={inputStyle(errori.nome)} />
+            className={classeInput(errori.nome)} />
         </Campo>
-        <Campo id="serata-cognome" label="Cognome" obbligatorio errore={errori.cognome}>
+        <Campo id="serata-cognome" label="Cognome" errore={errori.cognome}>
           <input id="serata-cognome" name="cognome" value={form.cognome} onChange={aggiorna} autoComplete="family-name"
-            className={inputClass} style={inputStyle(errori.cognome)} />
+            className={classeInput(errori.cognome)} />
         </Campo>
-        <Campo id="serata-email" label="Email" obbligatorio errore={errori.email}>
+        <Campo id="serata-email" label="Email" errore={errori.email}>
           <input id="serata-email" name="email" type="email" value={form.email} onChange={aggiorna} autoComplete="email"
-            className={inputClass} style={inputStyle(errori.email)} />
+            className={classeInput(errori.email)} />
         </Campo>
-        <Campo id="serata-telefono" label="Telefono">
+        <Campo id="serata-telefono" label="Telefono" facoltativo>
           <input id="serata-telefono" name="telefono" type="tel" value={form.telefono} onChange={aggiorna} autoComplete="tel"
-            className={inputClass} style={inputStyle(false)} />
+            className={classeInput(false)} />
         </Campo>
-        <Campo id="serata-azienda" label="Azienda o studio">
+        <Campo id="serata-azienda" label="Azienda o professione" errore={errori.azienda}>
           <input id="serata-azienda" name="azienda" value={form.azienda} onChange={aggiorna} autoComplete="organization"
-            className={inputClass} style={inputStyle(false)} />
+            placeholder="Es. Rossi Srl, oppure libero professionista – architetto"
+            className={classeInput(errori.azienda)} />
         </Campo>
-        <Campo id="serata-ruolo" label="Ruolo">
+        <Campo id="serata-ruolo" label="Ruolo" facoltativo>
           <input id="serata-ruolo" name="ruolo" value={form.ruolo} onChange={aggiorna} autoComplete="organization-title"
-            placeholder="es. titolare, responsabile ufficio…" className={inputClass} style={inputStyle(false)} />
+            className={classeInput(false)} />
+        </Campo>
+        <Campo id="serata-persone" label="Quante persone siete?">
+          <select id="serata-persone" name="num_persone" value={form.num_persone} onChange={aggiorna}
+            className={classeInput(false)}>
+            {Array.from({ length: maxPersone }, (_, i) => String(i + 1)).map((n) => (
+              <option key={n} value={n}>{n}</option>
+            ))}
+          </select>
         </Campo>
       </div>
 
-      <Campo id="serata-persone" label="Quante persone verranno, te compreso?">
-        <select id="serata-persone" name="num_persone" value={form.num_persone} onChange={aggiorna}
-          className={inputClass} style={{ ...inputStyle(false), maxWidth: "10rem" }}>
-          {Array.from({ length: maxPersone }, (_, i) => String(i + 1)).map((n) => (
-            <option key={n} value={n} style={{ color: "#0b0b0c" }}>{n}</option>
-          ))}
-        </select>
-      </Campo>
-
-      <fieldset>
-        <legend className="font-sans text-sm font-medium mb-3" style={{ color: "rgba(236,232,225,0.8)" }}>
-          Cosa ti interessa di più? <span style={{ color: "rgba(236,232,225,0.45)" }}>(facoltativo)</span>
-        </legend>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-          {INTERESSI_SERATA.map((i) => (
-            <label key={i.key} className="flex items-start gap-3 font-sans text-sm cursor-pointer rounded-lg px-3 py-2"
-              style={{ color: "rgba(236,232,225,0.75)", backgroundColor: "rgba(236,232,225,0.03)" }}>
-              <input type="checkbox" checked={form.interessi.includes(i.key)} onChange={() => toggleInteresse(i.key)}
-                className="mt-0.5 shrink-0" style={{ accentColor: CLAY }} />
-              {i.label}
-            </label>
-          ))}
-        </div>
-      </fieldset>
-
-      <Campo id="serata-messaggio" label="Una domanda o un'esigenza da anticiparci?">
-        <textarea id="serata-messaggio" name="messaggio" rows={3} value={form.messaggio} onChange={aggiorna}
-          className={inputClass} style={inputStyle(false)} />
+      <Campo id="serata-messaggio" label="La domanda più scomoda che porterai">
+        <textarea id="serata-messaggio" name="messaggio" rows={4} value={form.messaggio} onChange={aggiorna}
+          className={classeInput(false)} />
+        <p className="aia-modulo__aiuto">Facoltativa. La useremo in forma anonima per rompere il ghiaccio.</p>
       </Campo>
 
       {/* Trappola anti-bot: nascosta alle persone e ai lettori di schermo */}
@@ -252,47 +211,39 @@ export default function FormSerataAi() {
       </div>
 
       <div>
-        <label className="flex items-start gap-3 font-sans text-sm cursor-pointer" style={{ color: "rgba(236,232,225,0.7)" }}>
-          <input type="checkbox" name="consenso_privacy" checked={form.consenso_privacy} onChange={aggiorna}
-            className="mt-1 shrink-0" style={{ accentColor: CLAY }} />
+        <label className="aia-modulo__consenso">
+          <input type="checkbox" name="consenso_privacy" checked={form.consenso_privacy} onChange={aggiorna} />
           <span>
-            Ho letto l&apos;
-            <a href="/privacy-policy" target="_blank" className="underline" style={{ color: CLAY_LIGHT }}>
-              informativa sulla privacy
-            </a>{" "}
-            e acconsento al trattamento dei miei dati per l&apos;organizzazione della serata. *
+            Consenso al{" "}
+            <a href="/privacy-policy" target="_blank">trattamento dei dati</a>{" "}
+            per l&apos;organizzazione della serata
           </span>
         </label>
         {errori.consenso_privacy && (
-          <p className="font-sans text-xs mt-1 ml-7" style={{ color: "#fca5a5" }}>{errori.consenso_privacy}</p>
+          <p className="aia-modulo__errore" style={{ marginLeft: "2.25rem" }}>{errori.consenso_privacy}</p>
         )}
       </div>
 
       {/* Consenso marketing: facoltativo e separato dal consenso privacy */}
-      <label className="flex items-start gap-3 font-sans text-sm cursor-pointer" style={{ color: "rgba(236,232,225,0.7)" }}>
-        <input type="checkbox" name="consenso_marketing" checked={form.consenso_marketing} onChange={aggiorna}
-          className="mt-1 shrink-0" style={{ accentColor: CLAY }} />
+      <label className="aia-modulo__consenso">
+        <input type="checkbox" name="consenso_marketing" checked={form.consenso_marketing} onChange={aggiorna} />
         <span>
-          Acconsento a ricevere da Starting Work proposte formative e comunicazioni sulle prossime iniziative.{" "}
-          <span style={{ color: "rgba(236,232,225,0.45)" }}>(facoltativo)</span>
+          Consenso a ricevere comunicazioni e proposte formative da Starting Work <span>(facoltativo)</span>
         </span>
       </label>
 
       {erroreServer && (
-        <p role="alert" className="font-sans text-sm rounded-lg px-4 py-3"
-          style={{ color: "#fecaca", backgroundColor: "rgba(239,68,68,0.12)", border: "1px solid rgba(239,68,68,0.4)" }}>
-          {erroreServer}
-        </p>
+        <p role="alert" className="aia-modulo__avviso">{erroreServer}</p>
       )}
 
-      <button type="submit" disabled={invio}
-        className="inline-flex items-center justify-center gap-2 font-sans font-semibold rounded-full transition-all duration-200 hover:brightness-110 self-start"
-        style={{ backgroundColor: CLAY, color: "#fff", minHeight: "52px", padding: "0 2rem", fontSize: "16px", opacity: invio ? 0.6 : 1 }}>
-        {invio ? "Invio in corso…" : "Prenota il mio posto"}
-      </button>
-      <p className="font-sans text-xs" style={{ color: "rgba(236,232,225,0.45)" }}>
-        La serata è gratuita. Non riceverai email automatiche: se serve, ti contattiamo noi.
-      </p>
+      <div>
+        <button type="submit" disabled={invio} className="aia-pulsante aia-pulsante--blu">
+          {invio ? "Invio in corso…" : "Prenota il mio posto"}
+        </button>
+        <p className="aia-modulo__aiuto" style={{ marginTop: "1.25rem" }}>
+          Se cambi programma, avvisaci: liberi un posto per qualcun altro.
+        </p>
+      </div>
     </form>
   );
 }
