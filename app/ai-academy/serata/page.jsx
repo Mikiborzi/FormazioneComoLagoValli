@@ -1,16 +1,31 @@
 import Link from "next/link";
 import FormSerataAi from "@/app/components/FormSerataAi";
-import { SERATA_AI, TESTI_SERATA } from "@/app/lib/serataAi";
+import { PAGINA_SERATA, SERATA_AI, TESTI_SERATA } from "@/app/lib/serataAi";
 
 // Pagina della serata "AI Academy Open" (giovedì 26/11/2026).
 // Riproduce la pagina di riferimento del kit di stile AI Academy
 // (stile-riferimento/kit-stile-michele/riferimento/). Classi aia-* in app/aia-stile.css.
 // Il modulo (#prenota) scrive su /api/serata-ai con il limite posti di serataAi.js.
 
+const DESCRIZIONE =
+  "Giovedì 26 novembre 2026 alle 18:00 da Starting Work a Como: una serata gratuita per capire cosa può fare l'AI per il tuo lavoro e cosa chiede l'AI Act. Posti limitati, prenotazione obbligatoria.";
+
+// Anteprima per la condivisione (WhatsApp, Facebook, LinkedIn): titolo e testo
+// qui sotto, immagine generata da ./opengraph-image.jsx.
 export const metadata = {
   title: "AI Academy Open — Serata gratuita sull'AI · 26 novembre · Como",
-  description:
-    "Giovedì 26 novembre 2026 alle 18:00 da Starting Work a Como: una serata gratuita per capire cosa può fare l'AI per il tuo lavoro e cosa chiede l'AI Act. Posti limitati, prenotazione obbligatoria.",
+  description: DESCRIZIONE,
+  alternates: { canonical: PAGINA_SERATA },
+  openGraph: {
+    type: "website",
+    locale: "it_IT",
+    url: PAGINA_SERATA,
+    siteName: "AI Academy · Starting Work",
+    title: "AI Academy Open · Giovedì 26 novembre, ore 18:00 · Como",
+    description:
+      "Una serata per capire e confrontarsi. Dal vivo, insieme! Ingresso gratuito, posti limitati: prenota il tuo posto.",
+  },
+  twitter: { card: "summary_large_image" },
 };
 
 const programma = [

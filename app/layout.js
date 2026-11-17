@@ -69,6 +69,8 @@ const inter = Inter({
 });
 
 export const metadata = {
+  // Indirizzo pubblico: serve per gli URL assoluti di anteprima (og:image, og:url).
+  metadataBase: new URL("https://formazionecomolago.it"),
   verification: {
     google: "GjLAX1NWAvDUR51ZzWsNQwJsZFAQBCoP0oNoz_TjxjY",
   },
