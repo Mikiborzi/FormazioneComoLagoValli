@@ -8,6 +8,9 @@ export const PAGINA_SERATA = '/ai-academy/serata'
 
 // Testi comuni della serata: vanno usati IDENTICI (kit di stile AI Academy,
 // stile-riferimento/kit-stile-michele/testi-comuni.txt).
+// NB: l'anteprima per WhatsApp è l'immagine fissa
+// app/ai-academy/serata/opengraph-image.jpg. Se cambiano data o testi va rifatta:
+// il generatore è nel commit 2a0d378 (git show /Users/mikiborzi/formazione-como/2a0d378pp/ai-academy/serata/opengraph-image.jsx).
 export const TESTI_SERATA = {
   titolo: "Siamo in Champions. E tu, in che serie giochi con l'AI?",
   sottotitolo: 'Giovedì 26 novembre, una serata per capire e confrontarsi. Dal vivo, insieme!',
