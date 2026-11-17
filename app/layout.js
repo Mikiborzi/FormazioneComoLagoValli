@@ -1,5 +1,6 @@
-import { Playfair_Display, DM_Sans } from "next/font/google";
+import { Playfair_Display, DM_Sans, Inter } from "next/font/google";
 import "./globals.css";
+import "./aia.css";
 import SiteHeader from "./components/SiteHeader";
 import HydrationBeacon from "./components/HydrationBeacon";
 
@@ -53,6 +54,13 @@ const playfairDisplay = Playfair_Display({
   display: "swap",
 });
 
+// Font della linea grafica AI Academy (classi aia-* in app/aia.css).
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+  display: "swap",
+});
+
 const dmSans = DM_Sans({
   subsets: ["latin"],
   variable: "--font-dm-sans",
@@ -73,7 +81,7 @@ export default function RootLayout({ children }) {
   return (
     <html
       lang="it"
-      className={`${playfairDisplay.variable} ${dmSans.variable} h-full antialiased`}
+      className={`${playfairDisplay.variable} ${dmSans.variable} ${inter.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col font-sans">
         <noscript>

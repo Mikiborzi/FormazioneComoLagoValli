@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import MobileNav from './MobileNav'
 import NavbarAuth from './NavbarAuth'
+import { SERATA_AI } from '@/app/lib/serataAi'
 
 const navItems = [
   { label: "Home", href: "/" },
@@ -17,20 +18,23 @@ const navItems = [
 export default function SiteHeader() {
   return (
     <>
-      <div className="w-full" style={{ backgroundColor: "#2d7a4f" }}>
+      <div className="w-full" style={{ backgroundColor: "var(--aia-blu)", fontFamily: "var(--aia-font)" }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <Link
-            href="/ai-academy/imprese#serata"
-            className="flex items-center justify-center gap-2 py-2 text-center text-white font-sans text-xs sm:text-sm leading-tight transition-all duration-200 hover:brightness-110"
+            href="/ai-academy/serata#prenota"
+            className="flex items-center justify-center py-2 text-center text-white text-xs sm:text-sm leading-tight"
           >
-            <span aria-hidden="true">📢</span>
             <span>
-              <strong className="font-semibold">AI Academy per le imprese: serata di presentazione gratuita</strong>
-              {" · "}venerdì 27 novembre, ore 18:00, Starting Work Como{" · "}prenota il tuo posto
+              <strong style={{ fontWeight: 700 }}>AI Academy Open</strong>
+              {" · "}{SERATA_AI.giornoSenzaAnno.toLowerCase()}, ore {SERATA_AI.ora}
+              {" · "}{SERATA_AI.luogo}, Como{" · "}Ingresso gratuito{" · "}
+              <strong style={{ fontWeight: 700, color: "var(--aia-giallo)", whiteSpace: "nowrap" }}>
+                Prenota il tuo posto →
+              </strong>
             </span>
-            <span aria-hidden="true" className="hidden sm:inline">→</span>
           </Link>
         </div>
+        <div className="aia-filo" aria-hidden="true" style={{ height: "3px" }} />
       </div>
       <header
         className="sticky top-0 z-50 shadow-lg"
