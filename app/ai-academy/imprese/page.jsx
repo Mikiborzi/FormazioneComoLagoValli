@@ -1,11 +1,13 @@
 import Link from "next/link";
 import { Fraunces } from "next/font/google";
 import InvitoSerataAi from "@/app/components/InvitoSerataAi";
-import { SERATA_AI, TESTI_SERATA } from "@/app/lib/serataAi";
+import { PAGINA_SERATA, SERATA_AI, TESTI_SERATA } from "@/app/lib/serataAi";
 
 // AI Academy per le imprese: percorsi modulari su misura, laboratori di
 // Starting Work, esempio "Concretamente AI" e serata di presentazione.
-// Stessa identità visiva della pagina /ai-academy.
+// Stessa identità visiva della pagina /ai-academy; le parti sulla serata usano
+// lo stile del kit AI Academy (classi aia-*) e portano a /ai-academy/serata,
+// dove c'è il modulo di prenotazione.
 const fraunces = Fraunces({
   subsets: ["latin"],
   display: "swap",
@@ -22,7 +24,7 @@ const SERIF = "var(--font-fraunces), Georgia, serif";
 export const metadata = {
   title: "AI Academy per le imprese — Formazione AI su misura · Como",
   description:
-    "Percorsi di formazione sull'intelligenza artificiale costruiti sui processi della tua azienda: modulari, in aula, nei laboratori di Starting Work a Como. Serata gratuita AI Academy Open giovedì 26 novembre alle 18:00.",
+    "Percorsi di formazione sull'intelligenza artificiale costruiti sui processi della tua azienda: modulari, in aula, nei laboratori di Starting Work a Como. Serata di presentazione gratuita giovedì 26 novembre alle 18:00.",
 };
 
 // ─── Dati ────────────────────────────────────────────────────────────────────
@@ -32,7 +34,7 @@ const navSezioni = [
   { label: "I moduli", href: "#moduli" },
   { label: "Un esempio", href: "#esempio" },
   { label: "Laboratori", href: "#laboratori" },
-  { label: `Serata ${SERATA_AI.giornoNumero}/11`, href: "#serata" },
+  { label: "Serata 26/11", href: "#serata" },
 ];
 
 const flessibilita = [
@@ -188,13 +190,13 @@ export default function AiAcademyImpresePage() {
               </a>
             ))}
           </nav>
-          <a
-            href="/ai-academy/serata#prenota"
-            className="font-sans text-sm font-semibold rounded-full px-4 py-2 shrink-0 transition-all duration-200 hover:brightness-110"
-            style={{ backgroundColor: CLAY, color: "#fff" }}
+          <Link
+            href={`${PAGINA_SERATA}#prenota`}
+            className="text-sm font-bold rounded-full px-4 py-2 shrink-0 transition-all duration-200 hover:brightness-110"
+            style={{ backgroundColor: "var(--aia-giallo)", color: "var(--aia-inchiostro)", fontFamily: "var(--aia-font)" }}
           >
             Prenota la serata
-          </a>
+          </Link>
         </div>
       </div>
 
@@ -245,6 +247,7 @@ export default function AiAcademyImpresePage() {
             ))}
           </div>
 
+          {/* Serata in evidenza */}
           <InvitoSerataAi className="max-w-3xl" />
         </div>
       </section>
@@ -458,23 +461,23 @@ export default function AiAcademyImpresePage() {
         </div>
       </section>
 
-      {/* ── Serata AI Academy Open ───────────────────────────────────── */}
+      {/* ── Serata AI Academy Open: invito alla pagina con il modulo ── */}
       <section id="serata" className="aia-sezione aia-sfondo scroll-mt-32">
         <div className="aia-contenitore">
           <p className="aia-occhiello" style={{ marginTop: 0 }}>{TESTI_SERATA.occhiello}</p>
           <h2 className="aia-titolo-sezione" style={{ marginTop: "1.5rem" }}>{TESTI_SERATA.titolo}</h2>
           <div className="aia-barra" aria-hidden="true" />
-          <p className="aia-sottotitolo">{TESTI_SERATA.frase}</p>
+          <p className="aia-sottotitolo">{TESTI_SERATA.sottotitolo}</p>
           <p className="aia-sottotitolo-2">
-            Da {SERATA_AI.luogo}, {SERATA_AI.indirizzo}: novanta minuti con i docenti, la visita ai laboratori e poi
-            l&apos;aperitivo.
+            Da {SERATA_AI.luogo}, {SERATA_AI.indirizzo}: novanta minuti con i docenti, la visita ai
+            laboratori e poi l&apos;aperitivo.
           </p>
           <div className="aia-azioni">
-            <Link href="/ai-academy/serata#prenota" className="aia-pulsante">Prenota il tuo posto</Link>
+            <Link className="aia-pulsante" href={`${PAGINA_SERATA}#prenota`}>{TESTI_SERATA.pulsante}</Link>
             <span className="aia-badge">{TESTI_SERATA.dressCode}</span>
           </div>
           <p className="aia-nota">
-            <Link href="/ai-academy/serata" style={{ color: "inherit", textDecoration: "underline", textUnderlineOffset: "4px" }}>
+            <Link href={PAGINA_SERATA} style={{ color: "inherit", textDecoration: "underline", textUnderlineOffset: "4px" }}>
               Il programma della serata e i docenti
             </Link>
           </p>

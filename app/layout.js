@@ -1,6 +1,7 @@
 import { Playfair_Display, DM_Sans, Inter } from "next/font/google";
 import "./globals.css";
-import "./aia.css";
+// Stile della serata AI Academy (classi aia-*): barra in testata, inviti, pagina serata.
+import "./aia-stile.css";
 import SiteHeader from "./components/SiteHeader";
 import HydrationBeacon from "./components/HydrationBeacon";
 
@@ -54,16 +55,16 @@ const playfairDisplay = Playfair_Display({
   display: "swap",
 });
 
-// Font della linea grafica AI Academy (classi aia-* in app/aia.css).
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-inter",
-  display: "swap",
-});
-
 const dmSans = DM_Sans({
   subsets: ["latin"],
   variable: "--font-dm-sans",
+  display: "swap",
+});
+
+// Font della serata AI Academy (usato dalle classi aia-*).
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
   display: "swap",
 });
 

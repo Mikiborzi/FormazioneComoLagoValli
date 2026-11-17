@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import MobileNav from './MobileNav'
 import NavbarAuth from './NavbarAuth'
-import { SERATA_AI } from '@/app/lib/serataAi'
+import { PAGINA_SERATA, SERATA_AI, TESTI_SERATA } from '@/app/lib/serataAi'
 
 const navItems = [
   { label: "Home", href: "/" },
@@ -18,18 +18,18 @@ const navItems = [
 export default function SiteHeader() {
   return (
     <>
+      {/* Barra della serata AI Academy Open, nello stile del kit AI Academy (app/aia-stile.css) */}
       <div className="w-full" style={{ backgroundColor: "var(--aia-blu)", fontFamily: "var(--aia-font)" }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <Link
-            href="/ai-academy/serata#prenota"
+            href={`${PAGINA_SERATA}#prenota`}
             className="flex items-center justify-center py-2 text-center text-white text-xs sm:text-sm leading-tight"
           >
             <span>
               <strong style={{ fontWeight: 700 }}>AI Academy Open</strong>
-              {" · "}{SERATA_AI.giornoSenzaAnno.toLowerCase()}, ore {SERATA_AI.ora}
-              {" · "}{SERATA_AI.luogo}, Como{" · "}Ingresso gratuito{" · "}
+              {" · "}{SERATA_AI.giornoSenzaAnno.toLowerCase()}, ore {SERATA_AI.ora}{" · "}{SERATA_AI.luogo}, Como{" · "}Ingresso gratuito{" · "}
               <strong style={{ fontWeight: 700, color: "var(--aia-giallo)", whiteSpace: "nowrap" }}>
-                Prenota il tuo posto →
+                {TESTI_SERATA.pulsante} →
               </strong>
             </span>
           </Link>

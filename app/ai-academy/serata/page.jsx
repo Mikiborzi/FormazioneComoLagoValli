@@ -1,108 +1,104 @@
 import Link from "next/link";
-import FormSerataOpen from "@/app/components/FormSerataOpen";
+import FormSerataAi from "@/app/components/FormSerataAi";
 import { SERATA_AI, TESTI_SERATA } from "@/app/lib/serataAi";
 
-// Pagina della serata AI Academy Open (giovedì 26 novembre).
-// Linea grafica aia-* (app/aia.css). È la pagina linkata dagli inviti email:
-// /ai-academy/serata#prenota porta direttamente al modulo.
+// Pagina della serata "AI Academy Open" (giovedì 26/11/2026).
+// Riproduce la pagina di riferimento del kit di stile AI Academy
+// (stile-riferimento/kit-stile-michele/riferimento/). Classi aia-* in app/aia-stile.css.
+// Il modulo (#prenota) scrive su /api/serata-ai con il limite posti di serataAi.js.
 
 export const metadata = {
-  title: `AI Academy Open — Serata gratuita sull'AI · ${SERATA_AI.dataBreve} · Como`,
-  description: `${SERATA_AI.giorno} alle ${SERATA_AI.ora} da ${SERATA_AI.luogo} a Como: una serata gratuita per capire cosa può fare l'AI per il tuo lavoro e cosa chiede l'AI Act. Posti limitati, prenotazione obbligatoria.`,
-  alternates: { canonical: "/ai-academy/serata" },
+  title: "AI Academy Open — Serata gratuita sull'AI · 26 novembre · Como",
+  description:
+    "Giovedì 26 novembre 2026 alle 18:00 da Starting Work a Como: una serata gratuita per capire cosa può fare l'AI per il tuo lavoro e cosa chiede l'AI Act. Posti limitati, prenotazione obbligatoria.",
 };
 
 const programma = [
-  { ora: "18:00", colore: "viola", titolo: "Si entra.", testo: "Accoglienza e posti in aula." },
+  { ora: "18:00", titolo: "Si entra.", testo: "Accoglienza e posti in aula.", colore: "var(--aia-viola)" },
   {
     ora: "18:15",
-    colore: "magenta",
     titolo: "Quello che ti preoccupa.",
     testo:
       "Dal telefono, in forma anonima, scrivi cosa ti preoccupa dell'AI. Le domande arrivano sullo schermo e i docenti rispondono davanti a tutti. Nessuna domanda è fuori luogo.",
+    colore: "var(--aia-magenta)",
   },
   {
     ora: "18:50",
-    colore: "rosso",
     titolo: "L'art. 4 in dieci minuti.",
     testo: "Cosa chiede l'AI Act alle imprese sulla formazione del personale e come si documenta.",
+    colore: "var(--aia-rosso)",
   },
   {
     ora: "19:00",
-    colore: "arancio",
     titolo: "I docenti e il metodo.",
     testo: "Visita ai laboratori e dialogo con chi insegna: il metodo lo scopri parlandoci.",
+    colore: "var(--aia-arancio)",
   },
-  { ora: "19:30", colore: "oro", titolo: "Aperitivo.", testo: "Le conversazioni migliori cominciano qui." },
+  { ora: "19:30", titolo: "Aperitivo.", testo: "Le conversazioni migliori cominciano qui.", colore: "var(--aia-oro)" },
 ];
 
 const docenti = [
   {
     iniziali: "SA",
-    colore: "viola",
     nome: "Stefano Alborghetti",
     ruolo: "Presidente e socio fondatore di Starting Work",
+    colore: "var(--aia-viola)",
     bio: "Ha fondato Starting Work, l’ente di formazione accreditato da Regione Lombardia che ospita AI Academy. Guida un istituto che forma giovani, imprese e lavoratori in cerca di ricollocazione, con un indirizzo storico in grafica, multimedia, comunicazione e marketing. Per lui l’intelligenza artificiale è il passaggio naturale di quel percorso.",
     citazione:
       "«Ci teniamo che il tessuto imprenditoriale del territorio non arrivi in ritardo e che le competenze restino a chi lavora ogni giorno nelle nostre aziende.»",
   },
   {
     iniziali: "EP",
-    colore: "magenta",
     nome: "Enrico Paracchini",
     ruolo: "Ideatore dei percorsi di AI Academy, docente",
+    colore: "var(--aia-magenta)",
     bio: "Oltre trent’anni tra marketing, comunicazione e sviluppo d’impresa, e diverse aziende fondate in settori diversi. Usa l’intelligenza artificiale ogni giorno e da anni la insegna a imprenditori e professionisti. Ha ideato i percorsi di AI Academy con Michele e Fabio. In aula lavora sul cambio di prospettiva, prima che sugli strumenti.",
-    citazione:
-      "«Il nostro non è un messaggio da entusiasti né da catastrofisti: si tratta di conoscere per scegliere.»",
+    citazione: "«Il nostro non è un messaggio da entusiasti né da catastrofisti: si tratta di conoscere per scegliere.»",
   },
   {
     iniziali: "MB",
-    colore: "rosso",
     nome: "Michele Borzatta",
     ruolo: "Socio fondatore di Starting Work, docente",
+    colore: "var(--aia-rosso)",
     bio: "Specialista di sistemi organizzativi, ha fondato Starting Work insieme a Stefano Alborghetti. Usa l’intelligenza artificiale ogni giorno e ha già messo al lavoro i primi agenti. Ha ideato i percorsi di AI Academy con Enrico e Fabio. In aula porta il punto di vista di chi l’intelligenza artificiale la fa entrare in un’organizzazione.",
     citazione:
       "«Tutti cercano di correre con o dietro l’intelligenza artificiale, ma in pochi hanno le scarpe e molti corrono scalzi.»",
   },
   {
     iniziali: "FM",
-    colore: "arancio",
     nome: "Fabio Gino Merli",
     ruolo: "Ex CFO e direttore generale, docente",
+    colore: "var(--aia-arancio)",
     bio: "Ha passato molti anni come CFO in grandi gruppi multinazionali, fino alla direzione generale. Ha ideato i percorsi di AI Academy con Enrico e Michele, e in aula insegna gestione economico-finanziaria e controllo di gestione con l’intelligenza artificiale. Fa le domande che farebbe un imprenditore: quelle concrete.",
     citazione:
       "«Il controllo di gestione è uno dei terreni dove l’intelligenza artificiale, se la si conosce, può fare la differenza.»",
   },
 ];
 
-const colore = (nome) => ({ "--aia-colore": `var(--aia-${nome})` });
-
-export default function SerataAiAcademyOpen() {
+export default function SerataAiPage() {
   return (
     <main className="aia-pagina">
+      {/* ── Primo schermo ─────────────────────────────────────────── */}
       <section className="aia-sezione aia-sfondo aia-apertura">
         <div className="aia-contenitore">
           <Link href="/ai-academy">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img className="aia-logo" src="/ai-academy-logo.png" alt="AI Academy" width={380} height={100} />
+            <img className="aia-logo" src="/ai-academy-logo.png" alt="AI Academy" width="380" height="100" />
           </Link>
           <p className="aia-occhiello">{TESTI_SERATA.occhiello}</p>
           <h1 className="aia-titolo">{TESTI_SERATA.titolo}</h1>
           <div className="aia-barra" aria-hidden="true" />
-          <p className="aia-sottotitolo">{TESTI_SERATA.frase}</p>
-          <p className="aia-sottotitolo-2">Un aperitivo per incontrare la squadra e i programmi.</p>
+          <p className="aia-sottotitolo">{TESTI_SERATA.sottotitolo}</p>
+          <p className="aia-sottotitolo-2">{TESTI_SERATA.sottotitolo2}</p>
           <div className="aia-azioni">
-            <a className="aia-pulsante" href="#prenota">Prenota il tuo posto</a>
+            <a className="aia-pulsante" href="#prenota">{TESTI_SERATA.pulsante}</a>
             <span className="aia-badge">{TESTI_SERATA.dressCode}</span>
           </div>
-          <p className="aia-nota">
-            Non serve sapere niente. Serve solo la voglia di capire. Anche se l&apos;AI un po&apos; ti spaventa.
-          </p>
+          <p className="aia-nota">{TESTI_SERATA.nota}</p>
         </div>
       </section>
-
       <div className="aia-filo" aria-hidden="true" />
 
+      {/* ── Chi sta decidendo ─────────────────────────────────────── */}
       <section className="aia-sezione">
         <div className="aia-contenitore aia-due-colonne">
           <h2 className="aia-titolo-sezione aia-su-chiaro">Chi sta decidendo, da te?</h2>
@@ -123,10 +119,8 @@ export default function SerataAiAcademyOpen() {
         </div>
       </section>
 
-      <div className="aia-onda" aria-hidden="true">
-        <div />
-      </div>
-
+      {/* ── Programma ─────────────────────────────────────────────── */}
+      <div className="aia-onda" aria-hidden="true"><div /></div>
       <section className="aia-sezione aia-sfondo-notte">
         <div className="aia-contenitore">
           <h2 className="aia-titolo-sezione">
@@ -138,7 +132,7 @@ export default function SerataAiAcademyOpen() {
             {programma.map((p) => (
               <li key={p.ora}>
                 <span className="aia-programma__ora">{p.ora}</span>
-                <div className="aia-programma__corpo" style={colore(p.colore)}>
+                <div className="aia-programma__corpo" style={{ "--aia-colore": p.colore }}>
                   <p className="aia-programma__titolo">{p.titolo}</p>
                   <p className="aia-programma__testo">{p.testo}</p>
                 </div>
@@ -148,6 +142,7 @@ export default function SerataAiAcademyOpen() {
         </div>
       </section>
 
+      {/* ── Due cose ──────────────────────────────────────────────── */}
       <section className="aia-sezione">
         <div className="aia-contenitore">
           <h2 className="aia-titolo-sezione aia-su-chiaro">
@@ -156,41 +151,44 @@ export default function SerataAiAcademyOpen() {
             non ci rivediamo più.
           </h2>
           <ul className="aia-punti">
-            <li className="aia-punto" style={colore("viola")}>
+            <li className="aia-punto" style={{ "--aia-colore": "var(--aia-viola)" }}>
               <span className="aia-punto__numero">1</span>
-              <strong>Un&apos;idea precisa</strong> di cosa l&apos;AI può fare oggi per il tuo lavoro, e di cosa non
+              <strong>Un&apos;idea precisa</strong>{" "}di cosa l&apos;AI può fare oggi per il tuo lavoro, e di cosa non
               può fare.
             </li>
-            <li className="aia-punto" style={colore("rosso")}>
+            <li className="aia-punto" style={{ "--aia-colore": "var(--aia-rosso)" }}>
               <span className="aia-punto__numero">2</span>
-              <strong>Una risposta chiara</strong> su cosa ti chiede la normativa, senza allarmismi e senza legalese.
+              <strong>Una risposta chiara</strong>{" "}su cosa ti chiede la normativa, senza allarmismi e senza
+              legalese.
             </li>
           </ul>
         </div>
       </section>
 
+      {/* ── Per chi ───────────────────────────────────────────────── */}
       <section className="aia-sezione aia-sfondo-blu">
         <div className="aia-contenitore aia-due-colonne aia-due-colonne--centro">
           <h2 className="aia-titolo-sezione">Non conta il ruolo. Conta la voglia di capire.</h2>
           <div>
             <p className="aia-testo">
-              Imprenditori, manager, consulenti, professionisti, collaboratori. E chi non ha un titolo sul biglietto
-              da visita, ma ha capito che qualcosa sta cambiando. L&apos;unico requisito è la curiosità.
+              Imprenditori, manager, consulenti, professionisti, collaboratori. E chi non ha un titolo sul
+              biglietto da visita, ma ha capito che qualcosa sta cambiando. L&apos;unico requisito è la curiosità.
             </p>
             <p className="aia-testo">
-              <strong>Porta qualcuno con te.</strong> In due si vede di più, e il giorno dopo c&apos;è qualcuno con
+              <strong>Porta qualcuno con te.</strong>{" "}In due si vede di più, e il giorno dopo c&apos;è qualcuno con
               cui parlarne.
             </p>
           </div>
         </div>
       </section>
 
+      {/* ── Docenti ───────────────────────────────────────────────── */}
       <section className="aia-sezione">
         <div className="aia-contenitore">
           <h2 className="aia-titolo-sezione aia-su-chiaro">In aula, non sul palco.</h2>
           <ul className="aia-schede">
             {docenti.map((d) => (
-              <li key={d.nome} className="aia-scheda" style={colore(d.colore)}>
+              <li key={d.nome} className="aia-scheda" style={{ "--aia-colore": d.colore }}>
                 <div className="aia-scheda__testa">
                   <div className="aia-scheda__foto" aria-hidden="true">{d.iniziali}</div>
                   <div>
@@ -203,6 +201,7 @@ export default function SerataAiAcademyOpen() {
               </li>
             ))}
           </ul>
+
           <div className="aia-promessa" style={{ marginTop: "6rem" }}>
             <h2 className="aia-titolo-sezione">Non è una televendita.</h2>
             <p className="aia-testo">
@@ -213,6 +212,7 @@ export default function SerataAiAcademyOpen() {
         </div>
       </section>
 
+      {/* ── Prenotazione ──────────────────────────────────────────── */}
       <section id="prenota" className="aia-sezione aia-sfondo" style={{ scrollMarginTop: "60px" }}>
         <div className="aia-contenitore aia-due-colonne aia-due-colonne--modulo">
           <div>
@@ -224,11 +224,12 @@ export default function SerataAiAcademyOpen() {
             </p>
           </div>
           <div className="aia-riquadro-modulo">
-            <FormSerataOpen />
+            <FormSerataAi />
           </div>
         </div>
       </section>
 
+      {/* ── Informazioni pratiche ─────────────────────────────────── */}
       <section className="aia-sezione">
         <div className="aia-contenitore">
           <div className="aia-barra aia-barra--corta" aria-hidden="true" style={{ marginTop: 0, marginBottom: "2.5rem" }} />
@@ -250,6 +251,7 @@ export default function SerataAiAcademyOpen() {
         </div>
       </section>
 
+      {/* ── Piè di pagina ─────────────────────────────────────────── */}
       <footer className="aia-footer">
         <div className="aia-contenitore">
           <p className="aia-footer__nome">Starting Work</p>

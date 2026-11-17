@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Esempio — kit di stile AI Academy</title>
+  <!-- 1. Font Inter da Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&display=swap">
+  <!-- 2. Il kit -->
+  <link rel="stylesheet" href="stile.css">
+  <style>body { margin: 0; }</style>
+</head>
+<body>
+
+  <!-- PRIMO SCHERMO -->
+  <section class="aia-sezione aia-sfondo aia-apertura">
+    <div class="aia-contenitore">
+      <img class="aia-logo" src="logo/logo-aiacademy.png" alt="AI Academy" width="380" height="100">
+      <p class="aia-occhiello">AI Academy Open · Giovedì 26 novembre 2026 · ore 18:00 · Starting Work, Como · Ingresso gratuito · Posti limitati</p>
+      <h1 class="aia-titolo">Siamo in Champions. E tu, in che serie giochi con l'AI?</h1>
+      <div class="aia-barra" aria-hidden="true"></div>
+      <p class="aia-sottotitolo">Giovedì 26 novembre, una serata per capire e confrontarsi. Dal vivo, insieme!</p>
+      <p class="aia-sottotitolo-2">Un aperitivo per incontrare la squadra e i programmi.</p>
+      <div class="aia-azioni">
+        <a class="aia-pulsante" href="#prenota">Prenota il tuo posto</a>
+        <span class="aia-badge">Dress code: portate tante domande. Le più scomode.</span>
+      </div>
+      <p class="aia-nota">Non serve sapere niente. Serve solo la voglia di capire. Anche se l'AI un po' ti spaventa.</p>
+    </div>
+  </section>
+
+  <!-- SEZIONE CHIARA CON TESTO -->
+  <section class="aia-sezione">
+    <div class="aia-contenitore">
+      <h2 class="aia-titolo-sezione aia-su-chiaro">Chi sta decidendo, da te?</h2>
+      <div style="margin-top: 2.5rem; max-width: 46rem;">
+        <p class="aia-testo aia-su-chiaro">Nella tua azienda qualcuno usa già l'AI. Per una mail, un'offerta, un riassunto. <strong>Nessuno l'ha deciso: è successo.</strong></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCHEDE DOCENTE -->
+  <section class="aia-sezione">
+    <div class="aia-contenitore">
+      <h2 class="aia-titolo-sezione aia-su-chiaro">In aula, non sul palco.</h2>
+      <ul class="aia-schede">
+        <li class="aia-scheda" style="--aia-colore: var(--aia-magenta)">
+          <div class="aia-scheda__testa">
+            <div class="aia-scheda__foto" aria-hidden="true">EP</div>
+            <!-- con la foto: <div class="aia-scheda__foto"><img src="enrico.jpg" alt=""></div> -->
+            <div>
+              <p class="aia-scheda__nome">Enrico Paracchini</p>
+              <p class="aia-scheda__ruolo">Ideatore dei percorsi di AI Academy, docente</p>
+            </div>
+          </div>
+          <p class="aia-scheda__bio">Oltre trent’anni tra marketing, comunicazione e sviluppo d’impresa, e diverse aziende fondate in settori diversi. Usa l’intelligenza artificiale ogni giorno e da anni la insegna a imprenditori e professionisti. Ha ideato i percorsi di AI Academy con Michele e Fabio. In aula lavora sul cambio di prospettiva, prima che sugli strumenti.</p>
+          <blockquote class="aia-scheda__citazione">«Il nostro non è un messaggio da entusiasti né da catastrofisti: si tratta di conoscere per scegliere.»</blockquote>
+        </li>
+        <li class="aia-scheda" style="--aia-colore: var(--aia-rosso)">
+          <div class="aia-scheda__testa">
+            <div class="aia-scheda__foto" aria-hidden="true">MB</div>
+            <div>
+              <p class="aia-scheda__nome">Michele Borzatta</p>
+              <p class="aia-scheda__ruolo">Socio fondatore di Starting Work, docente</p>
+            </div>
+          </div>
+          <p class="aia-scheda__bio">Specialista di sistemi organizzativi, ha fondato Starting Work insieme a Stefano Alborghetti. Usa l’intelligenza artificiale ogni giorno e ha già messo al lavoro i primi agenti. Ha ideato i percorsi di AI Academy con Enrico e Fabio. In aula porta il punto di vista di chi l’intelligenza artificiale la fa entrare in un’organizzazione.</p>
+          <blockquote class="aia-scheda__citazione">«Tutti cercano di correre con o dietro l’intelligenza artificiale, ma in pochi hanno le scarpe e molti corrono scalzi.»</blockquote>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+</body>
+</html>

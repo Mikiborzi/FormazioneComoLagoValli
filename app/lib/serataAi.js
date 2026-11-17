@@ -1,19 +1,36 @@
 // Serata di presentazione AI Academy per le imprese.
 // Unico punto da aggiornare per data, luogo e stato delle iscrizioni:
-// pagina /ai-academy/serata, /ai-academy/imprese, inviti nel sito, barra in testata e API leggono da qui.
+// pagina /ai-academy/serata (con il modulo), fascia su /ai-academy/imprese,
+// inviti nel sito, barra in testata e API leggono da qui.
+
+// Indirizzo della pagina della serata (modulo di prenotazione su #prenota).
+export const PAGINA_SERATA = '/ai-academy/serata'
+
+// Testi comuni della serata: vanno usati IDENTICI (kit di stile AI Academy,
+// stile-riferimento/kit-stile-michele/testi-comuni.txt).
+export const TESTI_SERATA = {
+  titolo: "Siamo in Champions. E tu, in che serie giochi con l'AI?",
+  sottotitolo: 'Giovedì 26 novembre, una serata per capire e confrontarsi. Dal vivo, insieme!',
+  sottotitolo2: 'Un aperitivo per incontrare la squadra e i programmi.',
+  occhiello: 'AI Academy Open · Giovedì 26 novembre 2026 · ore 18:00 · Starting Work, Como · Ingresso gratuito · Posti limitati',
+  dressCode: 'Dress code: portate tante domande. Le più scomode.',
+  pulsante: 'Prenota il tuo posto',
+  nota: "Non serve sapere niente. Serve solo la voglia di capire. Anche se l'AI un po' ti spaventa.",
+}
 
 export const SERATA_AI = {
   // Slug salvato su ogni iscrizione (colonna `evento`): per una nuova serata
   // cambiare slug, così le iscrizioni restano separate nel tab admin.
+  // Resta "-27" anche se la serata è stata spostata al 26: è la stessa serata e
+  // le iscrizioni già raccolte sono salvate con questo codice.
   slug: 'serata-ai-2026-11-27',
-  // NB: la serata è giovedì 26 novembre. Lo slug è rimasto "-27" per non
-  // separare le iscrizioni già raccolte: non cambiarlo per questa serata.
   giorno: 'Giovedì 26 novembre 2026',
   giornoBreve: 'Gio 26 novembre',
+  // Per i testi della serata in stile AI Academy ("Giovedì 26 novembre, una serata per...").
   giornoSenzaAnno: 'Giovedì 26 novembre',
-  // Fine della parte "in aula" (poi aperitivo).
+  // Fine del programma, prima dell'aperitivo.
   oraFine: '19:30',
-  // Per il "calendarietto" del riquadro di invito.
+  // Per il "calendarietto" del riquadro di invito (InvitoSerataAi).
   giornoNumero: '26',
   // Per il messaggio di conferma del modulo ("Ci vediamo il 26 novembre!").
   dataBreve: '26 novembre',
@@ -29,16 +46,6 @@ export const SERATA_AI = {
   chiusuraIscrizioni: '2026-11-26T18:00:00+01:00',
   // Interruttore manuale: false per chiudere prima (es. posti esauriti).
   iscrizioniAperte: true,
-}
-
-// Testi ricorrenti dell'invito (pagina /ai-academy/serata, riquadri di invito,
-// sezione su /ai-academy/imprese).
-export const TESTI_SERATA = {
-  nome: 'AI Academy Open',
-  occhiello: `AI Academy Open · ${SERATA_AI.giorno} · ore ${SERATA_AI.ora} · ${SERATA_AI.luogo}, Como · Ingresso gratuito · Posti limitati`,
-  titolo: "Siamo in Champions. E tu, in che serie giochi con l'AI?",
-  frase: `${SERATA_AI.giornoSenzaAnno}, una serata per capire e confrontarsi. Dal vivo, insieme!`,
-  dressCode: 'Dress code: portate tante domande. Le più scomode.',
 }
 
 export function iscrizioniSerataAperte(ora = new Date()) {
